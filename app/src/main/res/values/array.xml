@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="studyKind">
+        <item>단답 학습</item>
+        <item>4지선다 학습</item>
+        <item>카드형 학습</item>
+        <item>카드형 OX 학습</item>
+        <item>카드형 4지선다 학습</item>
+        <item>카드형 4지선다 TTS 학습</item>
+    </string-array>
+
+    <string-array name="fontSize">
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+    </string-array>
+    <string-array name="fontSizeName">
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+    </string-array>
+
+    <string-array name="BackgroundColor">
+        <item>honeydew</item>
+        <item>mistyrose</item>
+        <item>lavender</item>
+        <item>default</item>
+    </string-array>
+
+
+    <string-array name="BackgroundColor_Values">
+        <item>#F0FFF0</item>
+        <item>#FFE4E1</item>
+        <item>#E6E6FA</item>
+        <item>#00000000</item>
+    </string-array>
+
+
+
+    <string-array name="TextColor">
+        <item>maroon</item>
+        <item>indigo</item>
+        <item>darkslategray</item>
+        <item>default</item>
+    </string-array>
+
+    <string-array name="TextColor_Values">
+        <item>#800000</item>
+        <item>#4B0082</item>
+        <item>#2F4F4F</item>
+        <item>#ffffff</item>
+    </string-array>
+</resources>
