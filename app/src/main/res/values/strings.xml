@@ -19,6 +19,12 @@
     <string name="title_activity_patch">패치 정보</string>
     <string name="title_activity_pattern">회화패턴</string>
     <string name="title_activity_pattern_view">회화패턴 예제</string>
+    <string name="title_activity_vocabulary_note">단어장</string>
+    <string name="title_activity_vocabulary_note_view">단어장 상세</string>
+    <string name="title_activity_naver_conversation">네이버 회화</string>
+    <string name="title_activity_naver_conversation_view">네이버 회화 상세</string>
+    <string name="title_activity_daum_vocabulary">Daum 단어장</string>
+    <string name="title_activity_daum_vocabulary_view">Daum 단어장 상세</string>
 
     <string name="title_activity_study">StudyActivity</string>
     <string name="title_activity_study1">Study1Activity</string>
@@ -40,7 +46,9 @@
     <string name="action_translate">번역</string>
     <string name="action_edit">수정모드</string>
     <string name="action_exit">취소</string>
+    <string name="action_refresh">동기화</string>
 
     <!-- My -->
     <string name="banner_ad_unit_id">ca-app-pub-3860766380986792/1510153469</string>
+    <string name="title_activity_conversation_note_view">ConversationNoteViewActivity</string>
 </resources>

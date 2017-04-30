@@ -69,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_conv_note)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_naver_conv)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_b_category)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_daum)).setOnClickListener(this);
 
-        ((Button) findViewById(R.id.my_b_my_conv)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc_study)).setOnClickListener(this);
 
@@ -147,12 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplication(), ConversationNoteActivity.class));
                 break;
             case R.id.my_b_naver_conv:
+                startActivity(new Intent(getApplication(), NaverConversationActivity.class));
                 break;
-            case R.id.my_b_category:
-                break;
-            case R.id.my_b_my_conv:
+            case R.id.my_b_daum:
+                startActivity(new Intent(getApplication(), DaumVocabularyActivity.class));
                 break;
             case R.id.my_b_voc:
+                startActivity(new Intent(getApplication(), VocabularyNoteActivity.class));
                 break;
             case R.id.my_b_voc_study:
                 startActivity(new Intent(getApplication(), StudyActivity.class));

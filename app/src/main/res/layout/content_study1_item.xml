@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/my_c_s1i_tv_question"
+                android:id="@+id/my_tv_pattern"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="false"
                 android:textColor="#e65a5a"
@@ -43,7 +43,7 @@
                 android:textSize="13dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/my_c_s1i_tv_question" />
+                android:layout_below="@+id/my_tv_pattern" />
 
         </RelativeLayout>
 

@@ -42,6 +42,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
     public int mSelect = 0;
     public String han;
     public String notHan;
+    public String sampleSeq;
     public boolean isMySample = false;
 
     private int fontSize = 0;
@@ -70,6 +71,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
         Bundle b = getIntent().getExtras();
         notHan = b.getString("foreign");
         han = b.getString("han");
+        sampleSeq = b.getString("sampleSeq");
 
         fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
 
@@ -217,15 +219,14 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
                     isMySample = false;
                     mySample.setImageResource(android.R.drawable.star_off);
 
-                    DicDb.delDicMySample(db, notHan);
-                    DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
+                    DicDb.delConversationFromNote(db, "C010001", Integer.parseInt(sampleSeq));
                 } else {
                     isMySample = true;
                     mySample.setImageResource(android.R.drawable.star_on);
 
-                    DicDb.insDicMySample(db, notHan, han, DicUtils.getDelimiterDate(DicUtils.getCurrentDate(), "."));
-                    DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
+                    DicDb.insConversationToNote(db, "C010001", sampleSeq);
                 }
+                DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
 
                 break;
             case R.id.my_ib_tts:
@@ -350,7 +351,7 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
         ((TextView) view.findViewById(R.id.my_tv_mean)).setText(DicUtils.getString(cursor.getString(cursor.getColumnIndexOrThrow("MEAN"))));
 
         ImageButton ib_myvoc = (ImageButton)view.findViewById(R.id.my_ib_myvoc);
-        if ( cursor.getInt(cursor.getColumnIndexOrThrow("MY_VOC")) > 0 ) {
+        if ( cursor.getInt(cursor.getColumnIndexOrThrow(CommConstants.vocabularyCode)) > 0 ) {
             ib_myvoc.setImageResource(android.R.drawable.star_on);
             viewHolder.isMyVoc = true;
         } else {

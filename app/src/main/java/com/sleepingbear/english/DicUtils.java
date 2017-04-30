@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.regex.PatternSyntaxException;
 
 
@@ -491,4 +492,108 @@ public class DicUtils {
         return rtn;
     }
 
+    public static ArrayList gatherCategory(SQLiteDatabase db, String url, String codeGroup) {
+        ArrayList wordAl = new ArrayList();
+        try {
+            int cnt = 1;
+            boolean isBreak = false;
+            while (true) {
+                Document doc = getDocument(url + "&page=" + cnt);
+                Element table_e = findElementSelect(doc, "table", "class", "tbl_wordbook");
+                Element tbody_e = findElementForTag(table_e, "tbody", 0);
+                for (int m = 0; m < tbody_e.children().size(); m++) {
+                    HashMap row = new HashMap();
+
+                    Element category = findElementForTag(tbody_e.child(m), "td", 1);
+
+                    String categoryId = "W" + getUrlParamValue(category.child(0).attr("href"), "id").replace("\n", "");
+                    String categoryName = category.text();
+                    String wordCnt = findElementForTag(tbody_e.child(m), "td", 3).text();
+                    String bookmarkCnt = findElementForTag(tbody_e.child(m), "td", 4).text();
+                    String updDate = findElementForTag(tbody_e.child(m), "td", 5).text();
+                    dicLog(codeGroup + " : " + categoryName + " : " + categoryId + " : " + categoryName + " : " + wordCnt + " : " + bookmarkCnt + " : " + updDate) ;
+                    Cursor cursor = db.rawQuery(DicQuery.getDaumCategory(categoryId), null);
+                    if (cursor.moveToNext()) {
+                        if ( categoryId.equals(cursor.getString(cursor.getColumnIndexOrThrow("CODE"))) && updDate.equals(cursor.getString(cursor.getColumnIndexOrThrow("UPD_DATE"))) ) {
+                            isBreak = true;
+                            break;
+                        } else {
+                            //수정
+                            DicDb.updDaumCategoryInfo(db, categoryId, categoryName, updDate, bookmarkCnt);
+                        }
+                    } else {
+                        //입력
+                        DicDb.insDaumCategoryInfo(db, codeGroup, categoryId, categoryName, updDate, wordCnt, bookmarkCnt);
+                    }
+                }
+
+                if ( isBreak ) {
+                    break;
+                }
+
+                HashMap pageHm = new HashMap();
+                Element div_paging = findElementSelect(doc, "div", "class", "paging_comm paging_type1");
+                for (int is = 0; is < div_paging.children().size(); is++) {
+                    if ("a".equals(div_paging.child(is).tagName())) {
+                        HashMap row = new HashMap();
+
+                        String page = getUrlParamValue(div_paging.child(is).attr("href"), "page");
+                        pageHm.put(page, page);
+                    }
+                }
+                // 페이지 정보중에 다음 페이지가 없으면 종료...
+                if (!pageHm.containsKey(Integer.toString(cnt + 1))) {
+                    break;
+                } else {
+                    dicLog("cnt : " + cnt);
+                    cnt++;
+                }
+            }
+        } catch ( Exception e ) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+
+        return wordAl;
+    }
+
+    public static ArrayList gatherCategoryWord(String url) {
+        ArrayList wordAl = new ArrayList();
+        try {
+            int cnt = 1;
+            while (true) {
+                Document doc = getDocument(url + "&page=" + cnt);
+                Element div_e = findElementSelect(doc, "div", "class", "list_word on");
+                for (int is = 0; is < div_e.children().size(); is++) {
+                    if ("div".equals(div_e.child(is).tagName())) {
+                        HashMap row = new HashMap();
+
+                        Element wordDiv = findElementForTagAttr(div_e.child(is), "div", "class", "txt_word");
+
+                        row.put("WORD", wordDiv.child(0).child(0).text());
+                        wordAl.add(row);
+                    }
+                }
+                HashMap pageHm = new HashMap();
+                Element div_paging = findElementSelect(doc, "div", "class", "paging_comm paging_type1");
+                for (int is = 0; is < div_paging.children().size(); is++) {
+                    if ("a".equals(div_paging.child(is).tagName())) {
+                        HashMap row = new HashMap();
+
+                        String page = getUrlParamValue(div_paging.child(is).attr("href"), "page");
+                        pageHm.put(page, page);
+                    }
+                }
+                // 페이지 정보중에 다음 페이지가 없으면 종료...
+                if (!pageHm.containsKey(Integer.toString(cnt + 1))) {
+                    break;
+                } else {
+                    cnt++;
+                }
+            }
+        } catch ( Exception e ) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+
+        return wordAl;
+    }
 }

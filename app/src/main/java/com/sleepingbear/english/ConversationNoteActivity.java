@@ -38,11 +38,12 @@ import java.io.IOException;
 public class ConversationNoteActivity extends AppCompatActivity implements View.OnClickListener {
     private DbHelper dbHelper;
     private SQLiteDatabase db;
+    int fontSize = 0;
     
-    private NoteFragCursorAdapter adapter;
+    private ConversationNoteCursorAdapter adapter;
 
     public Spinner s_group;
-    public String groupCode = "C01";
+    public String conversationNoteGroupCode = "C01";
     private int mSelect = 0;
     
     @Override
@@ -60,22 +61,23 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
+        fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
+
         dbHelper = new DbHelper(this);
         db = dbHelper.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(DicQuery.getNoteGroupKind(), null);
+        Cursor cursor = db.rawQuery(DicQuery.getConversationNoteGroupKind(), null);
         String[] from = new String[]{"KIND_NAME"};
         int[] to = new int[]{android.R.id.text1};
         SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, cursor, from, to);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s_group = (Spinner) findViewById(R.id.my_s_conversation_note);
         s_group.setAdapter(mAdapter);
-        s_group.setSelection(1); //학습회화로 초기값 지정
+        s_group.setSelection(0, true); //학습회화로 초기값 지정
         s_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                groupCode = ((Cursor) s_group.getSelectedItem()).getString(1);
-                DicUtils.dicLog("groupCode : " + groupCode);
+                conversationNoteGroupCode = ((Cursor) s_group.getSelectedItem()).getString(1);
 
                 changeListView();
             }
@@ -85,6 +87,9 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
 
             }
         });
+        //사이즈 설정
+        View v = s_group.getSelectedView();
+        ((TextView)v).setTextSize(fontSize);
 
         //리스트 내용 변경
         changeListView();
@@ -122,9 +127,9 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
 
     public void changeListView() {
         if ( db != null ) {
-            Cursor listCursor = db.rawQuery(DicQuery.getNoteKind(groupCode), null);
-            ListView listView = (ListView) findViewById(R.id.my_f_conversation_note_lv);
-            adapter = new NoteFragCursorAdapter(this, listCursor, 0);
+            Cursor listCursor = db.rawQuery(DicQuery.getConversationNoteKind(conversationNoteGroupCode), null);
+            ListView listView = (ListView) findViewById(R.id.my_lv);
+            adapter = new ConversationNoteCursorAdapter(this, listCursor, 0);
             listView.setAdapter(adapter);
             listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             listView.setOnItemClickListener(itemClickListener);
@@ -142,7 +147,7 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
             bundle.putString("kind", cur.getString(cur.getColumnIndexOrThrow("KIND")));
             bundle.putString("kindName", cur.getString(cur.getColumnIndexOrThrow("KIND_NAME")));
 
-            Intent intent = new Intent(ConversationNoteActivity.this, ConversationNoteActivity.class);
+            Intent intent = new Intent(ConversationNoteActivity.this, ConversationNoteViewActivity.class);
             intent.putExtras(bundle);
             startActivityForResult(intent, CommConstants.s_note);
         }
@@ -207,85 +212,74 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
         builder.setView(dialog_layout);
         final android.app.AlertDialog alertDialog = builder.create();
 
-        if ( "C01".equals(groupCode) || "C02".equals(groupCode) ) {
-            if ( "C01".equals(groupCode) ) {
-                final EditText et_upd = ((EditText) dialog_layout.findViewById(R.id.my_et_upd_name));
-                et_upd.setText(cur.getString(cur.getColumnIndexOrThrow("KIND_NAME")));
+        if ( "C01".equals(conversationNoteGroupCode) ) {
+            final EditText et_upd = ((EditText) dialog_layout.findViewById(R.id.my_et_upd_name));
+            et_upd.setText(cur.getString(cur.getColumnIndexOrThrow("KIND_NAME")));
 
-                ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setTag(cur.getString(cur.getColumnIndexOrThrow("KIND")));
-                ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ("".equals(et_upd.getText().toString())) {
-                            Toast.makeText(getApplication(), "회화노트 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            alertDialog.dismiss();
-
-                            db.execSQL(DicQuery.getUpdCode(groupCode, (String) v.getTag(), et_upd.getText().toString()));
-
-                            //기록...
-                            //DicUtils.writeInfoToFile(getContext(), db, groupCode);
-
-                            changeListView();
-
-                            Toast.makeText(getApplication(), "회화노트 이름을 수정하였습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            } else {
-                ((EditText) dialog_layout.findViewById(R.id.my_et_upd_name)).setEnabled(false);
-                ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setEnabled(false);
-            }
-            ((Button) dialog_layout.findViewById(R.id.my_b_del)).setTag(cur.getString(cur.getColumnIndexOrThrow("KIND")));
-            ((Button) dialog_layout.findViewById(R.id.my_b_del)).setOnClickListener(new View.OnClickListener() {
+            ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setTag(cur.getString(cur.getColumnIndexOrThrow("KIND")));
+            ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String code = (String) v.getTag();
-
-                    if ("C010001".equals(code)) {
-                        Toast.makeText(getApplication(), "기본 회화노트는 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        alertDialog.dismiss();
+                    if ("".equals(et_upd.getText().toString())) {
+                        Toast.makeText(getApplication(), "회화노트 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                     } else {
-                        new android.app.AlertDialog.Builder(ConversationNoteActivity.this)
-                                .setTitle("알림")
-                                .setMessage("삭제된 데이타는 복구할 수 없습니다. 삭제하시겠습니까?")
-                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        alertDialog.dismiss();
+                        alertDialog.dismiss();
 
-                                        db.execSQL(DicQuery.getDelCode(groupCode, code));
-                                        db.execSQL(DicQuery.getDelNote(code));
+                        db.execSQL(DicQuery.getUpdCode(conversationNoteGroupCode, (String) v.getTag(), et_upd.getText().toString()));
 
-                                        //기록...
-                                        //DicUtils.writeInfoToFile(getContext(), db, groupCode);
-                                        changeListView();
+                        changeListView();
 
-                                        Toast.makeText(getApplication(), "회화노트를 삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                })
-                                .show();
+                        Toast.makeText(getApplication(), "회화노트 이름을 수정하였습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         } else {
             ((EditText) dialog_layout.findViewById(R.id.my_et_upd_name)).setEnabled(false);
             ((Button) dialog_layout.findViewById(R.id.my_b_upd)).setEnabled(false);
-            ((Button) dialog_layout.findViewById(R.id.my_b_del)).setEnabled(false);
         }
+        ((Button) dialog_layout.findViewById(R.id.my_b_del)).setTag(cur.getString(cur.getColumnIndexOrThrow("KIND")));
+        ((Button) dialog_layout.findViewById(R.id.my_b_del)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String code = (String) v.getTag();
+
+                if ("C010001".equals(code)) {
+                    Toast.makeText(getApplication(), "기본 회화노트는 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    alertDialog.dismiss();
+                } else {
+                    new android.app.AlertDialog.Builder(ConversationNoteActivity.this)
+                            .setTitle("알림")
+                            .setMessage("삭제된 데이타는 복구할 수 없습니다. 삭제하시겠습니까?")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    alertDialog.dismiss();
+
+                                    db.execSQL(DicQuery.getDelCode(conversationNoteGroupCode, code));
+                                    db.execSQL(DicQuery.getDelNote(code));
+
+                                    //기록...
+                                    //DicUtils.writeInfoToFile(getContext(), db, conversationNoteGroupCode);
+                                    changeListView();
+
+                                    Toast.makeText(getApplication(), "회화노트를 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .show();
+                }
+            }
+        });
 
         final EditText et_saveName = ((EditText) dialog_layout.findViewById(R.id.my_et_file_name));
-        if ( "C01".equals(groupCode) ) {
+        if ( "C01".equals(conversationNoteGroupCode) ) {
             et_saveName.setText(cur.getString(cur.getColumnIndexOrThrow("KIND_NAME")));
-        } else if ( "C02".equals(groupCode) ) {
+        } else if ( "C02".equals(conversationNoteGroupCode) ) {
             et_saveName.setText(cur.getString(cur.getColumnIndexOrThrow("KIND")).replaceAll("[.]","") + "_회화학습");
-        } else {
-            et_saveName.setText(((Cursor) s_group.getSelectedItem()).getString(2) + "_" + DicUtils.getCurrentDate());
         }
         ((Button) dialog_layout.findViewById(R.id.my_b_save)).setTag(cur.getString(cur.getColumnIndexOrThrow("KIND")));
         ((Button) dialog_layout.findViewById(R.id.my_b_save)).setOnClickListener(new View.OnClickListener() {
@@ -371,9 +365,13 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
     }
 }
 
-class NoteFragCursorAdapter extends CursorAdapter {
-    public NoteFragCursorAdapter(Context context, Cursor cursor, int flags) {
+class ConversationNoteCursorAdapter extends CursorAdapter {
+    int fontSize = 0;
+
+    public ConversationNoteCursorAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, 0);
+
+        fontSize = Integer.parseInt( DicUtils.getPreferencesValue( context, CommConstants.preferences_font ) );
     }
 
 
@@ -387,6 +385,9 @@ class NoteFragCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ((TextView) view.findViewById(R.id.my_tv_kind)).setText(cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME")));
+
+        //사이즈 설정
+        ((TextView) view.findViewById(R.id.my_tv_kind)).setTextSize(fontSize);
     }
 
 }

@@ -25,9 +25,9 @@
                 android:id="@+id/my_s_conversation_note"
                 android:layout_marginLeft="10dp"
                 android:layout_alignParentRight="true"
-                android:layout_height="20dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp" />
 
         </RelativeLayout>
@@ -44,7 +44,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/my_f_conversation_note_lv"
+            android:id="@+id/my_lv"
             android:divider="@color/my_divider"
             android:dividerHeight="0.5dp"
             android:layout_below="@+id/my_f_conversation_note_ll"

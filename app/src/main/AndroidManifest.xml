@@ -111,6 +111,34 @@
         <activity
             android:name=".PatternViewActivity"
             android:label="@string/title_activity_pattern_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VocabularyNoteActivity"
+            android:label="@string/title_activity_vocabulary_note"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VocabularyNoteViewActivity"
+            android:label="@string/title_activity_vocabulary_note_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NaverConversationActivity"
+            android:label="@string/title_activity_naver_conversation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DaumVocabularyActivity"
+            android:label="@string/title_activity_daum_vocabulary"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NaverConversationViewActivity"
+            android:label="@string/title_activity_naver_conversation_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DaumVocabularyViewActivity"
+            android:label="@string/title_activity_daum_vocabulary_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ConversationNoteViewActivity"
+            android:label="@string/title_activity_conversation_note_view"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

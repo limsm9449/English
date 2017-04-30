@@ -161,7 +161,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
             TextView tv_type = (TextView)this.findViewById(R.id.my_tv_type);
             tv_type.setText(wordCursor.getString(wordCursor.getColumnIndexOrThrow("TYPE")));
 
-            if ( "0".equals(wordCursor.getString(wordCursor.getColumnIndexOrThrow("MY_VOC"))) ) {
+            if ( "0".equals(wordCursor.getString(wordCursor.getColumnIndexOrThrow(CommConstants.vocabularyCode))) ) {
                 ImageButton ib_myvoc = (ImageButton)this.findViewById(R.id.my_ib_myvoc);
                 ib_myvoc.setImageResource(android.R.drawable.star_off);
                 myVoc = false;

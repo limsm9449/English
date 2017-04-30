@@ -314,7 +314,7 @@ class Study1CursorAdapter extends CursorAdapter {
         viewHolder.seq = cursor.getString(cursor.getColumnIndexOrThrow("SEQ"));
         viewHolder.position = cursor.getPosition();
 
-        ((TextView) view.findViewById(R.id.my_c_s1i_tv_question)).setText(cursor.getString(cursor.getColumnIndexOrThrow("QUESTION")));
+        ((TextView) view.findViewById(R.id.my_tv_pattern)).setText(cursor.getString(cursor.getColumnIndexOrThrow("QUESTION")));
         if ( isItemView[cursor.getPosition()] ) {
             ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setText(cursor.getString(cursor.getColumnIndexOrThrow("ANSWER")));
         } else {
@@ -332,10 +332,10 @@ class Study1CursorAdapter extends CursorAdapter {
 
         //UI 수정
         if ( "WORD".equals(mWordMean) ) {
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_question)).setTextSize(15);
+            ((TextView) view.findViewById(R.id.my_tv_pattern)).setTextSize(15);
             ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setTextSize(13);
         } else {
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_question)).setTextSize(13);
+            ((TextView) view.findViewById(R.id.my_tv_pattern)).setTextSize(13);
             ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setTextSize(15);
         }
     }

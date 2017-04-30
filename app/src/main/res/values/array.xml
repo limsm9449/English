@@ -40,6 +40,25 @@
         <item>25</item>
     </string-array>
 
+    <string-array name="daumOrderValue">
+        <item>즐겨찾기</item>
+        <item>즐겨찾기 D</item>
+        <item>최근수정</item>
+        <item>최근수정 D</item>
+        <item>제목</item>
+        <item>제목 D</item>
+    </string-array>
+
+    <string-array name="dicOrderValue">
+        <item>등록일 D</item>
+        <item>단어 D</item>
+        <item>뜻 D</item>
+        <item>등록일</item>
+        <item>단어</item>
+        <item>뜻</item>
+        <item>Random</item>
+    </string-array>
+
     <string-array name="BackgroundColor">
         <item>honeydew</item>
         <item>mistyrose</item>

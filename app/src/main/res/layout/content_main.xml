@@ -141,10 +141,10 @@
                 android:layout_marginRight="3dp" />
 
             <Button
-                android:text="카테고리별 단어장"
+                android:text="Daum 단어장"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/my_b_category"
+                android:id="@+id/my_b_daum"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
                 android:layout_marginLeft="2dp" />
@@ -156,15 +156,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
-
-            <Button
-                android:text="My 회화"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_my_conv"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
 
             <Button
                 android:text="단어장"

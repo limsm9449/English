@@ -1,0 +1,6 @@
++ 네이버 예제 등록
+insert into dic_sample(sentence1,sentence2)
+select sentence1, sentence2
+from naver_conversation
+where sentence1 not in (
+select sentence1 from dic_sample where sentence1 in ( select sentence1 from naver_conversation) )

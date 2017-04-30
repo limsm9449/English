@@ -260,7 +260,6 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                         startActivity(intent);
                     } else {
                         DicDb.insConversationToNote(db, kindCodes[mSelect], sampleSeq);
-                        //DicUtils.writeInfoToFile(getActivity().getApplicationContext(), db, "C01");
                     }
                 }
             });

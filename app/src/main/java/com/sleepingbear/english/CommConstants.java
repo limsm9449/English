@@ -19,8 +19,14 @@ public class CommConstants {
     public static String screen_pattern = "SCREEN_PATTERN";
     public static String screen_patternView = "SCREEN_PATTERN_VIEW";
     public static String screen_conversationNote = "SCREEN_CONVERSATION_NOTE";
+    public static String screen_naverConversation = "SCREEN_NAVER_CONVERSATION";
+    public static String screen_naverConversationView = "SCREEN_NAVER_CONVERSATION_VIEW";
+    public static String screen_vocabularyNote = "SCREEN_VOCABULARY_NOTE";
+    public static String screen_vocabularyNoteView = "SCREEN_VOCABULARY_NOTE_VIEW";
 
     public static String preferences_font = "key_fontSize";
+
+    public static String vocabularyCode = "MY_VOC";
 
     public static String appName = "english";
     public static String sqlCR = "\n";

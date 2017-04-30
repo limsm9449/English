@@ -223,7 +223,7 @@ public class NewsClickWordActivity extends AppCompatActivity implements View.OnC
                                 alertDialog.dismiss();
 
                                 String insCategoryCode = DicQuery.getInsCategoryCode(db);
-                                db.execSQL(DicQuery.getInsNewCategory("MY", insCategoryCode, et_ins.getText().toString()));
+                                db.execSQL(DicQuery.getInsNewCategory(CommConstants.vocabularyCode, insCategoryCode, et_ins.getText().toString()));
 
                                 adapter.save(insCategoryCode);
                                 changeListView();
@@ -264,7 +264,7 @@ public class NewsClickWordActivity extends AppCompatActivity implements View.OnC
                     cursor.close();
 
                     final AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-                    dlg.setTitle("메뉴 선택");
+                    dlg.setTitle("단어장 선택");
                     dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {

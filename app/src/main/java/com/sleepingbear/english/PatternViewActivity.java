@@ -63,7 +63,7 @@ public class PatternViewActivity extends AppCompatActivity implements TextToSpee
         Bundle b = this.getIntent().getExtras();
         sqlWhere = b.getString("SQL_WHERE");
 
-        ((TextView)this.findViewById(R.id.my_tv_pattern_desc)).setText("뜻 : " + b.getString("DESC"));
+        ((TextView)this.findViewById(R.id.my_tv_pattern_desc)).setText(b.getString("PATTERN") + " : " + b.getString("DESC"));
         ((TextView)this.findViewById(R.id.my_tv_pattern_desc)).setTextSize(fontSize);
 
         dbHelper = new DbHelper(this);

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +49,7 @@ public class PatternActivity extends AppCompatActivity {
         dbHelper = new DbHelper(this);
         db = dbHelper.getWritableDatabase();
 
-        changeListView(true);
+        changeListView();
 
         AdView av = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -84,23 +83,21 @@ public class PatternActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void changeListView(boolean isKeyin) {
-        if ( isKeyin ) {
-            cursor = db.rawQuery(DicQuery.getPatternList(), null);
+    public void changeListView() {
+        cursor = db.rawQuery(DicQuery.getPatternList(), null);
 
-            if ( cursor.getCount() == 0 ) {
-                Toast.makeText(this, "검색된 데이타가 없습니다.", Toast.LENGTH_SHORT).show();
-            }
-
-            ListView listView = (ListView) findViewById(R.id.my_f_convation_lv);
-            adapter = new PatternCursorAdapter(getApplicationContext(), cursor, 0);
-            listView.setAdapter(adapter);
-
-            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            listView.setOnItemClickListener(itemClickListener);
-            listView.setOnItemLongClickListener(itemLongClickListener);
-            listView.setSelection(0);
+        if ( cursor.getCount() == 0 ) {
+            Toast.makeText(this, "검색된 데이타가 없습니다.", Toast.LENGTH_SHORT).show();
         }
+
+        ListView listView = (ListView) findViewById(R.id.my_f_convation_lv);
+        adapter = new PatternCursorAdapter(getApplicationContext(), cursor, 0);
+        listView.setAdapter(adapter);
+
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setOnItemClickListener(itemClickListener);
+        listView.setOnItemLongClickListener(itemLongClickListener);
+        listView.setSelection(0);
     }
 
     AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
