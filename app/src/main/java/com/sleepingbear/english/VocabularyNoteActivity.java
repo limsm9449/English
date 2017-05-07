@@ -187,7 +187,7 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), "기본 단어장은 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                     } else {
-                        new AlertDialog.Builder(getApplicationContext())
+                        new AlertDialog.Builder(VocabularyNoteActivity.this)
                                 .setTitle("알림")
                                 .setMessage("삭제된 데이타는 복구할 수 없습니다. 삭제하시겠습니까?")
                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -197,6 +197,8 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
 
                                         db.execSQL(DicQuery.getDelCategory(CommConstants.vocabularyCode, code));
                                         db.execSQL(DicQuery.getDelDicVoc(code));
+
+                                        DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
 
                                         changeListView();
 

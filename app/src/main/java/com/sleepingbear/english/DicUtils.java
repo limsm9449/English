@@ -257,9 +257,12 @@ public class DicUtils {
 
             Cursor cursor = db.rawQuery(DicQuery.getWriteData(), null);
             while (cursor.moveToNext()) {
-                DicUtils.dicLog(cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA")));
-                fos.write((cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA")).getBytes()));
-                fos.write("\n".getBytes());
+                String writeData = cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA"));
+                DicUtils.dicLog(writeData);
+                if ( writeData != null ) {
+                    fos.write((writeData.getBytes()));
+                    fos.write("\n".getBytes());
+                }
             }
             cursor.close();
 
