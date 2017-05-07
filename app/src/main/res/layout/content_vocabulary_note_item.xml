@@ -21,7 +21,7 @@
                 android:id="@+id/my_tv_pattern"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="false"
-                android:textColor="#e65a5a"
+                android:textColor="@color/my_text_word"
                 android:textSize="13dp"
                 android:gravity="center_vertical"
                 android:layout_alignParentBottom="false"

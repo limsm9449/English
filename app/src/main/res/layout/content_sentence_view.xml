@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text="Foriegn Sentence"
                     android:id="@+id/my_tv_foreign"
-                    android:textColor="#e65a5a"
+                    android:textColor="@color/my_text_word"
                     android:textSize="15dp"
                     android:textIsSelectable="true"
                     android:layout_marginLeft="10dp" />

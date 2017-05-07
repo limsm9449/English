@@ -140,6 +140,14 @@ public class Study6Activity extends AppCompatActivity implements View.OnClickLis
             ((RadioButton) findViewById(R.id.my_a_study6_rb_m_not)).setChecked(true);
         }
 
+        int fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
+        tv_answer1.setTextSize(fontSize);
+        tv_answer2.setTextSize(fontSize);
+        tv_answer3.setTextSize(fontSize);
+        tv_answer4.setTextSize(fontSize);
+        tv_o_cnt.setTextSize(fontSize);
+        tv_x_cnt.setTextSize(fontSize);
+
         sb = (SeekBar) findViewById(R.id.my_a_study6_sb);
         sb.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -529,7 +537,7 @@ public class Study6Activity extends AppCompatActivity implements View.OnClickLis
             finish();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "study6");
+            bundle.putString("SCREEN", CommConstants.screen_study6);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);

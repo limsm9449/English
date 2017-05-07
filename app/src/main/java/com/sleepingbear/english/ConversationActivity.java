@@ -260,6 +260,7 @@ public class ConversationActivity extends AppCompatActivity implements View.OnCl
                         startActivity(intent);
                     } else {
                         DicDb.insConversationToNote(db, kindCodes[mSelect], sampleSeq);
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
                 }
             });

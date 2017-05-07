@@ -180,49 +180,21 @@ public class DicUtils {
         return rtn;
     }
 
-    /*
-    public static void writeInfoToFile(Context ctx, String saveData) {
-        try {
-            FileOutputStream fos = ctx.openFileOutput(CommConstants.infoFileName, ctx.MODE_APPEND);
-            fos.write(saveData.getBytes());
-            fos.write("\n".getBytes());
-            fos.close();
-        } catch (Exception e) {
-            DicUtils.dicLog("File 에러=" + e.toString());
-        }
-    }
-    */
-
-    public static void readInfoFromFile(Context ctx, SQLiteDatabase db, String kind) {
-        readInfoFromFile(ctx, db, kind, "");
-    }
-    public static void readInfoFromFile(Context ctx, SQLiteDatabase db, String kind, String fileName) {
-        dicLog(DicUtils.class.toString() + " : " + "readInfoFromFile start, " + kind + ", " + fileName);
+    public static void readInfoFromFile(Context ctx, SQLiteDatabase db, String fileName) {
+        dicLog(DicUtils.class.toString() + " : " + "readInfoFromFile start, " + fileName);
 
         //데이타 복구
         FileInputStream fis = null;
         try {
-            if ( "C01".equals(kind) ) {
-                fis = ctx.openFileInput(CommConstants.infoFileNameC01);
+            //데이타 초기화
+            DicDb.initMyConversationNote(db);
+            DicDb.initConversationNote(db);
+            DicDb.initVocabulary(db);
+            DicDb.initDicClickWord(db);
 
-                //데이타 초기화
-                //DicDb.initNote(db, "C01");
-            } else if ( "C02".equals(kind) ) {
-                fis = ctx.openFileInput(CommConstants.infoFileNameC02);
-
-                //데이타 초기화
-                //DicDb.initNote(db, "C02");
-            } else if ( "VOC".equals(kind) ) {
-                fis = ctx.openFileInput(CommConstants.infoFileNameVoc);
-
-                //데이타 초기화
-                //DicDb.initVocabulary(db);
+            if ( "".equals(fileName) ) {
+                fis = ctx.openFileInput(CommConstants.infoFileName);
             } else {
-                //데이타 초기화
-                //DicDb.initNote(db, "C01");
-                //DicDb.initNote(db, "C02");
-                //DicDb.initVocabulary(db);
-
                 fis = new FileInputStream(new File(fileName));
             }
 
@@ -236,11 +208,15 @@ public class DicUtils {
 
                 String[] row = readString.split(":");
                 if ( row[0].equals(CommConstants.tag_code_ins) ) {
-                    //DicDb.insCode(db, row[1], row[2], row[3]);
+                    DicDb.insCode(db, row[1], row[2], row[3]);
                 } else if ( row[0].equals(CommConstants.tag_note_ins) ) {
-                    //DicDb.insConversationToNote(db, row[1], row[2]);
+                    DicDb.insConversationToNote(db, row[1], row[2]);
                 } else if ( row[0].equals(CommConstants.tag_voc_ins) ) {
-                    //DicDb.insDicVoc(db, row[1], row[2], row[3], row[4]);
+                    DicDb.insDicVoc(db, row[1], row[2], row[3], row[4]);
+                } else if ( row[0].equals(CommConstants.tag_history_ins) ) {
+                    DicDb.insSearchHistory(db, row[1], row[2]);
+                } else if ( row[0].equals(CommConstants.tag_click_word_ins) ) {
+                    DicDb.insDicClickWord(db, row[1], row[2]);
                 }
 
                 readString = buffreader.readLine();
@@ -260,23 +236,14 @@ public class DicUtils {
      * @param ctx
      * @param db
      */
-    public static void writeInfoToFile(Context ctx, SQLiteDatabase db, String kind) {
+    public static void writeInfoToFile(Context ctx, SQLiteDatabase db, String fileName) {
         System.out.println("writeNewInfoToFile start");
 
-        writeInfoToFile(ctx, db, kind, "");
-
-        System.out.println("writeNewInfoToFile end");
-    }
-    public static void writeInfoToFile(Context ctx, SQLiteDatabase db, String kind, String fileName) {
         try {
             FileOutputStream fos = null;
 
-            if ( "C01".equals(kind) ) {
-                fos = ctx.openFileOutput(CommConstants.infoFileNameC01, ctx.MODE_PRIVATE);
-            } else if ( "C02".equals(kind) ) {
-                fos = ctx.openFileOutput(CommConstants.infoFileNameC02, ctx.MODE_PRIVATE);
-            } else if ( "VOC".equals(kind) ) {
-                fos = ctx.openFileOutput(CommConstants.infoFileNameVoc, ctx.MODE_PRIVATE);
+            if ( "".equals(fileName) ) {
+                fos = ctx.openFileOutput(CommConstants.infoFileName, ctx.MODE_PRIVATE);
             } else {
                 File saveFile = new File(fileName);
                 try {
@@ -288,7 +255,7 @@ public class DicUtils {
                 fos = new FileOutputStream(saveFile);
             }
 
-            Cursor cursor = db.rawQuery(DicQuery.getWriteData(kind), null);
+            Cursor cursor = db.rawQuery(DicQuery.getWriteData(), null);
             while (cursor.moveToNext()) {
                 DicUtils.dicLog(cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA")));
                 fos.write((cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA")).getBytes()));
@@ -300,6 +267,8 @@ public class DicUtils {
         } catch (Exception e) {
             DicUtils.dicLog("File 에러=" + e.toString());
         }
+
+        System.out.println("writeNewInfoToFile end");
     }
 
     public static boolean isHangule(String pStr) {
@@ -466,6 +435,13 @@ public class DicUtils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(CommConstants.flag_dbChange, "Y");
         editor.commit();
+
+        dicLog(DicUtils.class.toString() + " setDbChange : " + "Y");
+    }
+
+    public static String getDbChange(Context mContext) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return prefs.getString(CommConstants.flag_dbChange, "N");
     }
 
     public static void clearDbChange(Context mContext) {
@@ -481,7 +457,7 @@ public class DicUtils {
         String rtn = sharedPref.getString( preference, "" );
         if ( "".equals( rtn ) ) {
             if ( preference.equals(CommConstants.preferences_font) ) {
-                rtn = "11";
+                rtn = "13";
             } else {
                 rtn = "";
             }

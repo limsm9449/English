@@ -178,7 +178,7 @@ public class Study1Activity extends AppCompatActivity implements View.OnClickLis
             finish();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "STUDY1");
+            bundle.putString("SCREEN", CommConstants.screen_study1);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -191,6 +191,7 @@ public class Study1Activity extends AppCompatActivity implements View.OnClickLis
 
 
 class Study1CursorAdapter extends CursorAdapter {
+    int fontSize = 0;
     private String mWordMean;
     private Activity mActivity;
     private SQLiteDatabase mDb;
@@ -220,6 +221,8 @@ class Study1CursorAdapter extends CursorAdapter {
         for ( int i = 0; i < isItemView.length; i++ ) {
             isItemView[i] = false;
         }
+
+        fontSize = Integer.parseInt( DicUtils.getPreferencesValue( context, CommConstants.preferences_font ) );
     }
 
     @Override
@@ -230,7 +233,7 @@ class Study1CursorAdapter extends CursorAdapter {
 
         //암기 체크
         ViewHolder viewHolder = new ViewHolder();
-        viewHolder.memorizationCheck = (CheckBox) view.findViewById(R.id.my_c_s1i_cb_memorization);
+        viewHolder.memorizationCheck = (CheckBox) view.findViewById(R.id.my_cb_memorization);
         viewHolder.memorizationCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +241,7 @@ class Study1CursorAdapter extends CursorAdapter {
 
                 StringBuffer sql = new StringBuffer();
                 sql.append("UPDATE DIC_VOC " + CommConstants.sqlCR);
-                sql.append("   SET MEMORIZATION = '" + ( ((CheckBox)v.findViewById(R.id.my_c_s1i_cb_memorization)).isChecked() ? "Y" : "N") + "'" + CommConstants.sqlCR);
+                sql.append("   SET MEMORIZATION = '" + ( ((CheckBox)v.findViewById(R.id.my_cb_memorization)).isChecked() ? "Y" : "N") + "'" + CommConstants.sqlCR);
                 sql.append(" WHERE ENTRY_ID = '" + params[0] + "' " + CommConstants.sqlCR);
                 mDb.execSQL(sql.toString());
 
@@ -314,16 +317,16 @@ class Study1CursorAdapter extends CursorAdapter {
         viewHolder.seq = cursor.getString(cursor.getColumnIndexOrThrow("SEQ"));
         viewHolder.position = cursor.getPosition();
 
-        ((TextView) view.findViewById(R.id.my_tv_pattern)).setText(cursor.getString(cursor.getColumnIndexOrThrow("QUESTION")));
+        ((TextView) view.findViewById(R.id.my_tv_question)).setText(cursor.getString(cursor.getColumnIndexOrThrow("QUESTION")));
         if ( isItemView[cursor.getPosition()] ) {
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setText(cursor.getString(cursor.getColumnIndexOrThrow("ANSWER")));
+            ((TextView) view.findViewById(R.id.my_tv_answer)).setText(cursor.getString(cursor.getColumnIndexOrThrow("ANSWER")));
         } else {
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setText("?");
+            ((TextView) view.findViewById(R.id.my_tv_answer)).setText("?");
         }
 
         //암기 체크박스
         String memorization = cursor.getString(cursor.getColumnIndexOrThrow("MEMORIZATION"));
-        CheckBox cb_memorization = (CheckBox) view.findViewById(R.id.my_c_s1i_cb_memorization);
+        CheckBox cb_memorization = (CheckBox) view.findViewById(R.id.my_cb_memorization);
         if ("Y".equals(memorization)) {
             cb_memorization.setChecked(true);
         } else {
@@ -332,11 +335,15 @@ class Study1CursorAdapter extends CursorAdapter {
 
         //UI 수정
         if ( "WORD".equals(mWordMean) ) {
-            ((TextView) view.findViewById(R.id.my_tv_pattern)).setTextSize(15);
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setTextSize(13);
+            ((TextView) view.findViewById(R.id.my_tv_question)).setTextSize(15);
+            ((TextView) view.findViewById(R.id.my_tv_answer)).setTextSize(13);
         } else {
-            ((TextView) view.findViewById(R.id.my_tv_pattern)).setTextSize(13);
-            ((TextView) view.findViewById(R.id.my_c_s1i_tv_answer)).setTextSize(15);
+            ((TextView) view.findViewById(R.id.my_tv_question)).setTextSize(13);
+            ((TextView) view.findViewById(R.id.my_tv_answer)).setTextSize(15);
         }
+
+        //사이즈 설정
+        ((TextView) view.findViewById(R.id.my_tv_question)).setTextSize(fontSize);
+        ((TextView) view.findViewById(R.id.my_tv_answer)).setTextSize(fontSize);
     }
 }

@@ -139,7 +139,21 @@
         <activity
             android:name=".ConversationNoteViewActivity"
             android:label="@string/title_activity_conversation_note_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".WebTranslateActivity"
+            android:label="@string/title_activity_web_translate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DictionaryHistoryActivity"
+            android:label="@string/title_activity_dictionary_history"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <service android:name=".MySpeechService">
+            <intent-filter>
+                <action android:name="com.sleepingbear.english.MySpeechService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

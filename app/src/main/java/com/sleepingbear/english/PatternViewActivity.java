@@ -151,7 +151,7 @@ public class PatternViewActivity extends AppCompatActivity implements TextToSpee
                             startActivity(intent);
                         } else {
                             DicDb.insConversationToNote(db, kindCodes[mSelect], sampleSeq);
-                            //DicUtils.writeInfoToFile(getApplicationContext(), db, "C01");
+                            DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                         }
                     }
                 });

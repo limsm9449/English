@@ -1,5 +1,6 @@
 package com.sleepingbear.english;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,7 +56,51 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setVisibility(View.GONE);
+        //fab.setVisibility(View.GONE);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                final View dialog_layout = inflater.inflate(R.layout.dialog_note_add, null);
+
+                //dialog 생성..
+                AlertDialog.Builder builder = new AlertDialog.Builder(ConversationNoteActivity.this);
+                builder.setView(dialog_layout);
+                final AlertDialog alertDialog = builder.create();
+
+
+                final EditText et_ins = ((EditText) dialog_layout.findViewById(R.id.my_et_ins_name));
+                ((Button) dialog_layout.findViewById(R.id.my_b_ins)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ("".equals(et_ins.getText().toString())) {
+                            Toast.makeText(getApplicationContext(), "My 회화 노트 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            alertDialog.dismiss();
+
+                            String insMaxCode = DicQuery.getInsMyNoteCode(db);
+                            db.execSQL(DicQuery.getInsNewCategory("C01", insMaxCode, et_ins.getText().toString()));
+
+                            changeListView();
+
+                            DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
+
+                            Toast.makeText(getApplicationContext(), "My 회화 노트에 추가하였습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                ((Button) dialog_layout.findViewById(R.id.my_b_close)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
+        });
 
         ActionBar ab = (ActionBar) getSupportActionBar();
         ab.setHomeButtonEnabled(true);
@@ -149,7 +194,7 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
 
             Intent intent = new Intent(ConversationNoteActivity.this, ConversationNoteViewActivity.class);
             intent.putExtras(bundle);
-            startActivityForResult(intent, CommConstants.s_note);
+            startActivity(intent);
         }
     };
 
@@ -258,8 +303,8 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
                                     db.execSQL(DicQuery.getDelCode(conversationNoteGroupCode, code));
                                     db.execSQL(DicQuery.getDelNote(code));
 
-                                    //기록...
-                                    //DicUtils.writeInfoToFile(getContext(), db, conversationNoteGroupCode);
+                                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+
                                     changeListView();
 
                                     Toast.makeText(getApplication(), "회화노트를 삭제하였습니다.", Toast.LENGTH_SHORT).show();

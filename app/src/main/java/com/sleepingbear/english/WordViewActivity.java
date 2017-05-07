@@ -132,6 +132,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
                         ImageButton ib_myvoc = (ImageButton)findViewById(R.id.my_ib_myvoc);
                         ib_myvoc.setImageResource(android.R.drawable.star_on);
                         myVoc = true;
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
                 });
 
@@ -282,6 +283,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
                     myVoc = true;
 
                     DicDb.insDicVoc(db, entryId, "VOC0001");
+                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                 }
 
                 break;

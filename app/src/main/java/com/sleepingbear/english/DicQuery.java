@@ -5,46 +5,31 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DicQuery {
 
-    public static String getWriteData(String kind) {
+    public static String getWriteData() {
         StringBuffer sql = new StringBuffer();
 
-        DicUtils.dicLog("kind : "  + kind);
-        if ( "C01".equals(kind) || "C02".equals(kind) ) {
-            sql.append("SELECT '" + CommConstants.tag_code_ins + "'||':'||A.CODE_GROUP||':'||A.CODE||':'||A.CODE_NAME WRITE_DATA" + CommConstants.sqlCR);
-            sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE_GROUP = '" + kind + "'" + CommConstants.sqlCR);
-            sql.append("   AND CODE NOT IN ('C010001')" + CommConstants.sqlCR);
+        sql.append("SELECT '" + CommConstants.tag_code_ins + "'||':'||A.CODE_GROUP||':'||A.CODE||':'||A.CODE_NAME WRITE_DATA" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP IN ('MY_VOC','C01','C02')" + CommConstants.sqlCR);
+        sql.append("   AND CODE NOT IN ('VOC0001','C010001')" + CommConstants.sqlCR);
 
-            sql.append("UNION" + CommConstants.sqlCR);
-            sql.append("SELECT '" + CommConstants.tag_note_ins + "'||':'||CODE||':'||SAMPLE_SEQ WRITE_DATA " + CommConstants.sqlCR);
-            sql.append(" FROM DIC_NOTE" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE IN (SELECT CODE FROM DIC_CODE WHERE CODE_GROUP = '" + kind + "')" + CommConstants.sqlCR);
-        } else if ( "VOC".equals(kind) ) {
-            sql.append("SELECT '" + CommConstants.tag_code_ins + "'||':'||A.CODE_GROUP||':'||A.CODE||':'||A.CODE_NAME WRITE_DATA" + CommConstants.sqlCR);
-            sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE_GROUP IN ('VOC')" + CommConstants.sqlCR);
-            sql.append("   AND CODE NOT IN ('VOC0001')" + CommConstants.sqlCR);
+        sql.append("UNION" + CommConstants.sqlCR);
+        sql.append("SELECT '" + CommConstants.tag_note_ins + "'||':'||CODE||':'||SAMPLE_SEQ WRITE_DATA " + CommConstants.sqlCR);
+        sql.append(" FROM DIC_NOTE" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE IN (SELECT CODE FROM DIC_CODE WHERE CODE_GROUP IN ('C01','C02') )" + CommConstants.sqlCR);
 
-            sql.append("UNION" + CommConstants.sqlCR);
-            sql.append("SELECT '" + CommConstants.tag_voc_ins + "'||':'||A.KIND||':'||A.ENTRY_ID||':'||A.INS_DATE||':'||A.MEMORIZATION WRITE_DATA " + CommConstants.sqlCR);
-            sql.append(" FROM DIC_VOC A, DIC B" + CommConstants.sqlCR);
-            sql.append(" WHERE A.ENTRY_ID = B.ENTRY_ID" + CommConstants.sqlCR);
-        } else {
-            sql.append("SELECT '" + CommConstants.tag_code_ins + "'||':'||A.CODE_GROUP||':'||A.CODE||':'||A.CODE_NAME WRITE_DATA" + CommConstants.sqlCR);
-            sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE_GROUP IN ('VOC','C01','C02')" + CommConstants.sqlCR);
-            sql.append("   AND CODE NOT IN ('VOC0001','C010001')" + CommConstants.sqlCR);
+        sql.append("UNION" + CommConstants.sqlCR);
+        sql.append("SELECT '" + CommConstants.tag_voc_ins + "'||':'||A.KIND||':'||A.ENTRY_ID||':'||A.INS_DATE||':'||A.MEMORIZATION WRITE_DATA " + CommConstants.sqlCR);
+        sql.append(" FROM DIC_VOC A, DIC B" + CommConstants.sqlCR);
+        sql.append(" WHERE A.ENTRY_ID = B.ENTRY_ID" + CommConstants.sqlCR);
 
-            sql.append("UNION" + CommConstants.sqlCR);
-            sql.append("SELECT '" + CommConstants.tag_note_ins + "'||':'||CODE||':'||SAMPLE_SEQ WRITE_DATA " + CommConstants.sqlCR);
-            sql.append(" FROM DIC_NOTE" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE IN (SELECT CODE FROM DIC_CODE WHERE CODE_GROUP IN ('C01','C02') )" + CommConstants.sqlCR);
+        sql.append("UNION" + CommConstants.sqlCR);
+        sql.append("SELECT '" + CommConstants.tag_history_ins + "'||':'||SEQ||':'||WORD WRITE_DATA " + CommConstants.sqlCR);
+        sql.append(" FROM DIC_SEARCH_HISTORY" + CommConstants.sqlCR);
 
-            sql.append("UNION" + CommConstants.sqlCR);
-            sql.append("SELECT '" + CommConstants.tag_voc_ins + "'||':'||A.KIND||':'||A.ENTRY_ID||':'||A.INS_DATE||':'||A.MEMORIZATION WRITE_DATA " + CommConstants.sqlCR);
-            sql.append(" FROM DIC_VOC A, DIC B" + CommConstants.sqlCR);
-            sql.append(" WHERE A.ENTRY_ID = B.ENTRY_ID" + CommConstants.sqlCR);
-        }
+        sql.append("UNION" + CommConstants.sqlCR);
+        sql.append("SELECT '" + CommConstants.tag_click_word_ins + "'||':'||ENTRY_ID||':'||INS_DATE WRITE_DATA " + CommConstants.sqlCR);
+        sql.append(" FROM DIC_CLICK_WORD" + CommConstants.sqlCR);
 
         DicUtils.dicSqlLog(sql.toString());
 
@@ -545,23 +530,27 @@ public class DicQuery {
     public static String getDaumKind() {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("SELECT 1 _id, 'DAILY' KIND, '사용 빈도수별 Daily 학습' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 1 _id, 'TOEIC' KIND, 'TOEIC' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 2 _id, 'TOEIC' KIND, 'TOEIC' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 2 _id, 'TOEFL' KIND, 'TOEFL' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 3 _id, 'TOEFL' KIND, 'TOEFL' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 3 _id, 'TEPS' KIND, 'TEPS' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 4 _id, 'TEPS' KIND, 'TEPS' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 4 _id, '수능영어' KIND, '수능영어' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 5 _id, '수능영어' KIND, '수능영어' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 5 _id, 'NEAT/NEPT' KIND, 'NEAT/NEPT' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 6 _id, 'NEAT/NEPT' KIND, 'NEAT/NEPT' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 6 _id, '초중고영어' KIND, '초중고영어' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 7 _id, '초중고영어' KIND, '초중고영어' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 7 _id, '회화' KIND, '회화' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 8 _id, '회화' KIND, '회화' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 8 _id, '기타' KIND, '기타' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 9 _id, '기타' KIND, '기타' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 9 _id, 'R1' KIND, '사용 빈도수별 Toeic Rank' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("UNION ALL" + CommConstants.sqlCR);
+        sql.append("SELECT 10 _id, 'R2' KIND, '사용 빈도수별 수능영어' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("UNION ALL" + CommConstants.sqlCR);
+        sql.append("SELECT 11 _id, 'R3' KIND, '사용 빈도수별 초중고영어' KIND_NAME" + CommConstants.sqlCR);
 
         DicUtils.dicSqlLog(sql.toString());
 
@@ -634,4 +623,42 @@ public class DicQuery {
 
         return sql.toString();
     }
+
+    public static String getDictionaryHistoryword() {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT SEQ _id, SEQ, WORD" + CommConstants.sqlCR);
+        sql.append("FROM   DIC_SEARCH_HISTORY" + CommConstants.sqlCR);
+        sql.append("ORDER  BY SEQ DESC" + CommConstants.sqlCR);
+
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    /**
+     * 새로 추가할 My 회화 코드
+     * @param mDb
+     * @return
+     */
+    public static String getInsMyNoteCode(SQLiteDatabase mDb) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT MAX(CODE) CODE" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_CODE" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = 'C01'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        String insMyNoteCode = "";
+        Cursor maxCategoryCursor = mDb.rawQuery(sql.toString(), null);
+        if ( maxCategoryCursor.moveToNext() ) {
+            String max = maxCategoryCursor.getString(maxCategoryCursor.getColumnIndexOrThrow("CODE"));
+            int maxCategory = Integer.parseInt(max.substring(3,max.length()));
+            insMyNoteCode = "C01" + DicUtils.lpadding(Integer.toString(maxCategory + 1), 4, "0");
+            DicUtils.dicSqlLog("insMyNoteCode : " + insMyNoteCode);
+        }
+
+        return insMyNoteCode;
+    }
+
 }

@@ -73,6 +73,9 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
         Bundle b = getIntent().getExtras();
         dictionaryKind = b.getString("KIND");
+        if ( dictionaryKind == null ) {
+            dictionaryKind = CommConstants.dictionaryKind_f;
+        }
 
         if ( dictionaryKind.equals(CommConstants.dictionaryKind_f) ) {
             ab.setTitle(CommConstants.dictionaryKind_f_title);
@@ -91,6 +94,8 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ( keyCode == KeyEvent.KEYCODE_ENTER ) {
+                    DicDb.insSearchHistory(db, et_search.getText().toString().trim().toLowerCase());
+                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     changeListView(true);
                 }
 
@@ -111,13 +116,21 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
         });
 
         ((CheckBox) findViewById(R.id.my_cb_word)).setOnClickListener(this);
+        ((ImageView) findViewById(R.id.my_iv_web)).setOnClickListener(this);
 
-        //키보드 보이게 하는 부분
-        et_search.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if ( !"".equals(b.getString("word")) ) {
+            et_search.setText(b.getString("word"));
+            changeListView(true);
+        } else {
+            //키보드 보이게 하는 부분
+            et_search.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-        changeListView(false);
+            changeListView(false);
+        }
+
+        ((RelativeLayout)findViewById(R.id.my_dictionary_rl_web)).setVisibility(View.GONE);
 
         AdView av = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -145,6 +158,7 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
             bundle.putString("SCREEN", CommConstants.screen_dictionary);
+            bundle.putString("KIND", dictionaryKind);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -267,6 +281,9 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
         } else {
             if (cursor.getCount() == 0) {
                 Toast.makeText(this, "검색된 데이타가 없습니다.", Toast.LENGTH_SHORT).show();
+                ((RelativeLayout)findViewById(R.id.my_dictionary_rl_web)).setVisibility(View.VISIBLE);
+            } else {
+                ((RelativeLayout)findViewById(R.id.my_dictionary_rl_web)).setVisibility(View.GONE);
             }
 
             ListView dictionaryListView = (ListView) findViewById(R.id.my_lv);
@@ -301,9 +318,11 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             public void onClick(DialogInterface dialog, int which) {
                 Bundle bundle = new Bundle();
 
+                Cursor cur = (Cursor) adapter.getCursor();
+
                 bundle.putString("kind", dictionaryKind);
                 bundle.putString("site", kindCodes[webDictionaryIdx]);
-                bundle.putString("word", et_search.getText().toString().trim().toLowerCase());
+                bundle.putString("word", cur.getString(cur.getColumnIndexOrThrow("WORD")));
 
                 Intent intent = new Intent(getApplication(), WebDictionaryActivity.class);
                 intent.putExtras(bundle);
@@ -374,6 +393,7 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
                         } else {
                             Cursor cur = (Cursor) adapter.getCursor();
                             DicDb.insDicVoc(db, cur.getString(cur.getColumnIndexOrThrow("ENTRY_ID")), kindCodes[dSelect]);
+                            DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                         }
                     }
                 });
@@ -410,6 +430,33 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if ( v.getId() == R.id.my_cb_word ) {
             changeListView(true);
+        } else if ( v.getId() == R.id.my_iv_web ) {
+            final String[] kindCodes = new String[]{"Naver","Daum"};
+
+            final AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setTitle("검색 사이트 선택");
+            dlg.setSingleChoiceItems(kindCodes, webDictionaryIdx, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    webDictionaryIdx = arg1;
+                }
+            });
+            dlg.setNegativeButton("취소", null);
+            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("kind", dictionaryKind);
+                    bundle.putString("site", kindCodes[webDictionaryIdx]);
+                    bundle.putString("word", et_search.getText().toString().trim().toLowerCase());
+
+                    Intent intent = new Intent(getApplication(), WebDictionaryActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+            dlg.show();
         }
     }
 

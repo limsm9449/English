@@ -248,7 +248,7 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
+        getMenuInflater().inflate(R.menu.menu_news_view, menu);
 
         return true;
     }
@@ -264,9 +264,15 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
 
         if (id == android.R.id.home) {
             finish();
+        } else if (id == R.id.action_web_dictionary) {
+            Bundle bundle = new Bundle();
+
+            Intent webIntent = new Intent(getApplication(), WebDictionaryActivity.class);
+            webIntent.putExtras(bundle);
+            startActivity(webIntent);
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "WEB_VIEW");
+            bundle.putString("SCREEN", CommConstants.screen_newsView);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -477,6 +483,7 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Bundle bundle = new Bundle();
+                bundle.putString("kind", CommConstants.dictionaryKind_f);
                 bundle.putString("site", kindCodes[m2Select]);
                 bundle.putString("word", clickWord);
 

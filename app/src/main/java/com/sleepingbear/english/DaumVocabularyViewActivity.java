@@ -35,6 +35,7 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private DaumVocabularyViewCursorAdapter adapter;
     public String categoryId;
+    public String kind;
     public int mSelect = 0;
 
     DaumVocabularyViewTask task;
@@ -51,6 +52,7 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
 
         Bundle b = this.getIntent().getExtras();
         categoryId = b.getString("CATEGORY_ID");
+        kind = b.getString("KIND");
 
         ActionBar ab = (ActionBar) getSupportActionBar();
         ab.setTitle(b.getString("CATEGORY_NAME"));
@@ -69,7 +71,7 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
 
     public void getListView() {
         Cursor cursor = db.rawQuery(DicQuery.getDaumVocabulary(categoryId), null);
-        if ( cursor.getCount() == 0 ) {
+        if ( cursor.getCount() == 0 && "R1,R2,R3".indexOf(DicUtils.getString(kind)) < 0 ) {
             if ( DicUtils.isNetWork(this) ) {
                 task = new DaumVocabularyViewTask();
                 task.execute();
@@ -138,6 +140,8 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     DicDb.insDicVoc(db, entryId, kindCodes[mSelect]);
                     adapter.dataChange();
+
+                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                 }
             });
             dlg.show();
@@ -156,7 +160,7 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
             if ( DicUtils.isNetWork(this) ) {
                 new AlertDialog.Builder(this)
                         .setTitle("알림")
-                        .setMessage("단어 정보를 가져오기 위해서 데이타를 사용합니다.\n연결하시겠습니까?")
+                        .setMessage("단어 정보를 동기화 하시겠습니까?")
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -175,7 +179,7 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
             }
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "DIC_CATEGORY_VIEW");
+            bundle.putString("SCREEN", CommConstants.screen_daumVocabularyView);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -191,6 +195,18 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_refresh, menu);
 
         return true;
+    }
+
+    @Override
+    // 메뉴 상태 변경
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if ( "TOEIC,TOEFL,TEPS,수능영어,NEAT/NEPT,초중고영어,회화,기타".indexOf(kind) > -1 ) {
+            ((MenuItem)menu.findItem(R.id.action_refresh)).setVisible(true);
+        } else {
+            ((MenuItem) menu.findItem(R.id.action_refresh)).setVisible(false);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     private class DaumVocabularyViewTask extends AsyncTask<Void, Void, Void> {
@@ -216,6 +232,8 @@ public class DaumVocabularyViewActivity extends AppCompatActivity {
             DicDb.delDaumVocabulary(db, categoryId);
             DicDb.insDaumVocabulary(db, categoryId, wordAl);
             DicDb.updDaumCategoryWordCount(db, categoryId);
+
+            DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
 
             return null;
         }

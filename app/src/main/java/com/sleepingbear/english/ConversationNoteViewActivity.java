@@ -229,16 +229,11 @@ public class ConversationNoteViewActivity extends AppCompatActivity implements V
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if ( "C01".equals(kind.substring(0, 3)) || "C02".equals(kind.substring(0, 3)) ) {
-            if (isEditing) {
-                ((MenuItem) menu.findItem(R.id.action_edit)).setVisible(false);
-                ((MenuItem) menu.findItem(R.id.action_exit)).setVisible(true);
-            } else {
-                ((MenuItem) menu.findItem(R.id.action_edit)).setVisible(true);
-                ((MenuItem) menu.findItem(R.id.action_exit)).setVisible(false);
-            }
-        } else {
+        if (isEditing) {
             ((MenuItem) menu.findItem(R.id.action_edit)).setVisible(false);
+            ((MenuItem) menu.findItem(R.id.action_exit)).setVisible(true);
+        } else {
+            ((MenuItem) menu.findItem(R.id.action_edit)).setVisible(true);
             ((MenuItem) menu.findItem(R.id.action_exit)).setVisible(false);
         }
 
@@ -275,6 +270,10 @@ public class ConversationNoteViewActivity extends AppCompatActivity implements V
 
             adapter.editChange(isEditing);
             adapter.notifyDataSetChanged();
+
+            if ( adapter.isChange ) {
+                DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+            }
         } else if (id == R.id.action_view) {
             isForeignView = true;
             invalidateOptionsMenu();
@@ -289,7 +288,7 @@ public class ConversationNoteViewActivity extends AppCompatActivity implements V
             adapter.notifyDataSetChanged();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "NOTE_ACT");
+            bundle.putString("SCREEN", CommConstants.screen_conversationNoteView);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -447,6 +446,7 @@ class ConversationNoteViewCursorAdapter extends CursorAdapter {
     private boolean isEditing = false;
     public HashMap statusData = new HashMap();
     public boolean isForeignView = false;
+    public boolean isChange = false;
 
     public ConversationNoteViewCursorAdapter(Context context, Cursor cursor, SQLiteDatabase db, int flags) {
         super(context, cursor, 0);
@@ -549,6 +549,8 @@ class ConversationNoteViewCursorAdapter extends CursorAdapter {
             }
         }
 
+        isChange = true;
+
         dataChange();
     }
 
@@ -559,6 +561,8 @@ class ConversationNoteViewCursorAdapter extends CursorAdapter {
             }
         }
 
+        isChange = true;
+
         dataChange();
     }
 
@@ -568,6 +572,8 @@ class ConversationNoteViewCursorAdapter extends CursorAdapter {
                 DicDb.moveConversationToNote(mDb, kind, copyKind, seq[i]);
             }
         }
+
+        isChange = true;
 
         dataChange();
     }

@@ -57,7 +57,6 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         fab.setVisibility(View.GONE);
 
         ActionBar ab = (ActionBar) getSupportActionBar();
-        ab.setTitle("학습");
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 

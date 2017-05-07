@@ -138,6 +138,12 @@ public class DicDb {
         db.execSQL(sql.toString());
     }
 
+    public static void initDicClickWord(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_CLICK_WORD " + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
 
     public static void insConversationStudy(SQLiteDatabase db, String sampleSeq, String insDate) {
         StringBuffer sql = new StringBuffer();
@@ -358,4 +364,145 @@ public class DicDb {
         db.execSQL(sql.toString());
     }
 
+    /**
+     * 단어장 초기화
+     * @param db
+     */
+    public static void initVocabulary(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_VOC" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+
+        sql.delete(0, sql.length());
+        sql.append("DELETE FROM DIC_CODE" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = '" + CommConstants.vocabularyCode + "'" + CommConstants.sqlCR);
+        sql.append("   AND CODE != 'VOC0001'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static void initHistory(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_SEARCH_HISTORY" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    /**
+     * 학습 회화 초기화
+     * @param db
+     */
+    public static void initConversationNote(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_NOTE WHERE CODE IN (SELECT CODE FROM DIC_CODE WHERE CODE_GROUP = 'C02') " + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+
+        sql.delete(0, sql.length());
+        sql.append("DELETE FROM DIC_CODE" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = 'C02'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    /**
+     * My 학습 초기화
+     * @param db
+     */
+    public static void initMyConversationNote(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_NOTE WHERE CODE IN (SELECT CODE FROM DIC_CODE WHERE CODE_GROUP = 'C01') " + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+
+        sql.delete(0, sql.length());
+        sql.append("DELETE FROM DIC_CODE" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = 'C01'" + CommConstants.sqlCR);
+        sql.append("   AND CODE != 'C010001'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    /**
+     * 코드 등록
+     * @param db
+     * @param groupCode
+     * @param code
+     * @param codeName
+     */
+    public static void insCode(SQLiteDatabase db, String groupCode, String code, String codeName) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO DIC_CODE (CODE_GROUP, CODE, CODE_NAME) " + CommConstants.sqlCR);
+        sql.append("VALUES('" + groupCode + "', '" + code + "', '" + codeName + "') " + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static void insDicVoc(SQLiteDatabase db, String kind, String entryId, String insDate, String memory) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_VOC " + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
+        sql.append("   AND ENTRY_ID = '" + entryId + "'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+
+        sql.setLength(0);
+        sql.append("INSERT INTO DIC_VOC (KIND, ENTRY_ID, MEMORIZATION,RANDOM_SEQ, INS_DATE) " + CommConstants.sqlCR);
+        sql.append("SELECT '" + kind + "', ENTRY_ID, '" + memory + "', RANDOM(), '" + insDate + "' " + CommConstants.sqlCR);
+        sql.append("  FROM DIC " + CommConstants.sqlCR);
+        sql.append(" WHERE ENTRY_ID = '" + entryId + "'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static boolean isExistDaumVocabulary(SQLiteDatabase db, String categoryId) {
+        boolean rtn = false;
+
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT COUNT(*) CNT  " + CommConstants.sqlCR);
+        sql.append("  FROM DAUM_VOCABULARY " + CommConstants.sqlCR);
+        sql.append(" WHERE CATEGORY_ID = '" + categoryId + "'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        Cursor cursor = db.rawQuery(sql.toString(), null);
+        if (cursor.moveToNext()) {
+            if (cursor.getInt(cursor.getColumnIndexOrThrow("CNT")) > 0) {
+                rtn = true;
+            }
+        }
+        cursor.close();
+
+        return rtn;
+    }
+
+    public static void insSearchHistory(SQLiteDatabase db, String word) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_SEARCH_HISTORY " + CommConstants.sqlCR);
+        sql.append(" WHERE WORD = '" + word + "'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+
+        sql.setLength(0);
+        sql.append("INSERT INTO DIC_SEARCH_HISTORY (WORD) " + CommConstants.sqlCR);
+        sql.append("VALUES( '" + word + "')" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static void insSearchHistory(SQLiteDatabase db, String seq, String word) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO DIC_SEARCH_HISTORY (SEQ, WORD) " + CommConstants.sqlCR);
+        sql.append("VALUES( '" + seq + "', '" + word + "')" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static void delSearchHistory(SQLiteDatabase db, int seq) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_SEARCH_HISTORY " + CommConstants.sqlCR);
+        sql.append(" WHERE SEQ = " + seq + "" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
 }

@@ -24,7 +24,7 @@
             android:id="@+id/my_tv_foreign"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:textColor="#e65a5a"
+            android:textColor="@color/my_text_word"
             android:textSize="15dp"
             android:gravity="left" />
 

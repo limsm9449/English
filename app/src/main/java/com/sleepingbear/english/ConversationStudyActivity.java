@@ -168,7 +168,7 @@ public class ConversationStudyActivity extends AppCompatActivity implements View
 
                 if ( isStart ) {
                     DicDb.insConversationStudy(db, currSeq, DicUtils.getDelimiterDate(DicUtils.getCurrentDate(),"."));
-                    //DicUtils.writeInfoToFile(getContext(), db, "C02");
+                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                 }
                 if ( !cursor.isLast() ) {
                     cursor.moveToNext();
@@ -227,7 +227,7 @@ public class ConversationStudyActivity extends AppCompatActivity implements View
                 if ( foreign.equals( currForeign) ) {
                     if ( isStart ) {
                         DicDb.insConversationStudy(db, currSeq, DicUtils.getDelimiterDate(DicUtils.getCurrentDate(),"."));
-                        //DicUtils. writeInfoToFile(getContext(), db, "C02");
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);

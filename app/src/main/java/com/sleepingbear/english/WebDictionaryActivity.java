@@ -1,8 +1,10 @@
 package com.sleepingbear.english;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,9 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -21,6 +26,10 @@ import com.google.android.gms.ads.AdView;
 
 public class WebDictionaryActivity extends AppCompatActivity {
     private WebView webView;
+    private String kind;
+    private String word;
+    private String site;
+    private ActionBar ab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +38,21 @@ public class WebDictionaryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String kind = getIntent().getExtras().getString("kind");
-        String word = getIntent().getExtras().getString("word");
-        String site = getIntent().getExtras().getString("site");
+        kind = getIntent().getExtras().getString("kind");
+        word = getIntent().getExtras().getString("word");
+        site = getIntent().getExtras().getString("site");
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
-        ab.setTitle(getIntent().getExtras().getString("word") + " 검색");
+        if ( kind == null ) {
+            kind = CommConstants.dictionaryKind_f;
+        }
+        if ( word == null ) {
+            word = "";
+        }
+        if ( site == null ) {
+            site = "Naver";
+        }
+
+        ab = (ActionBar) getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -48,6 +66,20 @@ public class WebDictionaryActivity extends AppCompatActivity {
 
 
         webView.setWebViewClient(new WebDictionaryActivity.MyWebViewClient());
+
+        webDictionaryLoad();
+
+        AdView av = (AdView)this.findViewById(R.id.adView);
+        AdRequest adRequest = new  AdRequest.Builder().build();
+        av.loadAd(adRequest);
+    }
+
+    public void webDictionaryLoad() {
+        if ( word.equals("") ) {
+            ab.setTitle("Web 사전");
+        } else {
+            ab.setTitle(word + " 검색");
+        }
 
         String url = "";
         if ( kind.equals(CommConstants.dictionaryKind_f) ) {
@@ -65,10 +97,43 @@ public class WebDictionaryActivity extends AppCompatActivity {
         }
         DicUtils.dicLog("url : " + url);
         webView.loadUrl(url);
+    }
 
-        AdView av = (AdView)this.findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_web_dic, menu);
+
+        MenuItem item = menu.findItem(R.id.action_web_dic);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.webDic, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                if ( parent.getSelectedItemPosition() == 0 ) {
+                    site = "Naver";
+                    webDictionaryLoad();
+                } else if ( parent.getSelectedItemPosition() == 1 ) {
+                    site = "Daum";
+                    webDictionaryLoad();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+        if ( "Naver".equals(site) ) {
+            spinner.setSelection(0);
+        } else {
+            spinner.setSelection(1);
+        }
+
+        return true;
     }
 
     public boolean onPrepareOptionsMenu(Menu menu){
@@ -82,6 +147,13 @@ public class WebDictionaryActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             finish();
+        } else if (id == R.id.action_help) {
+            Bundle bundle = new Bundle();
+            bundle.putString("SCREEN", CommConstants.screen_webDdictionary);
+
+            Intent intent = new Intent(getApplication(), HelpActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

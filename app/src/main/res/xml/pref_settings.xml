@@ -13,11 +13,11 @@
         <Preference
             android:key="key_backup"
             android:title="백업"
-            android:summary="단어장, 학습회화 데이타를 백업합니다."/>
+            android:summary="단어장, My 회화, 학습 회화 데이타를 english 디렉토리에 백업합니다."/>
         <Preference
             android:key="key_recovery"
             android:title="복구"
-            android:summary="단어장, 학습회화 데이타를 복구합니다."/>
+            android:summary="english 디렉토리에서 단어장, My 회화, 학습 회화 데이타를 복구합니다."/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="초기화">
@@ -26,74 +26,19 @@
             android:title="단어장 초기화"
             android:summary="모든 단어장을 삭제합니다."/>
         <Preference
+            android:key="key_my_conv_clear"
+            android:title="My 회화 초기화"
+            android:summary="My 회화 노트를 삭제합니다."/>
+        <Preference
             android:key="key_conv_clear"
-            android:title="학습회화 초기화"
+            android:title="학습 회화 초기화"
             android:summary="모든 학습회화를 삭제합니다."/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="어플 정보">
-
+    <PreferenceCategory android:title="개발자">
         <Preference
-            android:key="key_version"
-            android:summary="Version 정보를 확인합니다"
-            android:title="Version">
-        </Preference>
-        <Preference
-            android:summary="개발자에게 메일을 보냅니다"
-            android:title="메일보내기">
-            <intent
-                android:action="android.intent.action.SENDTO"
-                android:data="mailto:hellocatca@naver.com"/>
-        </Preference>
-
+            android:key="key_mail"
+            android:title="개발자 메일 보내기"
+            android:summary="어플 관련 메일을 보내주세요."/>
     </PreferenceCategory>
-
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="key_useUserName"
-        android:summaryOff="사용자의 이름을 사용하지 않습니다."
-        android:summaryOn="사용자의 이름을 사용합니다."
-        android:title="사용자 이름 사용"/>
-
-    <EditTextPreference
-        android:defaultValue="Mir"
-        android:dependency="key_useUserName"
-        android:key="key_userName"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="사용자 이름 설정"/>
-
-
-    <PreferenceCategory android:title="글꼴 지정">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="key_backgroundcolor"
-            android:summary="배경색을 지정합니다."
-            android:title="배경색 사용"/>
-        <ListPreference
-            android:defaultValue="0"
-            android:dependency="key_backgroundcolor"
-            android:key="key_dialog_backgroundcolor"
-            android:title="배경색설정"
-            android:entries="@array/BackgroundColor"
-            android:entryValues="@array/BackgroundColor_Values"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"/>
-
-        <ListPreference
-            android:defaultValue="0"
-            android:key="key_textcolor"
-            android:title="글씨색설정"
-            android:entries="@array/TextColor"
-            android:entryValues="@array/TextColor_Values"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null"
-            />
-    </PreferenceCategory>
-
-
-
-
-
 </PreferenceScreen>

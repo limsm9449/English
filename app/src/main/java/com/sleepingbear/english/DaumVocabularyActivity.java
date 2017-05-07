@@ -42,7 +42,6 @@ public class DaumVocabularyActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     public DaumVocabularyCursorAdapter adapter;
     public Spinner s_daumKind;
-    public boolean isChange = false;
     private int mOrder = -1;
     private String mOrderName = "";
     private String daumKind = "";
@@ -171,93 +170,97 @@ public class DaumVocabularyActivity extends AppCompatActivity {
             final Cursor cur = (Cursor) adapter.getItem(position);
             categoryId = cur.getString(cur.getColumnIndexOrThrow("CATEGORY_ID"));
 
-            //layout 구성
-            //메뉴 선택 다이얼로그 생성
-            Cursor cursor = db.rawQuery(DicQuery.getVocabularyCategory(), null);
-            final String[] kindCodes = new String[cursor.getCount()];
-            final String[] kindCodeNames = new String[cursor.getCount()];
+            if ( DicDb.isExistDaumVocabulary(db, categoryId) ) {
 
-            int idx = 0;
-            while (cursor.moveToNext()) {
-                kindCodes[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
-                kindCodeNames[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME"));
-                idx++;
-            }
-            cursor.close();
+                //layout 구성
+                //메뉴 선택 다이얼로그 생성
+                Cursor cursor = db.rawQuery(DicQuery.getVocabularyCategory(), null);
+                final String[] kindCodes = new String[cursor.getCount()];
+                final String[] kindCodeNames = new String[cursor.getCount()];
 
-            final android.support.v7.app.AlertDialog.Builder dlg = new android.support.v7.app.AlertDialog.Builder(DaumVocabularyActivity.this);
-            dlg.setTitle("단어장 선택");
-            dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    mSelect = arg1;
+                int idx = 0;
+                while (cursor.moveToNext()) {
+                    kindCodes[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
+                    kindCodeNames[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME"));
+                    idx++;
                 }
-            });
-            dlg.setNeutralButton("신규 단어장", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    final View dialog_layout = getLayoutInflater().inflate(R.layout.dialog_dic_category, null);
+                cursor.close();
 
-                    //dialog 생성..
-                    AlertDialog.Builder builder = new AlertDialog.Builder(DaumVocabularyActivity.this);
-                    builder.setView(dialog_layout);
-                    final AlertDialog alertDialog = builder.create();
-
-                    final EditText et_voc_name = ((EditText) dialog_layout.findViewById(R.id.my_dc_et_voc_name));
-                    et_voc_name.setText(cur.getString(cur.getColumnIndexOrThrow("CATEGORY_NAME")));
-
-                    ((Button) dialog_layout.findViewById(R.id.my_dc_b_save)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if ("".equals(et_voc_name.getText().toString())) {
-                                Toast.makeText(DaumVocabularyActivity.this, "단어장 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                alertDialog.dismiss();
-
-                                vocName = et_voc_name.getText().toString();
-
-                                String insCategoryCode = DicQuery.getInsCategoryCode(db);
-                                db.execSQL(DicQuery.getInsNewCategory(CommConstants.vocabularyCode, insCategoryCode, vocName));
-
-                                Cursor wordCursor = db.rawQuery(DicQuery.getDaumVocabulary(categoryId), null);
-                                while ( wordCursor.moveToNext() ) {
-                                    String entryId = wordCursor.getString(wordCursor.getColumnIndexOrThrow("ENTRY_ID"));
-                                    DicDb.insDicVoc(db, entryId, insCategoryCode);
-                                }
-
-                                isChange = true;
-
-                                Toast.makeText(getApplicationContext(), "단어장에 추가하였습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-                    ((Button) dialog_layout.findViewById(R.id.my_dc_b_close)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialog.dismiss();
-                        }
-                    });
-
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.show();
-                    isChange = true;
-                }
-            });
-            dlg.setNegativeButton("취소", null);
-            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Cursor wordCursor = db.rawQuery(DicQuery.getDaumVocabulary(categoryId), null);
-                    while ( wordCursor.moveToNext() ) {
-                        String entryId = wordCursor.getString(wordCursor.getColumnIndexOrThrow("ENTRY_ID"));
-                        DicDb.insDicVoc(db, entryId, kindCodes[mSelect]);
+                final android.support.v7.app.AlertDialog.Builder dlg = new android.support.v7.app.AlertDialog.Builder(DaumVocabularyActivity.this);
+                dlg.setTitle("단어장 선택");
+                dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        mSelect = arg1;
                     }
+                });
+                dlg.setNeutralButton("신규 단어장", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final View dialog_layout = getLayoutInflater().inflate(R.layout.dialog_dic_category, null);
 
-                    isChange = true;
-                }
-            });
-            dlg.show();
+                        //dialog 생성..
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DaumVocabularyActivity.this);
+                        builder.setView(dialog_layout);
+                        final AlertDialog alertDialog = builder.create();
+
+                        final EditText et_voc_name = ((EditText) dialog_layout.findViewById(R.id.my_dc_et_voc_name));
+                        et_voc_name.setText(cur.getString(cur.getColumnIndexOrThrow("CATEGORY_NAME")));
+
+                        ((Button) dialog_layout.findViewById(R.id.my_dc_b_save)).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if ("".equals(et_voc_name.getText().toString())) {
+                                    Toast.makeText(DaumVocabularyActivity.this, "단어장 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    alertDialog.dismiss();
+
+                                    vocName = et_voc_name.getText().toString();
+
+                                    String insCategoryCode = DicQuery.getInsCategoryCode(db);
+                                    db.execSQL(DicQuery.getInsNewCategory(CommConstants.vocabularyCode, insCategoryCode, vocName));
+
+                                    Cursor wordCursor = db.rawQuery(DicQuery.getDaumVocabulary(categoryId), null);
+                                    while (wordCursor.moveToNext()) {
+                                        String entryId = wordCursor.getString(wordCursor.getColumnIndexOrThrow("ENTRY_ID"));
+                                        DicDb.insDicVoc(db, entryId, insCategoryCode);
+                                    }
+
+                                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+
+                                    Toast.makeText(getApplicationContext(), "단어장에 추가하였습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        ((Button) dialog_layout.findViewById(R.id.my_dc_b_close)).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+
+                        alertDialog.setCanceledOnTouchOutside(false);
+                        alertDialog.show();
+                    }
+                });
+                dlg.setNegativeButton("취소", null);
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Cursor wordCursor = db.rawQuery(DicQuery.getDaumVocabulary(categoryId), null);
+                        while (wordCursor.moveToNext()) {
+                            String entryId = wordCursor.getString(wordCursor.getColumnIndexOrThrow("ENTRY_ID"));
+                            DicDb.insDicVoc(db, entryId, kindCodes[mSelect]);
+                        }
+
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+                    }
+                });
+                dlg.show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Daum 단어장과 동기화가 필요합니다.해당 단어장을 클릭해주세요.", Toast.LENGTH_SHORT).show();
+            }
 
             return true;
         }
@@ -293,7 +296,7 @@ public class DaumVocabularyActivity extends AppCompatActivity {
             if ( DicUtils.isNetWork(this) ) {
                 new AlertDialog.Builder(this)
                         .setTitle("알림")
-                        .setMessage("최근 수정일자를 기준으로 카테고리 변경사항을 갱신합니다.\n변경 정보를 가져오기 위해서 데이타를 사용합니다.\n연결하시겠습니까?")
+                        .setMessage("최근 수정일자를 기준으로 카테고리 변경사항을 동기화 하시겠습니까?")
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -312,7 +315,7 @@ public class DaumVocabularyActivity extends AppCompatActivity {
             }
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "DIC_CATEGORY");
+            bundle.putString("SCREEN", CommConstants.screen_daumVocabulary);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
@@ -387,8 +390,9 @@ class DaumVocabularyCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         String categoryName = cursor.getString(cursor.getColumnIndexOrThrow("CATEGORY_NAME"));
+        String kind = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
         String updDate = cursor.getString(cursor.getColumnIndexOrThrow("UPD_DATE"));
-        if ( !"".equals(DicUtils.getString(updDate)) ) {
+        if ( "R1,R2,R3".indexOf(DicUtils.getString(kind)) < 0 ) {
             categoryName += " [" + updDate + ", " + cursor.getString(cursor.getColumnIndexOrThrow("BOOKMARK_CNT")) + "]";
         }
         ((TextView) view.findViewById(R.id.my_c_dci_tv_category)).setText(categoryName);

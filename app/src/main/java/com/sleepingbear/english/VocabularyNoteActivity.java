@@ -50,7 +50,50 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setVisibility(View.GONE);
+        //fab.setVisibility(View.GONE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                final View dialog_layout = inflater.inflate(R.layout.dialog_category_add, null);
+
+                //dialog 생성..
+                AlertDialog.Builder builder = new AlertDialog.Builder(VocabularyNoteActivity.this);
+                builder.setView(dialog_layout);
+                final AlertDialog alertDialog = builder.create();
+
+                ((TextView) dialog_layout.findViewById(R.id.my_d_category_add_tv_title)).setText("단어장 추가");
+                final EditText et_ins = ((EditText) dialog_layout.findViewById(R.id.my_d_category_add_et_ins));
+                ((Button) dialog_layout.findViewById(R.id.my_d_category_add_b_ins)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ("".equals(et_ins.getText().toString())) {
+                            Toast.makeText(getApplication(), "단어장 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            alertDialog.dismiss();
+
+                            String insCategoryCode = DicQuery.getInsCategoryCode(db);
+                            db.execSQL(DicQuery.getInsNewCategory(CommConstants.vocabularyCode, insCategoryCode, et_ins.getText().toString()));
+
+                            changeListView();
+
+                            DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
+
+                            Toast.makeText(getApplicationContext(), "단어장에 추가하였습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                ((Button) dialog_layout.findViewById(R.id.my_d_category_add_b_close)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+        }
+        });
 
         ActionBar ab = (ActionBar) getSupportActionBar();
         ab.setHomeButtonEnabled(true);
@@ -107,7 +150,7 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
             final View dialog_layout = inflater.inflate(R.layout.dialog_category_iud, null);
 
             //dialog 생성..
-            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(VocabularyNoteActivity.this);
             builder.setView(dialog_layout);
             final AlertDialog alertDialog = builder.create();
 
@@ -140,7 +183,7 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
                 public void onClick(View v) {
                     final String code = (String) v.getTag();
 
-                    if ("MY0000".equals(code)) {
+                    if ("VOC0001".equals(code)) {
                         Toast.makeText(getApplicationContext(), "기본 단어장은 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                     } else {
@@ -268,6 +311,8 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
                                     readString = buffreader.readLine();
                                 }
                                 isr.close();
+
+                                DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
 
                                 changeListView();
 

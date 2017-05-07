@@ -51,7 +51,7 @@ public class WebTranslateActivity extends AppCompatActivity {
         String url = "";
         if ( "Naver".equals(site) ) {
             url = "http://translate.naver.com/#/en/ko/" + sentence;
-            Toast.makeText(getApplicationContext(), "'번역하고 싶은 문장을 입력해주세요' 영역을 클릭하시면 해당 문장이 들어갑니다.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "'번역하고 싶은 문장을 입력해주세요' 영역을 클릭하시면 해당 문장이 들어갑니다.", Toast.LENGTH_LONG).show();
         } else if ( "Google".equals(site) ) {
             url = "https://translate.google.co.kr/#en/ko/" + sentence;
         }

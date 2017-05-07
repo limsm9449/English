@@ -10,19 +10,31 @@ public class CommConstants {
     public static String flag_dbChange = "DB_CHANGE";
 
     public static String screen_dictionary = "SCREEN_DICTIONARY";
+    public static String screen_dictionaryHistory = "SCREEN_DICTIONARY_HISTORY";
+    public static String screen_webDdictionary = "SCREEN_WEB_DICTIONARY";
     public static String screen_sentenceView = "SCREEN_SENTENCEVIEW";
     public static String screen_news = "SCREEN_NEWS";
+    public static String screen_newsView= "SCREEN_NEWS_VIEW";
     public static String screen_newsClickWord = "SCREEN_NEWS_CLICKWORD";
-    public static String screen_newsWeb = "SCREEN_NEWS_WEB";
     public static String screen_conversationStudy = "SCREEN_CONVERSATION_STUDY";
     public static String screen_conversation = "SCREEN_CONVERSATION";
     public static String screen_pattern = "SCREEN_PATTERN";
     public static String screen_patternView = "SCREEN_PATTERN_VIEW";
     public static String screen_conversationNote = "SCREEN_CONVERSATION_NOTE";
+    public static String screen_conversationNoteView = "SCREEN_CONVERSATION_NOTE_VIEW";
     public static String screen_naverConversation = "SCREEN_NAVER_CONVERSATION";
     public static String screen_naverConversationView = "SCREEN_NAVER_CONVERSATION_VIEW";
+    public static String screen_daumVocabulary = "SCREEN_DAUM_VOCABULARY";
+    public static String screen_daumVocabularyView = "SCREEN_DAUM_VOCABULARY_VIEW";
+
     public static String screen_vocabularyNote = "SCREEN_VOCABULARY_NOTE";
     public static String screen_vocabularyNoteView = "SCREEN_VOCABULARY_NOTE_VIEW";
+    public static String screen_study1 = "SCREEN_STUDY1";
+    public static String screen_study2 = "SCREEN_STUDY2";
+    public static String screen_study3 = "SCREEN_STUDY3";
+    public static String screen_study4 = "SCREEN_STUDY4";
+    public static String screen_study5 = "SCREEN_STUDY5";
+    public static String screen_study6 = "SCREEN_STUDY6";
 
     public static String preferences_font = "key_fontSize";
 
@@ -31,9 +43,6 @@ public class CommConstants {
     public static String appName = "english";
     public static String sqlCR = "\n";
     public static String sentenceSplitStr = "()[]<>\"',.?/= ";
-    public static String regex = "/[()[]<>\"',.?/= /]";
-
-    public static int changeKind_title = 0;
 
     public static int studyKind1 = 0;
     public static int studyKind2 = 1;
@@ -44,19 +53,8 @@ public class CommConstants {
 
     public static String tag = "english";
 
-    public static String infoFileNameC01 = "C01.txt";
-    public static String infoFileNameC02 = "C02.txt";
-    public static String infoFileNameVoc = "VOC.txt";
-    public static String folderName = "/enconversation";
-
-    public final static int s_note = 1;
-    public final static int s_vocabulary = 2;
-
-    public static int f_ConversationStudy = 0;
-    public static int f_Pattern = 1;
-    public static int f_Conversation = 2;
-    public static int f_Note = 3;
-    public static int f_Vocabulary = 4;
+    public static String infoFileName = "english.txt";
+    public static String folderName = "/english";
 
     //코드 등록
     public static String tag_code_ins = "C_CODE_INS" ;
@@ -64,6 +62,8 @@ public class CommConstants {
     public static String tag_note_ins = "C_NOTE_INS" ;
     //단어장 등록
     public static String tag_voc_ins = "C_VOC_INS" ;
-
-    public static String voc_default_code = "VOC0001" ;
+    //History 등록
+    public static String tag_history_ins = "C_HISTORY_INS" ;
+    //History 등록
+    public static String tag_click_word_ins = "C_CW_INS" ;
 }

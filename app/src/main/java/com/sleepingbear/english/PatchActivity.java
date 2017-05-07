@@ -28,16 +28,16 @@ public class PatchActivity extends AppCompatActivity {
 
         StringBuffer patch = new StringBuffer();
 
-        patch.append("* 신규 패치" + CommConstants.sqlCR);
+        patch.append("* 영어 공부에 도움이 될만한 기능을 모아서 어플을 개발하게 되었습니다. 사용하시다가 문제점이나 개선사항이 있으면 메일을 보내주세요. 개발에 참고하겠습니다." + CommConstants.sqlCR);
         patch.append("" + CommConstants.sqlCR);
-        patch.append("- 단어장에서 TTS로 단어, 뜻을 듣는 기능 추가 - 상단 Context Menu에서 TTS 선택" + CommConstants.sqlCR);
-        patch.append("- 단어학습에서 '카드형 4지선다 TTS 학습' 기능 추가" + CommConstants.sqlCR);
+        patch.append("영어 공부에 많은 도움이 되었으면 합니다." + CommConstants.sqlCR);
+        patch.append("" + CommConstants.sqlCR);
         patch.append("" + CommConstants.sqlCR);
         patch.append("" + CommConstants.sqlCR);
 
-
-        patch.append("- 단어장에서 선택을 해서 삭제하거나, 다른 단어장으로 복사, 이동하는 기능 추가" + CommConstants.sqlCR);
-        patch.append("- 2016.11.21 : 영어뉴스 어플 개발" + CommConstants.sqlCR);
+        patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("" + CommConstants.sqlCR);
+        patch.append("- 2017.05.01 : 영어 학습 어플 통합 개발" + CommConstants.sqlCR);
 
         ((TextView) this.findViewById(R.id.my_c_patch_tv1)).setText(patch.toString());
     }

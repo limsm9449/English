@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkPermission();
 
         ((Button) findViewById(R.id.my_b_foreign_dic)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_dic_history)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_han_dic)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_web_dic)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_news)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_news_word)).setOnClickListener(this);
@@ -112,12 +114,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(englishIntent);
 
                 break;
+            case R.id.my_b_dic_history:
+                Intent dicHistoryIntent = new Intent(getApplication(), DictionaryHistoryActivity.class);
+                dicHistoryIntent.putExtras(bundle);
+                startActivity(dicHistoryIntent);
+
+                break;
             case R.id.my_b_han_dic:
                 bundle.putString("KIND", CommConstants.dictionaryKind_h);
 
                 Intent hanIntent = new Intent(getApplication(), DictionaryActivity.class);
                 hanIntent.putExtras(bundle);
                 startActivity(hanIntent);
+
+                break;
+            case R.id.my_b_web_dic:
+                Intent webIntent = new Intent(getApplication(), WebDictionaryActivity.class);
+                webIntent.putExtras(bundle);
+                startActivity(webIntent);
 
                 break;
             case R.id.my_b_news:
@@ -162,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent msg = new Intent(Intent.ACTION_SEND);
                 msg.addCategory(Intent.CATEGORY_DEFAULT);
                 msg.putExtra(Intent.EXTRA_SUBJECT, "최고의 영어학습 어플");
-                msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.ennewsvoc ");
+                msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.english ");
                 msg.setType("text/plain");
                 startActivity(Intent.createChooser(msg, "어플 공유"));
 
@@ -211,6 +225,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "파일 권한이 없기 때문에 파일 내보내기, 가져오기를 할 수 없습니다.\n만일 권한 팝업이 안열리면 '다시 묻지 않기'를 선택하셨기 때문입니다.\n어플을 지우고 다시 설치하셔야 합니다.", Toast.LENGTH_LONG).show();
                 }
                 return;
+        }
+    }
+
+    private long backKeyPressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(getApplicationContext(), "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            //종료 시점에 변경 사항을 기록한다.
+            if ( "Y".equals(DicUtils.getDbChange(getApplicationContext())) ) {
+                DicUtils.writeInfoToFile(this, db, "");
+            }
+
+            finish();
         }
     }
 }

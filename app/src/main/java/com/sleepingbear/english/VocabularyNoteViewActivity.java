@@ -36,7 +36,7 @@ import com.google.android.gms.ads.AdView;
 public class VocabularyNoteViewActivity extends AppCompatActivity implements View.OnClickListener {
     private DbHelper dbHelper;
     private SQLiteDatabase db;
-    private VocabularyCursorAdapter adapter;
+    private VocabularyNoteViewCursorAdapter adapter;
     public int mSelect = 0;
 
     private String kind = "";
@@ -90,7 +90,9 @@ public class VocabularyNoteViewActivity extends AppCompatActivity implements Vie
                                        int position, long id) {
                 mOrder = parent.getSelectedItemPosition();
 
-                //setActionBarTitle();
+                if ( mOrder == 6 ) {
+                    Toast.makeText(getApplicationContext(), "Random으로 조회시 암기여부를 체크할때 정렬이 다시 되기 때문에 보여지는 것이 틀려집니다.", Toast.LENGTH_LONG).show();
+                }
 
                 getListView();
             }
@@ -142,7 +144,7 @@ public class VocabularyNoteViewActivity extends AppCompatActivity implements Vie
         Cursor cursor = db.rawQuery(sql.toString(), null);
 
         ListView listView = (ListView) this.findViewById(R.id.my_lv_list);
-        adapter = new VocabularyCursorAdapter(getApplicationContext(), cursor, this, db);
+        adapter = new VocabularyNoteViewCursorAdapter(getApplicationContext(), cursor, this, db);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(itemClickListener);
@@ -337,8 +339,11 @@ public class VocabularyNoteViewActivity extends AppCompatActivity implements Vie
 
             adapter.editChange(isEditing);
             adapter.notifyDataSetChanged();
-        } else if (id == R.id.action_tts) {
 
+            if ( adapter.isChange ) {
+                DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+            }
+        } else if (id == R.id.action_tts) {
             Cursor cur = (Cursor) adapter.getItem(0);
 
             String[] words  = new String[cur.getCount()];
@@ -381,17 +386,17 @@ public class VocabularyNoteViewActivity extends AppCompatActivity implements Vie
     }
 }
 
-class VocabularyCursorAdapter extends CursorAdapter {
+class VocabularyNoteViewCursorAdapter extends CursorAdapter {
     int fontSize = 0;
 
-    private String seq = "";
-    private Activity mActivity;
     private SQLiteDatabase mDb;
     private Cursor mCursor;
 
     private boolean isEditing = false;
     private boolean[] isCheck;
     private String[] entryId;
+
+    public boolean isChange = false;
 
     static class ViewHolder {
         protected CheckBox memorizationCheck;
@@ -401,10 +406,9 @@ class VocabularyCursorAdapter extends CursorAdapter {
         protected CheckBox cb;
     }
 
-    public VocabularyCursorAdapter(Context context, Cursor cursor, Activity activity, SQLiteDatabase db) {
+    public VocabularyNoteViewCursorAdapter(Context context, Cursor cursor, Activity activity, SQLiteDatabase db) {
         super(context, cursor, 0);
         mCursor = cursor;
-        mActivity = activity;
         mDb = db;
 
         fontSize = Integer.parseInt( DicUtils.getPreferencesValue( context, CommConstants.preferences_font ) );
@@ -532,6 +536,7 @@ class VocabularyCursorAdapter extends CursorAdapter {
             }
         }
 
+        isChange = true;
         dataChange();
     }
 
@@ -542,6 +547,7 @@ class VocabularyCursorAdapter extends CursorAdapter {
             }
         }
 
+        isChange = true;
         dataChange();
     }
 
@@ -552,6 +558,7 @@ class VocabularyCursorAdapter extends CursorAdapter {
             }
         }
 
+        isChange = true;
         dataChange();
     }
 

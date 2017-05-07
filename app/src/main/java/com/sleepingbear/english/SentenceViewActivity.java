@@ -186,6 +186,8 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
                         DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
 
                         adapter.dataChange();
+
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
                 });
                 dlg.show();
@@ -325,7 +327,7 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
                     DicDb.delDicVocAll(mDb, viewHolder.entryId);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 } else {
-                    DicDb.insDicVoc(mDb, viewHolder.entryId, "MY0000");
+                    DicDb.insDicVoc(mDb, viewHolder.entryId, CommConstants.vocabularyCode);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 }
 
@@ -359,7 +361,7 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
             viewHolder.isMyVoc = false;
         }
 
-        ((TextView) view.findViewById(R.id.my_tv_word)).setTextSize(fontSize + 2);
+        ((TextView) view.findViewById(R.id.my_tv_word)).setTextSize(fontSize);
         ((TextView) view.findViewById(R.id.my_tv_spelling)).setTextSize(fontSize);
         ((TextView) view.findViewById(R.id.my_tv_mean)).setTextSize(fontSize);
     }

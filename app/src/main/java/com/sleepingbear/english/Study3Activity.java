@@ -100,6 +100,12 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
             ((RadioButton) findViewById(R.id.my_a_study3_rb_m_not)).setChecked(true);
         }
 
+        //UI 수정
+        int fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
+        tv_question.setTextSize(fontSize);
+        tv_spelling.setTextSize(fontSize);
+        tv_answer.setTextSize(fontSize);
+
         sb = (SeekBar) findViewById(R.id.my_a_study3_sb);
         sb.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -244,7 +250,7 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
             finish();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "STUDY3");
+            bundle.putString("SCREEN", CommConstants.screen_study3);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);

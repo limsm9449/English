@@ -1,30 +1,34 @@
 package com.sleepingbear.english;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.File;
 
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
 
     private static final String TAG = "PreSettingsActivity";
 
-    private static final String USE_USER_NAME = "key_useUserName";
-    private static final String USER_NAME = "key_userName";
-    private static final String USE_BACKGROUND_COLOR = "key_backgroundcolor";
-    private static final String BACKGROUND_COLOR = "key_dialog_backgroundcolor";
-    private static final String TEXT_COLOR = "key_textcolor";
-    private static final String ALL_REMOVE_MEMO = "key_all_memo_clear";
-
+    private DbHelper dbHelper;
+    private SQLiteDatabase db;
     private PreferenceScreen screen;
     private ListPreference mFontSize;
-    private CheckBoxPreference mUseUsername;
-    private EditTextPreference mUsername;
-    private ListPreference mbackgroundcolor;
-    private ListPreference mTextcolor;
+
 
 
     @Override
@@ -36,18 +40,13 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         mFontSize = (ListPreference) screen.findPreference("key_fontSize");
 
-        //인자로 전달되는 Key값을 가지는 Preference 항목의 인스턴스를 가져옴
-        //굳이 여러곳에서 사용하지 않는 이상에는 이런식으로 객체화 시킬필요는 없는듯
-        mUsername = (EditTextPreference) screen.findPreference(USER_NAME);
-        mbackgroundcolor = (ListPreference) screen.findPreference(BACKGROUND_COLOR);
-        mTextcolor = (ListPreference) screen.findPreference(TEXT_COLOR);
+        dbHelper = new DbHelper(this);
+        db = dbHelper.getWritableDatabase();
 
         //변화 이벤트가 일어났을 시 동작
         mFontSize.setOnPreferenceChangeListener(this);
 
-        mUsername.setOnPreferenceChangeListener(this);
-        mbackgroundcolor.setOnPreferenceChangeListener(this);
-        mTextcolor.setOnPreferenceChangeListener(this);
+
     }
 
     @Override
@@ -64,10 +63,139 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                                          Preference preference) {
         DicUtils.dicLog("onPreferenceTreeClick : " + preference.getKey());
         if ( preference.getKey().equals("key_backup") ) {
-        } else if ( preference.getKey().equals("key_recovery") ) {
-        } else if ( preference.getKey().equals("key_voc_clear") ) {
-        } else if ( preference.getKey().equals("key_conv_clear") ) {
+            //layout 구성
+            LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View dialog_layout = li.inflate(R.layout.dialog_backup, null);
 
+            //dialog 생성..
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialog_layout);
+            final AlertDialog alertDialog = builder.create();
+
+            final EditText et_saveName = ((EditText) dialog_layout.findViewById(R.id.my_d_dm_et_save));
+            et_saveName.setText("backup_" + DicUtils.getCurrentDate() + ".txt");
+            ((Button) dialog_layout.findViewById(R.id.my_d_dm_b_save)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String saveFileName = et_saveName.getText().toString();
+                    if ("".equals(saveFileName)) {
+                        Toast.makeText(getApplicationContext(), "저장할 파일명을 입력하세요.", Toast.LENGTH_SHORT).show();
+                    } else if (saveFileName.indexOf(".") > -1 && !"txt".equals(saveFileName.substring(saveFileName.length() - 3, saveFileName.length()).toLowerCase())) {
+                        Toast.makeText(getApplicationContext(), "확장자는 txt 입니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //디렉토리 생성
+                        String fileName = "";
+                        boolean existDir = false;
+                        File appDir = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName);
+                        if (!appDir.exists()) {
+                            existDir = appDir.mkdirs();
+                            if (saveFileName.indexOf(".") > -1) {
+                                fileName = Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/" + saveFileName;
+                            } else {
+                                fileName = Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/" + saveFileName + ".txt";
+                            }
+                        } else {
+                            if (saveFileName.indexOf(".") > -1) {
+                                fileName = Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/" + saveFileName;
+                            } else {
+                                fileName = Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/" + saveFileName + ".txt";
+                            }
+                        }
+
+                        File saveFile = new File(fileName);
+                        if (saveFile.exists()) {
+                            Toast.makeText(getApplicationContext(), "파일명이 존재합니다.", Toast.LENGTH_LONG).show();
+                        } else {
+                            DicUtils.writeInfoToFile(getApplicationContext(), db, fileName);
+
+                            Toast.makeText(getApplicationContext(), "백업 데이타를 정상적으로 내보냈습니다.", Toast.LENGTH_LONG).show();
+
+                            alertDialog.dismiss();
+                        }
+                    }
+                }
+            });
+
+            ((Button) dialog_layout.findViewById(R.id.my_d_dm_b_close)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
+
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        } else if ( preference.getKey().equals("key_recovery") ) {
+            FileChooser filechooser = new FileChooser(SettingsActivity.this);
+            filechooser.setFileListener(new FileChooser.FileSelectedListener() {
+                @Override
+                public void fileSelected(final File file) {
+                    DicUtils.readInfoFromFile(getApplicationContext(), (new DbHelper(getApplicationContext())).getWritableDatabase(), file.getAbsolutePath());
+
+                    Toast.makeText(getApplicationContext(), "백업 데이타를 정상적으로 가져왔습니다.", Toast.LENGTH_LONG).show();
+                }
+            });
+            filechooser.setExtension("txt");
+            filechooser.showDialog();
+        } else if ( preference.getKey().equals("key_voc_clear") ) {
+            new AlertDialog.Builder(this)
+                    .setTitle("알림")
+                    .setMessage("단어장을 초기화 하시겠습니까?\n초기화 후에는 복구할 수 없습니다.")
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DicDb.initVocabulary(db);
+                            Toast.makeText(getApplicationContext(), "단어장이 초기화 되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .show();
+        } else if ( preference.getKey().equals("key_my_conv_clear") ) {
+            new AlertDialog.Builder(this)
+                    .setTitle("알림")
+                    .setMessage("My 회화를 초기화 하시겠습니까?\n초기화 후에는 복구할 수 없습니다.")
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DicDb.initMyConversationNote(db);
+                            Toast.makeText(getApplicationContext(), "My 회화가 초기화 되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .show();
+        } else if ( preference.getKey().equals("key_conv_clear") ) {
+            new AlertDialog.Builder(this)
+                    .setTitle("알림")
+                    .setMessage("학습 회화를 초기화 하시겠습니까?\n초기화 후에는 복구할 수 없습니다.")
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DicDb.initConversationNote(db);
+                            Toast.makeText(getApplicationContext(), "학습 회화가 초기화 되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .show();
+        } else if ( preference.getKey().equals("key_mail") ) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
+            intent.putExtra(Intent.EXTRA_TEXT, "어플관련 문제점을 적어 주세요.\n빠른 시간 안에 수정을 하겠습니다.\n감사합니다.");
+            intent.setData(Uri.parse("mailto:limsm9449@gmail.com"));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
         return false;
     }
@@ -81,19 +209,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             ListPreference listPreference = (ListPreference) preference;
             int index = listPreference.findIndexOfValue(value);
             mFontSize.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-        } else if(preference == mUsername){
-            DicUtils.dicLog("mUsername onPreferenceChange");
-            mUsername.setSummary(value);
-        }else if(preference == mbackgroundcolor){
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(value);
-            mbackgroundcolor.setSummary(index >= 0 ? listPreference.getEntries()[index]
-                    : null);    // entries 값 대신 이에 해당하는 entryValues값 set
-        }else if(preference == mTextcolor){
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(value);
-            mTextcolor.setSummary(index >= 0 ? listPreference.getEntries()[index]
-                    : null);    // entries 값 대신 이에 해당하는 entryValues값 set
         }
         return true;
     }
@@ -101,9 +216,5 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
     private void updateSummary(){
         mFontSize.setSummary(mFontSize.getEntry());
-        mUsername.setSummary(mUsername.getText());
-        mbackgroundcolor.setSummary(mbackgroundcolor.getEntry());
-        mTextcolor.setSummary(mTextcolor.getEntry());
-        DicUtils.dicLog("mbackgroundcolor="+mbackgroundcolor +", mUsername :" + mUsername);
     }
 }

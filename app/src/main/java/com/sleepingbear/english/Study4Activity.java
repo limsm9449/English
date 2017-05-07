@@ -106,6 +106,13 @@ public class Study4Activity extends AppCompatActivity implements View.OnClickLis
         tv_total = (TextView) findViewById(R.id.my_a_study4_tv_total);
         tv_total.setText("0");
 
+        int fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
+        tv_question.setTextSize(fontSize);
+        tv_spelling.setTextSize(fontSize);
+        tv_answer.setTextSize(fontSize);
+        tv_o_cnt.setTextSize(fontSize);
+        tv_x_cnt.setTextSize(fontSize);
+
         if ( "".equals(mMemorization) ) {
             ((RadioButton) findViewById(R.id.my_a_study4_rb_all)).setChecked(true);
         } else if ( "Y".equals(mMemorization) ) {
@@ -417,7 +424,7 @@ public class Study4Activity extends AppCompatActivity implements View.OnClickLis
             finish();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", "STUDY4");
+            bundle.putString("SCREEN", CommConstants.screen_study4);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
