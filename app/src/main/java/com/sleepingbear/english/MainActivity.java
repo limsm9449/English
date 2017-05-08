@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_foreign_dic)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_dic_history)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_han_dic)).setOnClickListener(this);
+
+        ((Button) findViewById(R.id.my_b_web_translate)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_web_dic)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_news)).setOnClickListener(this);
@@ -76,25 +78,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_voc)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc_study)).setOnClickListener(this);
 
-        ((Button) findViewById(R.id.my_b_share)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_b_patch)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_b_help)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_b_setting)).setOnClickListener(this);
-
         AdView av = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         av.loadAd(adRequest);
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 상단 메뉴 구성
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_share) {
+            Intent msg = new Intent(Intent.ACTION_SEND);
+            msg.addCategory(Intent.CATEGORY_DEFAULT);
+            msg.putExtra(Intent.EXTRA_SUBJECT, "최고의 영어학습 어플");
+            msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.english ");
+            msg.setType("text/plain");
+            startActivity(Intent.createChooser(msg, "어플 공유"));
+
+            return true;
+        } else if (id == R.id.action_patch) {
+            startActivity(new Intent(getApplication(), PatchActivity.class));
+
+            return true;
+        } else if (id == R.id.action_help) {
+            Bundle bundle = new Bundle();
+            Intent helpIntent = new Intent(getApplication(), HelpActivity.class);
+            helpIntent.putExtras(bundle);
+            startActivity(helpIntent);
+
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplication(), SettingsActivity.class));
+
             return true;
         }
 
@@ -134,6 +157,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(webIntent);
 
                 break;
+            case R.id.my_b_web_translate:
+                Intent webTranslateIntent = new Intent(getApplication(), WebTranslateActivity.class);
+                webTranslateIntent.putExtras(bundle);
+                startActivity(webTranslateIntent);
+
+                break;
             case R.id.my_b_news:
                 Intent newsIntent = new Intent(getApplication(), NewsActivity.class);
                 newsIntent.putExtras(bundle);
@@ -170,27 +199,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.my_b_voc_study:
                 startActivity(new Intent(getApplication(), StudyActivity.class));
-
-                break;
-            case R.id.my_b_share:
-                Intent msg = new Intent(Intent.ACTION_SEND);
-                msg.addCategory(Intent.CATEGORY_DEFAULT);
-                msg.putExtra(Intent.EXTRA_SUBJECT, "최고의 영어학습 어플");
-                msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.english ");
-                msg.setType("text/plain");
-                startActivity(Intent.createChooser(msg, "어플 공유"));
-
-                break;
-            case R.id.my_b_patch :
-                startActivity(new Intent(getApplication(), PatchActivity.class));
-                break;
-            case R.id.my_b_help :
-                Intent helpIntent = new Intent(getApplication(), HelpActivity.class);
-                helpIntent.putExtras(bundle);
-                startActivity(helpIntent);
-                break;
-            case R.id.my_b_setting:
-                startActivity(new Intent(getApplication(), SettingsActivity.class));
 
                 break;
         }

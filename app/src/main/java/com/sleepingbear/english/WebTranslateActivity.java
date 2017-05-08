@@ -1,8 +1,10 @@
 package com.sleepingbear.english;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,12 +16,18 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
 public class WebTranslateActivity extends AppCompatActivity {
+    private ActionBar ab;
+    private String site;
+    private String sentence;
     private WebView webView;
 
     @Override
@@ -29,11 +37,17 @@ public class WebTranslateActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String sentence = getIntent().getExtras().getString("sentence");
-        String site = getIntent().getExtras().getString("site");
+        sentence = getIntent().getExtras().getString("sentence");
+        site = getIntent().getExtras().getString("site");
+        if ( sentence == null ) {
+            sentence = "";
+        }
+        if ( site == null ) {
+            site = "Google";
+        }
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
-        ab.setTitle(site + " 번역");
+        ab = (ActionBar) getSupportActionBar();
+        ab.setTitle("Web 번역");
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -44,27 +58,66 @@ public class WebTranslateActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(false);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
-
         webView.setWebViewClient(new WebTranslateActivity.MyWebViewClient());
 
-        String url = "";
-        if ( "Naver".equals(site) ) {
-            url = "http://translate.naver.com/#/en/ko/" + sentence;
-            //Toast.makeText(getApplicationContext(), "'번역하고 싶은 문장을 입력해주세요' 영역을 클릭하시면 해당 문장이 들어갑니다.", Toast.LENGTH_LONG).show();
-        } else if ( "Google".equals(site) ) {
-            url = "https://translate.google.co.kr/#en/ko/" + sentence;
-        }
-        DicUtils.dicLog("url : " + url);
-        webView.loadUrl(url);
+        webTranslateLoad();
 
         AdView av = (AdView)this.findViewById(R.id.adView);
         AdRequest adRequest = new  AdRequest.Builder().build();
         av.loadAd(adRequest);
     }
 
+    public void webTranslateLoad() {
+        String url = "";
+        if ( "Naver".equals(site) ) {
+            url = "http://translate.naver.com/#/en/ko/" + sentence;
+        } else if ( "Google".equals(site) ) {
+            url = "https://translate.google.co.kr/#en/ko/" + sentence;
+        }
+        DicUtils.dicLog("url : " + url);
+        webView.clearHistory();
+        webView.loadUrl(url);
+    }
+
     public boolean onPrepareOptionsMenu(Menu menu){
         super.onPrepareOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_web_dic, menu);
+
+        MenuItem item = menu.findItem(R.id.action_web_dic);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.webTranslate, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                if ( parent.getSelectedItemPosition() == 0 ) {
+                    site = "Naver";
+                    webTranslateLoad();
+                } else if ( parent.getSelectedItemPosition() == 1 ) {
+                    site = "Google";
+                    webTranslateLoad();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+        if ( "Naver".equals(site) ) {
+            spinner.setSelection(0);
+        } else {
+            spinner.setSelection(1);
+        }
+
         return true;
     }
 
@@ -74,6 +127,13 @@ public class WebTranslateActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             finish();
+        } else if (id == R.id.action_help) {
+            Bundle bundle = new Bundle();
+            bundle.putString("SCREEN", CommConstants.screen_webTranslate);
+
+            Intent intent = new Intent(getApplication(), HelpActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -171,7 +171,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
                 cursor.close();
 
                 final AlertDialog.Builder dlg = new AlertDialog.Builder(SentenceViewActivity.this);
-                dlg.setTitle("메뉴 선택");
+                dlg.setTitle("단어장 선택");
                 dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -327,7 +327,7 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
                     DicDb.delDicVocAll(mDb, viewHolder.entryId);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 } else {
-                    DicDb.insDicVoc(mDb, viewHolder.entryId, CommConstants.vocabularyCode);
+                    DicDb.insDicVoc(mDb, viewHolder.entryId, CommConstants.defaultVocabularyCode);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 }
 

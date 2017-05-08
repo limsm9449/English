@@ -196,7 +196,10 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             intent.setData(Uri.parse("mailto:limsm9449@gmail.com"));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } else if ( preference.getKey().equals("key_review") ) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
         }
+
         return false;
     }
 

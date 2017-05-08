@@ -548,9 +548,9 @@ public class DicQuery {
         sql.append("UNION ALL" + CommConstants.sqlCR);
         sql.append("SELECT 9 _id, 'R1' KIND, '사용 빈도수별 Toeic Rank' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 10 _id, 'R2' KIND, '사용 빈도수별 수능영어' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 10 _id, 'R2' KIND, '사용 빈도수별 수능영어 Rank' KIND_NAME" + CommConstants.sqlCR);
         sql.append("UNION ALL" + CommConstants.sqlCR);
-        sql.append("SELECT 11 _id, 'R3' KIND, '사용 빈도수별 초중고영어' KIND_NAME" + CommConstants.sqlCR);
+        sql.append("SELECT 11 _id, 'R3' KIND, '사용 빈도수별 초중고영어 Rank' KIND_NAME" + CommConstants.sqlCR);
 
         DicUtils.dicSqlLog(sql.toString());
 

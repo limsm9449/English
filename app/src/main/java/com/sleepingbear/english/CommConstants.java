@@ -11,7 +11,8 @@ public class CommConstants {
 
     public static String screen_dictionary = "SCREEN_DICTIONARY";
     public static String screen_dictionaryHistory = "SCREEN_DICTIONARY_HISTORY";
-    public static String screen_webDdictionary = "SCREEN_WEB_DICTIONARY";
+    public static String screen_webDictionary = "SCREEN_WEB_DICTIONARY";
+    public static String screen_webTranslate = "SCREEN_WEB_TRANSLATE";
     public static String screen_sentenceView = "SCREEN_SENTENCEVIEW";
     public static String screen_news = "SCREEN_NEWS";
     public static String screen_newsView= "SCREEN_NEWS_VIEW";
@@ -39,6 +40,7 @@ public class CommConstants {
     public static String preferences_font = "key_fontSize";
 
     public static String vocabularyCode = "MY_VOC";
+    public static String defaultVocabularyCode = "VOC0001";
 
     public static String appName = "english";
     public static String sqlCR = "\n";

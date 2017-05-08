@@ -85,7 +85,17 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append("* Web 사전" + CommConstants.sqlCR);
         tempSb.append("- Naver, Daum 웹사전으로 검색을 합니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( screen.equals(CommConstants.screen_webDdictionary) ) {
+        if ( screen.equals(CommConstants.screen_webDictionary) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* Web 번역" + CommConstants.sqlCR);
+        tempSb.append("- Naver, Google 을 사용하여 번역을 합니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_webTranslate) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -211,19 +221,6 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
-        tempSb.append("* 단어장" + CommConstants.sqlCR);
-        tempSb.append("- 내가 등록한 단어를 보실 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .하단의 + 버튼을 클릭해서 신규 단어장을 추가할 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .기존 단어장을 길게 클릭하시면 수정, 추가, 삭제,  내보내기, 가져오기를 하실 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .단어장을 클릭하시면 등록된 단어를 보실 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append("" + CommConstants.sqlCR);
-        if ( screen.equals(CommConstants.screen_vocabularyNote) ) {
-            CurrentSb.append(tempSb.toString());
-        } else {
-            allSb.append(tempSb.toString());
-        }
-
-        tempSb.delete(0, tempSb.length());
         tempSb.append("* 네이버 회화" + CommConstants.sqlCR);
         tempSb.append("- 네이버 회화를 카테고리를 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
@@ -247,7 +244,7 @@ public class HelpActivity extends AppCompatActivity {
 
         tempSb.delete(0, tempSb.length());
         tempSb.append("* Daum 단어장" + CommConstants.sqlCR);
-        tempSb.append("- Daum 단어장을 TOEIC,TOEFL,TEPS,수능영어,NEAT/NEPT,초중고영어,회화,기타 별로 카테고리를 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("- Daum 단어장을 TOEIC,TOEFL,TEPS,수능영어,NEAT/NEPT,초중고영어,회화,기타 카테고리 별로 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .즐겨찾기, 최근수정, 제목 순으로 정렬할 수 있습니다. " + CommConstants.sqlCR);
         tempSb.append(" .상단 refresh 버튼을 클릭하시면 Daum 단어장과 동기화를 합니다." + CommConstants.sqlCR);
         tempSb.append(" .리스트를 길게 클릭하시면 기존 단어장, 신규 단어장에 등록을 할 수 있습니다." + CommConstants.sqlCR);
@@ -260,7 +257,7 @@ public class HelpActivity extends AppCompatActivity {
 
         tempSb.delete(0, tempSb.length());
         tempSb.append("* Daum 단어장 상세" + CommConstants.sqlCR);
-        tempSb.append("- Daum 단어장 내용을 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("- Daum 사이트에 있는 단어장 내용을 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .처음 카테고리를 선택하고 들어갈 경우 Daum 단어장에서 단어를 가져와 보여줍니다." + CommConstants.sqlCR);
         tempSb.append(" .상단 refresh 버튼을 클릭하시면 Daum 단어장과 동기화를 합니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
@@ -273,6 +270,7 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.delete(0, tempSb.length());
         tempSb.append("* 단어장" + CommConstants.sqlCR);
         tempSb.append("- 단어장 목록을 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .하단의 + 버튼을 클릭해서 신규 단어장을 추가할 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .기존 단어장을 길게 클릭하시면 수정, 추가, 삭제,  내보내기, 가져오기를 하실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .단어장을 클릭하시면 등록된 단어를 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
@@ -295,24 +293,12 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
-        tempSb.append("* 단어장 - 단어 학습" + CommConstants.sqlCR);
-        tempSb.append("- 등록한 단어를 5가지 방법으로 공부할 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .단어장 선택, 학습 종류 선택, 시간 선택을 하신후 학습시작을 클릭하세요." + CommConstants.sqlCR);
-        tempSb.append(" .Default는 현재부터 60일전에 등록한 단어입니다." + CommConstants.sqlCR);
-        tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY".equals(b.getString("SCREEN")) ) {
-            CurrentSb.append(tempSb.toString());
-        } else {
-            allSb.append(tempSb.toString());
-        }
-
-        tempSb.delete(0, tempSb.length());
         tempSb.append("* 단답 학습" + CommConstants.sqlCR);
         tempSb.append(" .단어를 클릭하시면 뜻을 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .별표를 클릭해서 암기여부를 표시합니다." + CommConstants.sqlCR);
         tempSb.append(" .단어를 길게 클릭하시면 단어 보기/전체 정답 보기를 선택하실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY1".equals(b.getString("SCREEN")) ) {
+        if ( screen.equals(CommConstants.screen_study1) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -323,7 +309,7 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append(" .별표를 클릭해서 암기여부를 표시합니다." + CommConstants.sqlCR);
         tempSb.append(" .단어를 길게 클릭하시면 정답 보기/ 단어 보기/전체 정답 보기를 선택하실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY2".equals(b.getString("SCREEN")) ) {
+        if ( screen.equals(CommConstants.screen_study2) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -332,8 +318,9 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.delete(0, tempSb.length());
         tempSb.append("* 카드형 학습" + CommConstants.sqlCR);
         tempSb.append("- 카드형 학습입니다." + CommConstants.sqlCR);
+        tempSb.append(" .하단 Play 버튼을 클릭하시면 영어를 보여주고 잠시후에 뜻이 보여집니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY3".equals(b.getString("SCREEN")) ) {
+        if ( screen.equals(CommConstants.screen_study3) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -343,7 +330,7 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append("* 카드형 OX 학습" + CommConstants.sqlCR);
         tempSb.append("- 카드형 OX 학습입니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY4".equals(b.getString("SCREEN")) ) {
+        if ( screen.equals(CommConstants.screen_study4) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -353,7 +340,17 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append("* 카드형 4지선다 학습" + CommConstants.sqlCR);
         tempSb.append("- 카드형 4지선다 학습입니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
-        if ( "STUDY5".equals(b.getString("SCREEN")) ) {
+        if ( screen.equals(CommConstants.screen_study5) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 카드형 4지선다 TTS 학습" + CommConstants.sqlCR);
+        tempSb.append("- TTS를 이용하여 학습을 합니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_study6) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -361,7 +358,7 @@ public class HelpActivity extends AppCompatActivity {
 
         tempSb.delete(0, tempSb.length());
         tempSb.append("* 단어 상세" + CommConstants.sqlCR);
-        tempSb.append("- 단어의 뜻, 발음, 상세 뜻, 예제, 기타 예제별로 단어 상세를 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("- 단어의 뜻, 발음, 상세 뜻, 예제별로 단어 상세를 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .별표를 클릭하시면 Default 단어장에 추가 됩니다." + CommConstants.sqlCR);
         tempSb.append(" .별표를 길게 클릭하시면 추가할 단어장을 선택하실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
@@ -374,8 +371,8 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.delete(0, tempSb.length());
         tempSb.append("* 문장 상세" + CommConstants.sqlCR);
         tempSb.append("- 문장의 발음 및 관련 단어를 조회하실 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .연필 버튼을 클릭해서 문장을 입력하시면 관련 단어와 해석을 조회하실 수 있습니다.(해석은 정확도가 떨어지니 참고만 하세요)" + CommConstants.sqlCR);
         tempSb.append(" .단어를 클릭하시면 단어 보기 및 등록할 단어장을 선택 하실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .단어를 길게 클릭하시면 등록할 단어장을 선택할 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .별표를 클릭하시면 Default 단어장에 추가 됩니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
         if ( "SENTENCEVIEW".equals(b.getString("SCREEN")) ) {

@@ -55,9 +55,16 @@
                 android:id="@+id/my_b_han_dic"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
+                android:layout_marginLeft="2dp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp">
             <Button
                 android:text="Web 사전"
                 android:layout_width="match_parent"
@@ -65,8 +72,17 @@
                 android:id="@+id/my_b_web_dic"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="3dp" />
 
+            <Button
+                android:text="Web 번역"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_web_translate"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginLeft="2dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -191,51 +207,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_voc_study"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <Button
-                android:text="어플 공유"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_share"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="패치 정보"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_patch"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="2dp" />
-
-            <Button
-                android:text="도움말"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_help"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="2dp" />
-
-            <Button
-                android:text="환경 설정"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_setting"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
                 android:layout_marginLeft="2dp" />

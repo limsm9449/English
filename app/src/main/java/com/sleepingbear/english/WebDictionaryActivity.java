@@ -63,8 +63,6 @@ public class WebDictionaryActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(false);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-
-
         webView.setWebViewClient(new WebDictionaryActivity.MyWebViewClient());
 
         webDictionaryLoad();
@@ -82,20 +80,29 @@ public class WebDictionaryActivity extends AppCompatActivity {
         }
 
         String url = "";
-        if ( kind.equals(CommConstants.dictionaryKind_f) ) {
+        if ( "".equals(word) ) {
             if ("Naver".equals(site)) {
-                url = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=entry_idiom&query=" + word;
+                url = "http://endic.naver.com/";
             } else if ("Daum".equals(site)) {
-                url = "http://alldic.daum.net/search.do?dic=eng&q=" + word;
+                url = "http://alldic.daum.net/search.do?dic=eng";
             }
         } else {
-            if ("Naver".equals(site)) {
-                url = "http://krdic.naver.com/search.nhn?kind=all&query=" + word;
-            } else if ("Daum".equals(site)) {
-                url = "http://alldic.daum.net/search.do?dic=kor&q=" + word;
+            if ( kind.equals(CommConstants.dictionaryKind_f) ) {
+                if ("Naver".equals(site)) {
+                    url = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=entry_idiom&query=" + word;
+                } else if ("Daum".equals(site)) {
+                    url = "http://alldic.daum.net/search.do?dic=eng&q=" + word;
+                }
+            } else {
+                if ("Naver".equals(site)) {
+                    url = "http://krdic.naver.com/search.nhn?kind=all&query=" + word;
+                } else if ("Daum".equals(site)) {
+                    url = "http://alldic.daum.net/search.do?dic=kor&q=" + word;
+                }
             }
         }
         DicUtils.dicLog("url : " + url);
+        webView.clearHistory();
         webView.loadUrl(url);
     }
 
@@ -149,7 +156,7 @@ public class WebDictionaryActivity extends AppCompatActivity {
             finish();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_webDdictionary);
+            bundle.putString("SCREEN", CommConstants.screen_webDictionary);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);

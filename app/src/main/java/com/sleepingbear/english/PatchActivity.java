@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 public class PatchActivity extends AppCompatActivity {
+    private int fontSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,9 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("- 2017.05.01 : 영어 학습 어플 통합 개발" + CommConstants.sqlCR);
 
         ((TextView) this.findViewById(R.id.my_c_patch_tv1)).setText(patch.toString());
+
+        fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
+        ((TextView) this.findViewById(R.id.my_c_patch_tv1)).setTextSize(fontSize);
     }
 
     @Override

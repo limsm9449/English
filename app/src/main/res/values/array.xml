@@ -64,6 +64,10 @@
         <item>Daum</item>
     </string-array>
 
+    <string-array name="webTranslate">
+        <item>Naver</item>
+        <item>Google</item>
+    </string-array>
 
 
 </resources>
