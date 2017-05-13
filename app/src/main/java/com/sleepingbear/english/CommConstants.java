@@ -13,7 +13,6 @@ public class CommConstants {
     public static String screen_dictionaryHistory = "SCREEN_DICTIONARY_HISTORY";
     public static String screen_webDictionary = "SCREEN_WEB_DICTIONARY";
     public static String screen_webTranslate = "SCREEN_WEB_TRANSLATE";
-    public static String screen_sentenceView = "SCREEN_SENTENCEVIEW";
     public static String screen_news = "SCREEN_NEWS";
     public static String screen_newsView= "SCREEN_NEWS_VIEW";
     public static String screen_newsClickWord = "SCREEN_NEWS_CLICKWORD";
@@ -27,7 +26,6 @@ public class CommConstants {
     public static String screen_naverConversationView = "SCREEN_NAVER_CONVERSATION_VIEW";
     public static String screen_daumVocabulary = "SCREEN_DAUM_VOCABULARY";
     public static String screen_daumVocabularyView = "SCREEN_DAUM_VOCABULARY_VIEW";
-
     public static String screen_vocabularyNote = "SCREEN_VOCABULARY_NOTE";
     public static String screen_vocabularyNoteView = "SCREEN_VOCABULARY_NOTE_VIEW";
     public static String screen_study1 = "SCREEN_STUDY1";
@@ -36,6 +34,10 @@ public class CommConstants {
     public static String screen_study4 = "SCREEN_STUDY4";
     public static String screen_study5 = "SCREEN_STUDY5";
     public static String screen_study6 = "SCREEN_STUDY6";
+    public static String screen_idiom = "SCREEN_IDIOM";
+    public static String screen_idiomView = "SCREEN_IDIOM_VIEW";
+    public static String screen_wordView = "SCREEN_WORD_VIEW";
+    public static String screen_sentenceView = "SCREEN_SENTENCE_VIEW";
 
     public static String preferences_font = "key_fontSize";
 

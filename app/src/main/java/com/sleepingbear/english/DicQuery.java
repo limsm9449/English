@@ -61,7 +61,7 @@ public class DicQuery {
     public static String getVocDetailForEntryId(String entryId) {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("SELECT SEQ _id, WORD, MEAN, ENTRY_ID, SPELLING, TENSE, TYPE, (SELECT COUNT(*) FROM DIC_VOC WHERE ENTRY_ID = '" + entryId + "') MY_VOC" + CommConstants.sqlCR);
+        sql.append("SELECT SEQ _id, WORD, MEAN, ENTRY_ID, SPELLING, TENSE, TYPE, (SELECT COUNT(*) FROM DIC_VOC WHERE ENTRY_ID = '" + entryId + "') MY_VOC, KIND" + CommConstants.sqlCR);
         sql.append("  FROM DIC" + CommConstants.sqlCR);
         sql.append(" WHERE ENTRY_ID = '" + entryId + "'" + CommConstants.sqlCR);
 
@@ -659,6 +659,28 @@ public class DicQuery {
         }
 
         return insMyNoteCode;
+    }
+
+    public static String getIdiomList() {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT SEQ _id, SEQ, IDIOM, DESC, SQL_WHERE" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_IDIOM" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getIdiomSampleList(String idiom) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT  SEQ _id, SEQ, SENTENCE1, SENTENCE2" + CommConstants.sqlCR);
+        sql.append("FROM    DIC_SAMPLE" + CommConstants.sqlCR);
+        sql.append("WHERE   SENTENCE1 LIKE '" + idiom + "'" + CommConstants.sqlCR);
+        sql.append("ORDER   BY ORD" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
     }
 
 }

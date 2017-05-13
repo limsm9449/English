@@ -10,31 +10,11 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Kind"
-            android:id="@+id/my_tv_kind"
-            android:textAlignment="gravity"
-            android:textColor="@color/FlatDarkBlue"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:layout_marginTop="7dp" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Mean"
-            android:id="@+id/my_tv_mean"
-            android:textSize="16dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:text="Foriegn"
             android:id="@+id/my_tv_foriegn"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:textColor="#e65a5a"
+            android:textColor="@color/my_text_word"
             android:textSize="15dp"
             android:textAlignment="gravity"
             android:layout_marginLeft="10dp"
@@ -48,10 +28,10 @@
             android:layout_alignParentBottom="false"
             android:layout_alignParentRight="false"
             android:layout_alignParentEnd="true"
-            android:textColor="#4f8ead"
+            android:textColor="@color/my_text_mean"
             android:textSize="13dp"
             android:layout_alignParentLeft="false"
-            android:layout_below="@+id/my_f_dk_tv_viet"
+            android:layout_below="@+id/my_tv_foriegn"
             android:textAlignment="gravity"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="5dp" />

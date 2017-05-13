@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_conv_search)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_conv_note)).setOnClickListener(this);
 
+        //((Button) findViewById(R.id.my_b_idiom)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_naver_conv)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_daum)).setOnClickListener(this);
 
@@ -188,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.my_b_conv_note:
                 startActivity(new Intent(getApplication(), ConversationNoteActivity.class));
                 break;
+            //case R.id.my_b_idiom:
+             //   startActivity(new Intent(getApplication(), IdiomActivity.class));
+            //    break;
             case R.id.my_b_naver_conv:
                 startActivity(new Intent(getApplication(), NaverConversationActivity.class));
                 break;
@@ -210,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ( ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ) {
             Log.d(CommConstants.tag, "권한 없음");
             if ( ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ) {
-                Toast.makeText(this, "(중요)파일로 내보내기, 가져오기를 하기 위해서 권한이 필요합니다.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "(중요)파일로 내보내기, 가져오기를 하기 위해서 권한이 필요합니다.", Toast.LENGTH_LONG).show();
             }
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST);
             Log.d(CommConstants.tag, "2222");

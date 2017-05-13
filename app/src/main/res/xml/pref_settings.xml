@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <ListPreference
-        android:defaultValue="13"
+        android:defaultValue="17"
         android:key="key_fontSize"
         android:title="폰트 사이즈"
         android:entries="@array/fontSizeName"

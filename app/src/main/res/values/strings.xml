@@ -27,7 +27,6 @@
     <string name="title_activity_daum_vocabulary_view">Daum 단어장 상세</string>
     <string name="title_activity_conversation_note_view">ConversationNoteViewActivity</string>
     <string name="title_activity_web_translate">번역</string>
-
     <string name="title_activity_study">StudyActivity</string>
     <string name="title_activity_study1">Study1Activity</string>
     <string name="title_activity_study2">Study2Activity</string>
@@ -35,6 +34,8 @@
     <string name="title_activity_study4">Study4Activity</string>
     <string name="title_activity_study5">Study5Activity</string>
     <string name="title_activity_study6">Study6Activity</string>
+    <string name="title_activity_idiom">숙어</string>
+    <string name="title_activity_idiom_view">숙어 예제</string>
 
     <!-- action -->
     <string name="action_help">도움말</string>

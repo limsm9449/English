@@ -64,6 +64,12 @@
         <item>Daum</item>
     </string-array>
 
+    <string-array name="wordView">
+        <item>Naver</item>
+        <item>Daum</item>
+        <item>예제</item>
+    </string-array>
+
     <string-array name="webTranslate">
         <item>Naver</item>
         <item>Google</item>

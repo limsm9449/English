@@ -94,8 +94,11 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ( keyCode == KeyEvent.KEYCODE_ENTER ) {
-                    DicDb.insSearchHistory(db, et_search.getText().toString().trim().toLowerCase());
-                    DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+                    if ( dictionaryKind.equals(CommConstants.dictionaryKind_f) ) {
+                        DicDb.insSearchHistory(db, et_search.getText().toString().trim().toLowerCase());
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+                    }
+
                     changeListView(true);
                 }
 
@@ -272,7 +275,7 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
     public void setListView() {
         if ( isEmptyCondition ) {
-            Toast.makeText(this, "검색할 단어를 입력하세요.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "검색할 단어를 입력하세요.", Toast.LENGTH_SHORT).show();
             et_search.requestFocus();
 
             //키보드 보이게 하는 부분
@@ -299,37 +302,6 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(et_search.getWindowToken(), 0);
         }
-    }
-
-    public void webDictionarySearch() {
-        final String[] kindCodes = new String[]{"Naver","Daum"};
-
-        final AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-        dlg.setTitle("검색 사이트 선택");
-        dlg.setSingleChoiceItems(kindCodes, webDictionaryIdx, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                webDictionaryIdx = arg1;
-            }
-        });
-        dlg.setNegativeButton("취소", null);
-        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Bundle bundle = new Bundle();
-
-                Cursor cur = (Cursor) adapter.getCursor();
-
-                bundle.putString("kind", dictionaryKind);
-                bundle.putString("site", kindCodes[webDictionaryIdx]);
-                bundle.putString("word", cur.getString(cur.getColumnIndexOrThrow("WORD")));
-
-                Intent intent = new Intent(getApplication(), WebDictionaryActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-        dlg.show();
     }
 
     /**
@@ -362,14 +334,10 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
                 //단어장 다이얼로그 생성
                 Cursor cursor = db.rawQuery(DicQuery.getVocabularyCategory(), null);
 
-                final String[] kindCodes = new String[cursor.getCount() + 1];
-                final String[] kindCodeNames = new String[cursor.getCount() + 1];
+                final String[] kindCodes = new String[cursor.getCount()];
+                final String[] kindCodeNames = new String[cursor.getCount()];
 
                 int idx = 0;
-                // 웹 사전 검색 추가
-                kindCodes[idx] = "WEB_DICTIONARY";
-                kindCodeNames[idx] = "웹사전 검색";
-                idx++;
                 while (cursor.moveToNext()) {
                     kindCodes[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
                     kindCodeNames[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME")) + " 에 단어 추가";
@@ -388,19 +356,13 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
                 dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (dSelect == 0) {
-                            webDictionarySearch();
-                        } else {
-                            Cursor cur = (Cursor) adapter.getCursor();
-                            DicDb.insDicVoc(db, cur.getString(cur.getColumnIndexOrThrow("ENTRY_ID")), kindCodes[dSelect]);
-                            DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
-                        }
+                        Cursor cur = (Cursor) adapter.getCursor();
+                        DicDb.insDicVoc(db, cur.getString(cur.getColumnIndexOrThrow("ENTRY_ID")), kindCodes[dSelect]);
+                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
                 });
 
                 dlg.show();
-            } else {
-                webDictionarySearch();
             }
             //return ture 설정하면 Long클릭 후 클릭은 처리 안됨
             return true;

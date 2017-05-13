@@ -460,7 +460,7 @@ public class DicUtils {
         String rtn = sharedPref.getString( preference, "" );
         if ( "".equals( rtn ) ) {
             if ( preference.equals(CommConstants.preferences_font) ) {
-                rtn = "13";
+                rtn = "17";
             } else {
                 rtn = "";
             }

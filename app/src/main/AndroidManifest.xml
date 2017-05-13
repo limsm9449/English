@@ -147,13 +147,22 @@
         <activity
             android:name=".DictionaryHistoryActivity"
             android:label="@string/title_activity_dictionary_history"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".MySpeechService">
             <intent-filter>
                 <action android:name="com.sleepingbear.english.MySpeechService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".IdiomActivity"
+            android:label="@string/title_activity_idiom"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".IdiomViewActivity"
+            android:label="@string/title_activity_idiom_view"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
