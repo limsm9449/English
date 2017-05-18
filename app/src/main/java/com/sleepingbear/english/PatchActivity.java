@@ -38,7 +38,7 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("" + CommConstants.sqlCR);
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
-        patch.append("" + CommConstants.sqlCR);
+        patch.append("- 숙어 모음 및 예제 보기 기능 추가" + CommConstants.sqlCR);
         patch.append("- 2017.05.01 : 영어 학습 어플 통합 개발" + CommConstants.sqlCR);
 
         ((TextView) this.findViewById(R.id.my_c_patch_tv1)).setText(patch.toString());

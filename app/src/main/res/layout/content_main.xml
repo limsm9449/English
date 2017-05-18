@@ -129,16 +129,6 @@
                 android:layout_marginRight="3dp" />
 
             <Button
-                android:text="회화 패턴"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_pattern"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp"
-                android:layout_marginLeft="2dp" />
-
-            <Button
                 android:text="회화 검색"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -167,12 +157,32 @@
             android:layout_marginBottom="5dp">
 
             <Button
-                android:text="네이버 회화"
+                android:text="회화 패턴"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_pattern"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginRight="3dp" />
+
+            <Button
+                android:text="숙어"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_idiom"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="3dp" />
+
+            <Button
+                android:text="네이버\n회화"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_naver_conv"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
+                android:layout_marginLeft="2dp"
                 android:layout_marginRight="3dp" />
 
             <Button

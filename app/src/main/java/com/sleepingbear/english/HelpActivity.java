@@ -154,31 +154,6 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
-        tempSb.append("* 회화 패턴" + CommConstants.sqlCR);
-        tempSb.append("- 회화 패턴별로 회화를 조회 및 회화 학습을 할 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .패턴을 클릭하면 패턴이 들어간 회화를 조회 합니다. " + CommConstants.sqlCR);
-        tempSb.append(" .패턴을 길게 클릭하면 패턴이 들어간 회화를 학습 할 수 있습니다. " + CommConstants.sqlCR);
-        tempSb.append("" + CommConstants.sqlCR);
-        if ( screen.equals(CommConstants.screen_pattern) ) {
-            CurrentSb.append(tempSb.toString());
-        } else {
-            allSb.append(tempSb.toString());
-        }
-
-        tempSb.delete(0, tempSb.length());
-        tempSb.append("* 회화 패턴 예제" + CommConstants.sqlCR);
-        tempSb.append("- 회화 패턴이 들어간 회화를 조회합니다." + CommConstants.sqlCR);
-        tempSb.append(" .회화를 클릭하면 영문을 볼 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .회화를 길게 클릭하면 회화 학습, 문장 상세, 회화 노트에 추가, TTS 기능을 사용 할 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append(" .오른쪽 상단 버튼의 눈 모양 버튼을 클릭하면 영어 문장을 볼 수 있습니다." + CommConstants.sqlCR);
-        tempSb.append("" + CommConstants.sqlCR);
-        if ( screen.equals(CommConstants.screen_patternView) ) {
-            CurrentSb.append(tempSb.toString());
-        } else {
-            allSb.append(tempSb.toString());
-        }
-
-        tempSb.delete(0, tempSb.length());
         tempSb.append("* 회화 검색" + CommConstants.sqlCR);
         tempSb.append("- 검색어로 회화를 검색합니다." + CommConstants.sqlCR);
         tempSb.append(" .'A B'로 검색을 하면 A와 B가 들어간 회화를 검색합니다." + CommConstants.sqlCR);
@@ -215,6 +190,56 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append(" .오른쪽 상단 버튼의 눈 모양 버튼을 클릭하면 영어문장을 볼 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
         if ( screen.equals(CommConstants.screen_conversationNoteView) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 회화 패턴" + CommConstants.sqlCR);
+        tempSb.append("- 회화 패턴별로 회화를 조회 및 회화 학습을 할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .패턴을 클릭하면 패턴이 들어간 회화를 조회 합니다. " + CommConstants.sqlCR);
+        tempSb.append(" .패턴을 길게 클릭하면 패턴이 들어간 회화를 학습 할 수 있습니다. " + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_pattern) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 회화 패턴 예제" + CommConstants.sqlCR);
+        tempSb.append("- 회화 패턴이 들어간 회화를 조회합니다.(예제에서 비슷한 패턴을 찾기 때문에 100% 정확하지는 않습니다.)" + CommConstants.sqlCR);
+        tempSb.append(" .회화를 클릭하면 영문을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .회화를 길게 클릭하면 회화 학습, 문장 상세, 회화 노트에 추가, TTS 기능을 사용 할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .오른쪽 상단 버튼의 눈 모양 버튼을 클릭하면 영어 문장을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_patternView) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 숙어" + CommConstants.sqlCR);
+        tempSb.append("- 숙어별로 회화를 조회 및 회화 학습을 할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .숙어를 클릭하면 숙어가 들어간 회화를 조회 합니다. " + CommConstants.sqlCR);
+        tempSb.append(" .숙어를 길게 클릭하면 숙어가 들어간 회화를 학습 할 수 있습니다. " + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_idiom) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 숙어 예제" + CommConstants.sqlCR);
+        tempSb.append("- 숙어가 들어간 회화를 조회합니다.(예제에서 비슷한 숙어를 찾기 때문에 100% 정확하지는 않습니다.)" + CommConstants.sqlCR);
+        tempSb.append(" .회화를 클릭하면 영문을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .회화를 길게 클릭하면 회화 학습, 문장 상세, 회화 노트에 추가, TTS 기능을 사용 할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .오른쪽 상단 버튼의 눈 모양 버튼을 클릭하면 영어 문장을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_idiomView) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());

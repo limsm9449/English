@@ -664,7 +664,7 @@ public class DicQuery {
     public static String getIdiomList() {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("SELECT SEQ _id, SEQ, IDIOM, DESC, SQL_WHERE" + CommConstants.sqlCR);
+        sql.append("SELECT SEQ _id, SEQ, IDIOM, DESC, SQL_WHERE, SAME_IDIOM" + CommConstants.sqlCR);
         sql.append("  FROM DIC_IDIOM" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
 

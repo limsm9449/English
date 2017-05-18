@@ -109,7 +109,7 @@ public class ConversationNoteStudyActivity extends AppCompatActivity implements 
     public void getData() {
         DicUtils.dicLog(this.getClass().toString() + " getData");
         if ( db != null ) {
-            if ( "PATTERN".equals(kind) ) {
+            if ( "PATTERN".equals(kind) || "IDIOM".equals(kind) ) {
                 cursor = db.rawQuery(DicQuery.getPatternSampleList(sqlWhere), null);
             } else if ( "SAMPLE".equals(kind) ) {
                 cursor = db.rawQuery(DicQuery.getSample(sampleSeq), null);

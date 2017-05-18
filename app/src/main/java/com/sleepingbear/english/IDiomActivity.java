@@ -154,11 +154,17 @@ class IdiomCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ((TextView) view.findViewById(R.id.my_tv_idiom)).setText(String.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("IDIOM"))));
+        ((TextView) view.findViewById(R.id.my_tv_same_idiom)).setText(" = " + String.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("SAME_IDIOM"))));
         ((TextView) view.findViewById(R.id.my_tv_idiom_desc)).setText(String.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("DESC"))));
 
         //사이즈 설정
         ((TextView) view.findViewById(R.id.my_tv_idiom)).setTextSize(fontSize);
+        ((TextView) view.findViewById(R.id.my_tv_same_idiom)).setTextSize(fontSize);
         ((TextView) view.findViewById(R.id.my_tv_idiom_desc)).setTextSize(fontSize);
+
+        if ( "".equals(String.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("SAME_IDIOM")))) ) {
+            ((TextView) view.findViewById(R.id.my_tv_same_idiom)).setVisibility(View.GONE);
+        }
     }
 
 }
