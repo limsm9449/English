@@ -53,7 +53,7 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
     private Cursor cursor;
     private DictionaryActivitySearchTask task;
     private boolean isEmptyCondition;
-    private int dSelect = 1;
+    private int dSelect = 0;
     private int webDictionaryIdx = 0;
 
     @Override

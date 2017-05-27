@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ( "Y".equals(prefs.getString("db_new", "N")) ) {
             DicUtils.dicLog("backup data import");
 
-            //DicUtils.readInfoFromFile(this, db);
+            DicUtils.readInfoFromFile(this, db, "");
 
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("db_new", "N");

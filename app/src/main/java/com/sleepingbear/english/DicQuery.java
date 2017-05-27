@@ -494,7 +494,7 @@ public class DicQuery {
 
         sql.append("SELECT CODE KIND, CODE_NAME KIND_NAME" + CommConstants.sqlCR);
         sql.append("  FROM DIC_CODE" + CommConstants.sqlCR);
-        sql.append(" WHERE CODE_GROUP = 'MY'" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = 'MY_VOC'" + CommConstants.sqlCR);
         sql.append("   AND CODE != '" + code + "'" + CommConstants.sqlCR);
         sql.append(" ORDER BY CODE_NAME" + CommConstants.sqlCR);
 

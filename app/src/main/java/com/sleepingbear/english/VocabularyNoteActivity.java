@@ -163,16 +163,22 @@ public class VocabularyNoteActivity extends AppCompatActivity implements View.On
             ((Button) dialog_layout.findViewById(R.id.my_d_category_b_upd)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if ("".equals(et_upd.getText().toString())) {
-                        Toast.makeText(getApplicationContext(), "단어장 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-                    } else {
+                    final String code = (String) v.getTag();
+                    if ("VOC0001".equals(code)) {
+                        Toast.makeText(getApplicationContext(), "기본 단어장은 수정할 수 없습니다.", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
+                    } else {
+                        if ("".equals(et_upd.getText().toString())) {
+                            Toast.makeText(getApplicationContext(), "단어장 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            alertDialog.dismiss();
 
-                        db.execSQL(DicQuery.getUpdCategory(CommConstants.vocabularyCode, (String) v.getTag(), et_upd.getText().toString()));
+                            db.execSQL(DicQuery.getUpdCategory(CommConstants.vocabularyCode, code, et_upd.getText().toString()));
 
-                        changeListView();
+                            changeListView();
 
-                        Toast.makeText(getApplicationContext(), "단어장 이름을 수정하였습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "단어장 이름을 수정하였습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
