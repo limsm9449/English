@@ -243,6 +243,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long backKeyPressedTime = 0;
     @Override
     public void onBackPressed() {
+        //종료 시점에 변경 사항을 기록한다.
+        if ( "Y".equals(DicUtils.getDbChange(getApplicationContext())) ) {
+            DicUtils.writeInfoToFile(this, db, "");
+            DicUtils.clearDbChange(this);
+        }
+
         if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
             backKeyPressedTime = System.currentTimeMillis();
             Toast.makeText(getApplicationContext(), "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
@@ -250,11 +256,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            //종료 시점에 변경 사항을 기록한다.
-            if ( "Y".equals(DicUtils.getDbChange(getApplicationContext())) ) {
-                DicUtils.writeInfoToFile(this, db, "");
-            }
-
             finish();
         }
     }
