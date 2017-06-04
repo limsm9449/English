@@ -22,10 +22,6 @@
 
     <PreferenceCategory android:title="초기화">
         <Preference
-            android:key="key_voc_clear"
-            android:title="단어장 초기화"
-            android:summary="모든 단어장을 삭제합니다."/>
-        <Preference
             android:key="key_my_conv_clear"
             android:title="My 회화 초기화"
             android:summary="My 회화 노트를 삭제합니다."/>
@@ -33,6 +29,14 @@
             android:key="key_conv_clear"
             android:title="학습 회화 초기화"
             android:summary="모든 학습회화를 삭제합니다."/>
+        <Preference
+            android:key="key_today_clear"
+            android:title="오늘의 단어 초기화"
+            android:summary="오늘의 단어를 삭제합니다."/>
+        <Preference
+            android:key="key_voc_clear"
+            android:title="단어장 초기화"
+            android:summary="모든 단어장을 삭제합니다."/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="개발자">

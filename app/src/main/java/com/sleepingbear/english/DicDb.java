@@ -505,4 +505,29 @@ public class DicDb {
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }
+
+    public static void insToday10(SQLiteDatabase db, String today) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO DIC_TODAY(TODAY, ENTRY_ID) " + CommConstants.sqlCR);
+        sql.append("SELECT '" + today + "', ENTRY_ID FROM (" + CommConstants.sqlCR);
+        sql.append("SELECT ENTRY_ID, WORD, RANDOM() RND" + CommConstants.sqlCR);
+        sql.append("  FROM DAUM_VOCABULARY " + CommConstants.sqlCR);
+        sql.append(" WHERE ENTRY_ID NOT IN ( SELECT ENTRY_ID FROM DIC_TODAY ) " + CommConstants.sqlCR);
+        sql.append(" ) ORDER BY RND LIMIT 10" + CommConstants.sqlCR);
+
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    /**
+     * 오늘이 단어 초기화
+     * @param db
+     */
+    public static void initToday(SQLiteDatabase db) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("DELETE FROM DIC_TODAY" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
 }

@@ -188,6 +188,23 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                         }
                     })
                     .show();
+        } else if ( preference.getKey().equals("key_today_clear") ) {
+            new AlertDialog.Builder(this)
+                    .setTitle("알림")
+                    .setMessage("오늘의 단어를 초기화 하시겠습니까?\n초기화 후에는 복구할 수 없습니다.")
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DicDb.initToday(db);
+                            Toast.makeText(getApplicationContext(), "오늘의 단어가 초기화 되었습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .show();
         } else if ( preference.getKey().equals("key_mail") ) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setType("text/plain");

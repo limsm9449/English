@@ -163,6 +163,10 @@
             android:name=".IdiomViewActivity"
             android:label="@string/title_activity_idiom_view"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".TodayActivity"
+            android:label="@string/title_activity_today"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

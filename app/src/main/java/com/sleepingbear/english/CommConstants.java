@@ -38,6 +38,7 @@ public class CommConstants {
     public static String screen_idiomView = "SCREEN_IDIOM_VIEW";
     public static String screen_wordView = "SCREEN_WORD_VIEW";
     public static String screen_sentenceView = "SCREEN_SENTENCE_VIEW";
+    public static String screen_today = "SCREEN_TODAY";
 
     public static String preferences_font = "key_fontSize";
 

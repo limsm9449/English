@@ -120,7 +120,7 @@
             android:layout_marginBottom="5dp">
 
             <Button
-                android:text="회화 학습"
+                android:text="회화\n학습"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_conversation_study"
@@ -129,7 +129,7 @@
                 android:layout_marginRight="3dp" />
 
             <Button
-                android:text="회화 검색"
+                android:text="회화\n검색"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_conv_search"
@@ -139,7 +139,16 @@
                 android:layout_marginRight="3dp" />
 
             <Button
-                android:text="회화 노트"
+                android:text="회화\n패턴"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_pattern"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginRight="3dp" />
+
+            <Button
+                android:text="회화\n노트"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_conv_note"
@@ -157,22 +166,12 @@
             android:layout_marginBottom="5dp">
 
             <Button
-                android:text="회화 패턴"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_pattern"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
                 android:text="숙어"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/my_b_idiom"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
-                android:layout_marginLeft="2dp"
                 android:layout_marginRight="3dp" />
 
             <Button
@@ -201,6 +200,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="5dp">
+
+            <Button
+                android:text="오늘의 단어"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_today"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginRight="3dp"/>
 
             <Button
                 android:text="단어장"

@@ -36,6 +36,8 @@
     <string name="title_activity_study6">Study6Activity</string>
     <string name="title_activity_idiom">숙어</string>
     <string name="title_activity_idiom_view">숙어 예제</string>
+    <string name="title_activity_today">오늘의 단어</string>
+
 
     <!-- action -->
     <string name="action_help">도움말</string>

@@ -293,6 +293,16 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
+        tempSb.append("* 오늘의 단어" + CommConstants.sqlCR);
+        tempSb.append("- 매일 랜덤하게 뽑은 10개의 단어를 학습할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_today) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
         tempSb.append("* 단어장" + CommConstants.sqlCR);
         tempSb.append("- 단어장 목록을 보실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .하단의 + 버튼을 클릭해서 신규 단어장을 추가할 수 있습니다." + CommConstants.sqlCR);
