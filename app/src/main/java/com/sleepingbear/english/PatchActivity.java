@@ -38,6 +38,7 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("" + CommConstants.sqlCR);
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 사전에서 한글 검색시 단어체크 여부에 상관없이 한글 검색이 되도록 수정" + CommConstants.sqlCR);
         patch.append("- 영한사전, 한영 사전을 한 화면으로 통합" + CommConstants.sqlCR);
         patch.append("- Daum 단어장에 동기화 안되는 문제점 수정" + CommConstants.sqlCR);
         patch.append("- 오늘의 단어 기능 추가" + CommConstants.sqlCR);
