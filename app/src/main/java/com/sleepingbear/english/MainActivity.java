@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ((Button) findViewById(R.id.my_b_foreign_dic)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_dic_history)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_b_han_dic)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_web_translate)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_web_dic)).setOnClickListener(this);
@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(getApplication(), SettingsActivity.class));
 
             return true;
+        } else if (id == R.id.action_no_ad) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.sleepingbear.pehdictandvoc")));
         }
 
         return super.onOptionsItemSelected(item);
@@ -143,14 +145,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent dicHistoryIntent = new Intent(getApplication(), DictionaryHistoryActivity.class);
                 dicHistoryIntent.putExtras(bundle);
                 startActivity(dicHistoryIntent);
-
-                break;
-            case R.id.my_b_han_dic:
-                bundle.putString("KIND", CommConstants.dictionaryKind_h);
-
-                Intent hanIntent = new Intent(getApplication(), DictionaryActivity.class);
-                hanIntent.putExtras(bundle);
-                startActivity(hanIntent);
 
                 break;
             case R.id.my_b_web_dic:

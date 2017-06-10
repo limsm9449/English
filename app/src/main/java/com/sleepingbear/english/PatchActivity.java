@@ -38,6 +38,9 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("" + CommConstants.sqlCR);
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 영한사전, 한영 사전을 한 화면으로 통합" + CommConstants.sqlCR);
+        patch.append("- Daum 단어장에 동기화 안되는 문제점 수정" + CommConstants.sqlCR);
+        patch.append("- 오늘의 단어 기능 추가" + CommConstants.sqlCR);
         patch.append("- 숙어 모음 및 예제 보기 기능 추가" + CommConstants.sqlCR);
         patch.append("- 2017.05.01 : 영어 학습 어플 통합 개발" + CommConstants.sqlCR);
 
