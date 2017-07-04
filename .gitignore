@@ -7,5 +7,5 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/assets/english.db
+/app/src/main/assets/ehdictandvoc.db
 /app/app-release.apk

@@ -38,6 +38,7 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("" + CommConstants.sqlCR);
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 영문 소설 기능 수정 : 페이지 단위로 보도록 수정, 무료 영문소설 사이트 추가" + CommConstants.sqlCR);
         patch.append("- 영문 소설 보는 기능 추가" + CommConstants.sqlCR);
         patch.append("- 사전에서 한글 검색시 단어체크 여부에 상관없이 한글 검색이 되도록 수정" + CommConstants.sqlCR);
         patch.append("- 영한사전, 한영 사전을 한 화면으로 통합" + CommConstants.sqlCR);

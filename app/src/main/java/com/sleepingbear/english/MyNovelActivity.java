@@ -45,6 +45,7 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
     private RelativeLayout editRl;
 
     private boolean isEditing;
+    private boolean isChange = false;
 
 
     @Override
@@ -59,41 +60,75 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                Intent intent = new Intent(MyNovelActivity.this, NovelActivity.class);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 1);
-            }
-        });
-        fab.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                FileChooser filechooser = new FileChooser(MyNovelActivity.this);
-                filechooser.setFileListener(new FileChooser.FileSelectedListener() {
-                    @Override
-                    public void fileSelected(final File file) {
-                        DicDb.insMyNovel(db, file.getName(), file.getAbsolutePath());
-                        changeListView();
+                final int[] kindCodes = new int[4];
+                final String[] kindCodeNames = new String[4];
 
-                        Toast.makeText(getApplicationContext(), "소설을 추가했습니다.", Toast.LENGTH_LONG).show();
+                int idx = 0;
+                kindCodes[idx] = 0;
+                kindCodeNames[idx++] = CommConstants.novel_fullbooks;
+                kindCodes[idx] = 1;
+                kindCodeNames[idx++] = CommConstants.novel_classicreader;
+                kindCodes[idx] = 2;
+                kindCodeNames[idx++] = CommConstants.novel_loyalbooks;
+                kindCodes[idx] = 3;
+                kindCodeNames[idx++] = CommConstants.novel_local;
+
+                final android.support.v7.app.AlertDialog.Builder dlg = new android.support.v7.app.AlertDialog.Builder(MyNovelActivity.this);
+                dlg.setTitle("사이트 선택");
+                dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        mSelect = arg1;
                     }
                 });
-                filechooser.setExtension("txt");
-                filechooser.showDialog();
+                dlg.setNegativeButton("취소", null);
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if ( mSelect == 3 ) {
+                            FileChooser filechooser = new FileChooser(MyNovelActivity.this);
+                            filechooser.setFileListener(new FileChooser.FileSelectedListener() {
+                                @Override
+                                public void fileSelected(final File file) {
+                                    DicDb.insMyNovel(db, file.getName(), file.getAbsolutePath());
+                                    changeListView();
 
-                return false;
+                                    Toast.makeText(getApplicationContext(), "소설을 추가했습니다.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            filechooser.setExtension("txt");
+                            filechooser.showDialog();
+                        } else {
+                            Bundle bundle = new Bundle();
+                            if (mSelect == 0) {
+                                bundle.putString("SITE", CommConstants.novel_fullbooks);
+                                bundle.putInt("SITE_IDX", mSelect);
+                            } else if (mSelect == 1) {
+                                bundle.putString("SITE", CommConstants.novel_classicreader);
+                                bundle.putInt("SITE_IDX", mSelect);
+                            } else if (mSelect == 2) {
+                                bundle.putString("SITE", CommConstants.novel_loyalbooks);
+                                bundle.putInt("SITE_IDX", mSelect);
+                            }
+                            Intent intent = new Intent(MyNovelActivity.this, NovelActivity.class);
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, 1);
+                        }
+                    }
+                });
+                dlg.show();
             }
         });
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
         dbHelper = new DbHelper(this);
         db = dbHelper.getWritableDatabase();
 
-        ((ImageView) findViewById(R.id.my_f_cw_all)).setOnClickListener(this);
-        ((ImageView) findViewById(R.id.my_f_cw_delete)).setOnClickListener(this);
+        findViewById(R.id.my_f_cw_all).setOnClickListener(this);
+        findViewById(R.id.my_f_cw_delete).setOnClickListener(this);
 
         editRl = (RelativeLayout) findViewById(R.id.my_my_novel_rl);
         editRl.setVisibility(View.GONE);
@@ -129,13 +164,13 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        ((MenuItem)menu.findItem(R.id.action_edit)).setVisible(false);
-        ((MenuItem)menu.findItem(R.id.action_exit)).setVisible(false);
+        menu.findItem(R.id.action_edit).setVisible(false);
+        menu.findItem(R.id.action_exit).setVisible(false);
 
         if ( isEditing ) {
-            ((MenuItem)menu.findItem(R.id.action_exit)).setVisible(true);
+            menu.findItem(R.id.action_exit).setVisible(true);
         } else {
-            ((MenuItem)menu.findItem(R.id.action_edit)).setVisible(true);
+            menu.findItem(R.id.action_edit).setVisible(true);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -146,7 +181,7 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            finish();
+            onBackPressed();
         } else if (id == R.id.action_edit) {
             isEditing = true;
             invalidateOptionsMenu();
@@ -170,6 +205,11 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
     public void changeListView() {
         if ( db != null ) {
             Cursor listCursor = db.rawQuery(DicQuery.getMyNovel(), null);
+            if ( listCursor.getCount() == 0 ) {
+                listCursor = db.rawQuery(DicQuery.getMyNovelMessage(), null);
+                changeEdit(false);
+                invalidateOptionsMenu();
+            }
             ListView listView = (ListView) findViewById(R.id.my_lv);
             adapter = new MyNovelCursorAdapter(this, listCursor, db, 0);
             adapter.editChange(isEditing);
@@ -188,9 +228,8 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
 
                 Bundle bundle = new Bundle();
 
-                String content = DicUtils.getMyNovelContent(cur.getString(cur.getColumnIndexOrThrow("PATH")));
                 bundle.putString("novelTitle", cur.getString(cur.getColumnIndexOrThrow("TITLE")));
-                bundle.putString("content", DicUtils.getHtmlString(content));
+                bundle.putString("path", cur.getString(cur.getColumnIndexOrThrow("PATH")));
 
                 Intent intent = new Intent(MyNovelActivity.this, NovelViewActivity.class);
                 intent.putExtras(bundle);
@@ -204,11 +243,7 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
         DicUtils.dicLog("onClick");
         switch (v.getId()) {
             case R.id.my_f_cw_all :
-                if ( isAllCheck ) {
-                    isAllCheck = false;
-                } else {
-                    isAllCheck = true;
-                }
+                isAllCheck = !isAllCheck;
                 adapter.allCheck(isAllCheck);
                 break;
             case R.id.my_f_cw_delete :
@@ -253,7 +288,18 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
             editRl.setVisibility(View.GONE);
         }
 
-        adapter.editChange(isEditing);
+        if ( adapter != null ) {
+            adapter.editChange(isEditing);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this.getApplication(), MyNovelActivity.class);
+        intent.putExtra("isChange", (isChange ? "Y" : "N"));
+        setResult(RESULT_OK, intent);
+
+        finish();
     }
 }
 
@@ -317,13 +363,11 @@ class MyNovelCursorAdapter extends CursorAdapter {
         viewHolder.cb.setTag(viewHolder);
 
         ((TextView) view.findViewById(R.id.my_tv_title)).setText(cursor.getString(cursor.getColumnIndexOrThrow("TITLE")));
-        ((TextView) view.findViewById(R.id.my_tv_path)).setText(cursor.getString(cursor.getColumnIndexOrThrow("PATH")));
         ((TextView) view.findViewById(R.id.my_tv_date)).setText(cursor.getString(cursor.getColumnIndexOrThrow("INS_DATE")));
+        ((TextView) view.findViewById(R.id.my_tv_path)).setText(cursor.getString(cursor.getColumnIndexOrThrow("PATH")));
 
         //사이즈 설정
         ((TextView) view.findViewById(R.id.my_tv_title)).setTextSize(fontSize);
-        ((TextView) view.findViewById(R.id.my_tv_path)).setTextSize(fontSize);
-        ((TextView) view.findViewById(R.id.my_tv_date)).setTextSize(fontSize);
 
         if ( isCheck[cursor.getPosition()] ) {
             ((CheckBox)view.findViewById(R.id.my_cb_check)).setButtonDrawable(android.R.drawable.checkbox_on_background);
@@ -332,9 +376,9 @@ class MyNovelCursorAdapter extends CursorAdapter {
         }
 
         if ( isEditing ) {
-            ((RelativeLayout) view.findViewById(R.id.my_f_ci_rl)).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.my_f_ci_rl).setVisibility(View.VISIBLE);
         } else {
-            ((RelativeLayout) view.findViewById(R.id.my_f_ci_rl)).setVisibility(View.GONE);
+            view.findViewById(R.id.my_f_ci_rl).setVisibility(View.GONE);
         }
     }
 
@@ -375,5 +419,4 @@ class MyNovelCursorAdapter extends CursorAdapter {
         notifyDataSetChanged();
     }
 }
-
 

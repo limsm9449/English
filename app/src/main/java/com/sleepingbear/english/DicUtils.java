@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -121,7 +123,7 @@ public class DicUtils {
     public static String[] sentenceSplit(String sentence) {
         ArrayList<String> al = new ArrayList<String>();
 
-        if ( sentence != null ) {
+        if (sentence != null) {
             String tmpSentence = sentence + " ";
 
             int startPos = 0;
@@ -149,17 +151,17 @@ public class DicUtils {
 
     public static String getSentenceWord(String[] sentence, int kind, int position) {
         String rtn = "";
-        if ( kind == 1 ) {
+        if (kind == 1) {
             rtn = sentence[position];
-        } else if ( kind == 2 ) {
-            if ( position + 2 <= sentence.length - 1 ) {
-                if ( " ".equals(sentence[position + 1]) ) {
+        } else if (kind == 2) {
+            if (position + 2 <= sentence.length - 1) {
+                if (" ".equals(sentence[position + 1])) {
                     rtn = sentence[position] + sentence[position + 1] + sentence[position + 2];
                 }
             }
-        } else if ( kind == 3 ) {
-            if ( position + 4 <= sentence.length - 1 ) {
-                if ( " ".equals(sentence[position + 1]) && " ".equals(sentence[position + 3]) ) {
+        } else if (kind == 3) {
+            if (position + 4 <= sentence.length - 1) {
+                if (" ".equals(sentence[position + 1]) && " ".equals(sentence[position + 3])) {
                     rtn = sentence[position] + sentence[position + 1] + sentence[position + 2] + sentence[position + 3] + sentence[position + 4];
                 }
             }
@@ -172,7 +174,7 @@ public class DicUtils {
     public static String getOneSpelling(String spelling) {
         String rtn = "";
         String[] str = spelling.split(",");
-        if ( str.length == 1 ) {
+        if (str.length == 1) {
             rtn = spelling;
         } else {
             rtn = str[0] + "(" + str[1] + ")";
@@ -192,8 +194,10 @@ public class DicUtils {
             DicDb.initConversationNote(db);
             DicDb.initVocabulary(db);
             DicDb.initDicClickWord(db);
+            DicDb.initHistory(db);
+            DicDb.initMyNovel(db);
 
-            if ( "".equals(fileName) ) {
+            if ("".equals(fileName)) {
                 fis = ctx.openFileInput(CommConstants.infoFileName);
             } else {
                 fis = new FileInputStream(new File(fileName));
@@ -208,15 +212,15 @@ public class DicUtils {
                 dicLog(readString);
 
                 String[] row = readString.split(":");
-                if ( row[0].equals(CommConstants.tag_code_ins) ) {
+                if (row[0].equals(CommConstants.tag_code_ins)) {
                     DicDb.insCode(db, row[1], row[2], row[3]);
-                } else if ( row[0].equals(CommConstants.tag_note_ins) ) {
+                } else if (row[0].equals(CommConstants.tag_note_ins)) {
                     DicDb.insConversationToNote(db, row[1], row[2]);
-                } else if ( row[0].equals(CommConstants.tag_voc_ins) ) {
+                } else if (row[0].equals(CommConstants.tag_voc_ins)) {
                     DicDb.insDicVoc(db, row[1], row[2], row[3], row[4]);
-                } else if ( row[0].equals(CommConstants.tag_history_ins) ) {
+                } else if (row[0].equals(CommConstants.tag_history_ins)) {
                     DicDb.insSearchHistory(db, row[1], row[2]);
-                } else if ( row[0].equals(CommConstants.tag_click_word_ins) ) {
+                } else if (row[0].equals(CommConstants.tag_click_word_ins)) {
                     DicDb.insDicClickWord(db, row[1], row[2]);
                 }
 
@@ -234,6 +238,7 @@ public class DicUtils {
 
     /**
      * 데이타 기록
+     *
      * @param ctx
      * @param db
      */
@@ -243,7 +248,7 @@ public class DicUtils {
         try {
             FileOutputStream fos = null;
 
-            if ( "".equals(fileName) ) {
+            if ("".equals(fileName)) {
                 fos = ctx.openFileOutput(CommConstants.infoFileName, ctx.MODE_PRIVATE);
             } else {
                 File saveFile = new File(fileName);
@@ -260,7 +265,7 @@ public class DicUtils {
             while (cursor.moveToNext()) {
                 String writeData = cursor.getString(cursor.getColumnIndexOrThrow("WRITE_DATA"));
                 DicUtils.dicLog(writeData);
-                if ( writeData != null ) {
+                if (writeData != null) {
                     fos.write((writeData.getBytes()));
                     fos.write("\n".getBytes());
                 }
@@ -279,7 +284,7 @@ public class DicUtils {
         boolean isHangule = false;
         String str = (pStr == null ? "" : pStr);
         try {
-            if(str.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
+            if (str.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
                 isHangule = true;
             } else {
                 isHangule = false;
@@ -295,7 +300,7 @@ public class DicUtils {
         Document doc = null;
         //while (true) {
         //    try {
-                doc = Jsoup.connect(url).timeout(60000).get();
+        doc = Jsoup.connect(url).timeout(60000).get();
         //        break;
         //    } catch (Exception e) {
         //        System.out.println(e.getMessage());
@@ -402,30 +407,30 @@ public class DicUtils {
         return rtn;
     }
 
-    public static Boolean isNetWork(AppCompatActivity context){
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService (Context.CONNECTIVITY_SERVICE);
+    public static Boolean isNetWork(AppCompatActivity context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isMobileAvailable = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
         boolean isMobileConnect = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
         boolean isWifiAvailable = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isAvailable();
         boolean isWifiConnect = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
 
-        if ((isWifiAvailable && isWifiConnect) || (isMobileAvailable && isMobileConnect)){
+        if ((isWifiAvailable && isWifiConnect) || (isMobileAvailable && isMobileConnect)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public static String getBtnString(String word){
+    public static String getBtnString(String word) {
         String rtn = "";
 
-        if ( word.length() == 1 ) {
+        if (word.length() == 1) {
             rtn = "  " + word + "  ";
-        } else if ( word.length() == 2 ) {
+        } else if (word.length() == 2) {
             rtn = "  " + word + " ";
-        } else if ( word.length() == 3 ) {
+        } else if (word.length() == 3) {
             rtn = " " + word + " ";
-        } else if ( word.length() == 4 ) {
+        } else if (word.length() == 4) {
             rtn = " " + word;
         } else {
             rtn = " " + word + " ";
@@ -458,9 +463,9 @@ public class DicUtils {
     public static String getPreferencesValue(Context context, String preference) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        String rtn = sharedPref.getString( preference, "" );
-        if ( "".equals( rtn ) ) {
-            if ( preference.equals(CommConstants.preferences_font) ) {
+        String rtn = sharedPref.getString(preference, "");
+        if ("".equals(rtn)) {
+            if (preference.equals(CommConstants.preferences_font)) {
                 rtn = "17";
             } else {
                 rtn = "";
@@ -491,10 +496,10 @@ public class DicUtils {
                     String wordCnt = findElementForTag(tbody_e.child(m), "td", 3).text();
                     String bookmarkCnt = findElementForTag(tbody_e.child(m), "td", 4).text();
                     String updDate = findElementForTag(tbody_e.child(m), "td", 5).text();
-                    dicLog(codeGroup + " : " + categoryName + " : " + categoryId + " : " + categoryName + " : " + wordCnt + " : " + bookmarkCnt + " : " + updDate) ;
+                    dicLog(codeGroup + " : " + categoryName + " : " + categoryId + " : " + categoryName + " : " + wordCnt + " : " + bookmarkCnt + " : " + updDate);
                     Cursor cursor = db.rawQuery(DicQuery.getDaumCategory(categoryId), null);
                     if (cursor.moveToNext()) {
-                        if ( categoryId.equals(cursor.getString(cursor.getColumnIndexOrThrow("CATEGORY_ID"))) && updDate.equals(cursor.getString(cursor.getColumnIndexOrThrow("UPD_DATE"))) ) {
+                        if (categoryId.equals(cursor.getString(cursor.getColumnIndexOrThrow("CATEGORY_ID"))) && updDate.equals(cursor.getString(cursor.getColumnIndexOrThrow("UPD_DATE")))) {
                             isBreak = true;
                             break;
                         } else {
@@ -507,7 +512,7 @@ public class DicUtils {
                     }
                 }
 
-                if ( isBreak ) {
+                if (isBreak) {
                     break;
                 }
 
@@ -529,7 +534,7 @@ public class DicUtils {
                     cnt++;
                 }
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Log.d(CommConstants.tag, e.getMessage());
         }
 
@@ -570,54 +575,175 @@ public class DicUtils {
                     cnt++;
                 }
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Log.d(CommConstants.tag, e.getMessage());
         }
 
         return wordAl;
     }
 
-    public static void getNovelList(SQLiteDatabase db, String url, String kind) {
+    public static void getNovelList0(SQLiteDatabase db, String url, String kind) {
         try {
             Document doc = getDocument(url);
             Elements es = doc.select("li a");
 
-            if ( DicDb.getNovelCount(db, kind) != es.size() ) {
-                DicDb.delNovel(db);
+            DicDb.delNovel(db, kind);
 
-                for (int m = 0; m < es.size(); m++) {
-                    DicDb.insNovel(db, kind, es.get(m).text(), es.get(m).attr("href"));
-                }
+            for (int m = 0; m < es.size(); m++) {
+                DicDb.insNovel(db, kind, es.get(m).text(), es.get(m).attr("href"));
             }
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Log.d(CommConstants.tag, e.getMessage());
         }
     }
 
-    public static int getNovelPartCount(String url) {
+    public static void getNovelList1(SQLiteDatabase db, String url, String kind) {
+        try {
+            Document doc = getDocument(url);
+            Elements es = doc.select("ul.titlelist li");
+
+            DicDb.delNovel(db, kind);
+
+            for (int m = 0; m < es.size(); m++) {
+                DicDb.insNovel(db, kind, es.get(m).text(), es.get(m).child(0).attr("href"));
+            }
+        } catch (Exception e) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+    }
+
+    public static void getNovelList2(SQLiteDatabase db, String url, String kind) {
+        dicLog("getNovelList2 : " + url);
+        try {
+            Document doc = getDocument(url);
+            Elements es = doc.select("li.menu-li-bottom p.paginate-bar");
+            String pageStr = es.get(0).text().trim().replaceAll("Page ", "").replaceAll("of ", "").split(" ")[1];
+            int page = Integer.parseInt(pageStr);
+
+            ArrayList al = new ArrayList();
+            for (int i = 1; i <= page; i++) {
+                String pageUrl = url;
+                if (i > 1) {
+                    doc = getDocument(url + "&page=" + i);
+                }
+                Elements es2 = doc.select("li.list-li");
+                for (int m = 0; m < es2.size(); m++) {
+                    //dicLog(i + " page " + m + " td");
+
+                    Elements esA = es2.get(m).select("a.list-link");
+                    Elements esImg = es2.get(m).select("img");
+                    if (esA.size() > 0) {
+                        HashMap hm = new HashMap();
+                        hm.put("url", esA.get(0).attr("href"));
+                        hm.put("title", esImg.get(0).attr("alt"));
+                        al.add(hm);
+                    }
+                }
+                es2 = doc.select("ul#s-list-ul li");
+                for (int m = 0; m < es2.size(); m++) {
+                    //dicLog(i + " page " + m + " td");
+
+                    Elements esA = es2.get(m).select("a");
+                    if (esA.size() > 0) {
+                        HashMap hm = new HashMap();
+                        hm.put("url", esA.get(0).attr("href"));
+                        hm.put("title", es2.get(m).text().replaceAll("[:]", ""));
+                        al.add(hm);
+                    }
+                }
+            }
+
+            DicDb.delNovel(db, kind);
+
+            for (int i = 0; i < al.size(); i++) {
+                DicDb.insNovel(db, kind, (String) ((HashMap) al.get(i)).get("title"), (String) ((HashMap) al.get(i)).get("url"));
+            }
+        } catch (Exception e) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+    }
+
+    public static int getNovelPartCount0(String url) {
         int partSize = 0;
         try {
             Document doc = getDocument(url);
             Elements es = doc.select("li a");
             partSize = es.size();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             Log.d(CommConstants.tag, e.getMessage());
         }
 
         return partSize;
     }
 
-    public static String getNovelContent(String url) {
+    public static int getNovelPartCount1(String url) {
+        int partSize = 0;
+        try {
+            Document doc = getDocument(url);
+            Elements es = doc.select("ul.chapter-list li");
+            partSize = es.size();
+        } catch (Exception e) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+
+        return partSize;
+    }
+
+    public static String getNovelContent0(String url) {
         String rtn = "";
         try {
             Document doc = getDocument(url);
             Elements contents = doc.select("td font");
-            rtn = contents.get(1).html().replaceAll("<br /> <br />", "\n").replaceAll("&quot;","\"").replaceAll("<br />","");
-        } catch ( Exception e ) {
+            rtn = contents.get(1).html().replaceAll("<br /> <br />", "\n").replaceAll("&quot;", "\"").replaceAll("<br />", "");
+        } catch (Exception e) {
             Log.d(CommConstants.tag, e.getMessage());
         }
 
         return rtn;
+    }
+
+    public static String getNovelContent1(String url) {
+        String rtn = "";
+        try {
+            Document doc = getDocument(url);
+            Elements contents = doc.select("td.chapter-text span.chapter-heading");
+            if (contents.size() > 0) {
+                rtn += contents.get(0).text() + "\n\n\n";
+            }
+
+            contents = doc.select("td.chapter-text p");
+            for (int i = 0; i < contents.size(); i++) {
+                rtn += contents.get(i).text() + "\n\n";
+            }
+        } catch (Exception e) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+
+        return rtn;
+    }
+
+    public static String getNovelContent2(String url) {
+        StringBuffer rtn = new StringBuffer();
+        try {
+            Document doc = getDocument(url);
+            Elements esA = doc.select("ul#book-ul a");
+            for (int i = 0; i < esA.size(); i++) {
+                if (esA.get(i).attr("href").indexOf(".txt") >= 0) {
+                    InputStream inputStream = new URL("http://www.loyalbooks.com" + esA.get(i).attr("href")).openStream();
+                    BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        rtn.append(line);
+                        rtn.append('\n');
+                    }
+                    rd.close();
+                }
+            }
+        } catch (Exception e) {
+            Log.d(CommConstants.tag, e.getMessage());
+        }
+
+        return rtn.toString();
     }
 
     public static File getFIle(String folderName, String fileName) {
@@ -630,7 +756,7 @@ public class DicUtils {
         return saveFile;
     }
 
-    public static String getHtmlString(String contents) {
+    public static String getHtmlString(String contents, int fontSize) {
         StringBuffer sb = new StringBuffer();
         sb.append("<!doctype html>");
         sb.append("<html>");
@@ -649,9 +775,9 @@ public class DicUtils {
         sb.append("</script>");
 
         sb.append("<body>");
-        sb.append("<div id='contents'>");
+        sb.append("<font size='" + fontSize + "' face='돋움'><div id='contents'>");
         sb.append(contents);
-        sb.append("</body>");
+        sb.append("</div></font></body>");
         sb.append("</html>");
 
         return sb.toString();
@@ -665,7 +791,7 @@ public class DicUtils {
             BufferedReader br = new BufferedReader(isr);
 
             String temp = "";
-            while( (temp = br.readLine()) != null) {
+            while ((temp = br.readLine()) != null) {
                 content += temp + "\n";
             }
 
@@ -691,4 +817,88 @@ public class DicUtils {
 
         return content;
     }
+
+    public static String getFilePageContent(String path, int pageSize, int page) {
+        //dicLog("getFilePageContent : " + pageSize + " : " + page);
+        String content = "";
+        try {
+            FileInputStream fis = new FileInputStream(new File(path));
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+
+            String temp = "";
+            int getContentSize = 0;
+            while ((temp = br.readLine()) != null) {
+                getContentSize += temp.length();
+                if (getContentSize > (page - 1) * pageSize && getContentSize < page * pageSize) {
+                    content += temp + "\n";
+                } else if (getContentSize > page * pageSize) {
+                    break;
+                }
+            }
+
+            try {
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                isr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
+
+        //dicLog("content length : " + content.length());
+        return content;
+    }
+
+    public static int getFilePageCount(String path, int pageSize) {
+        int getContentSize = 0;
+        try {
+            FileInputStream fis = new FileInputStream(new File(path));
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+
+            String temp = "";
+            while ((temp = br.readLine()) != null) {
+                getContentSize += temp.length();
+            }
+
+            try {
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                isr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
+
+        int pageCount = (int) Math.ceil(getContentSize / pageSize);
+        if (getContentSize - pageCount * pageSize > 0) {
+            pageCount++;
+        }
+        //dicLog("content page : " + getContentSize + " : " + pageSize + " : " + pageCount);
+        return pageCount;
+    }
+
 }

@@ -13,9 +13,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 class DbHelper extends SQLiteOpenHelper {
-    private static String DB_NAME ="english.db";
+    private static String DB_NAME ="ehdictandvoc.db";
     private String DB_PATH = "";
-    private static final int DATABASE_VERSION = 27;
+    private static final int DATABASE_VERSION = 29;
     private final Context mContext;
 
     public DbHelper(Context context) {
