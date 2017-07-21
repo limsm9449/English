@@ -29,15 +29,10 @@ public class PatchActivity extends AppCompatActivity {
 
         StringBuffer patch = new StringBuffer();
 
-        patch.append("* 영어 공부에 도움이 될만한 기능을 모아서 어플을 개발하게 되었습니다." + CommConstants.sqlCR);
-        patch.append("사용하시다가 문제점이나 개선사항이 있으면 메일을 보내주세요." + CommConstants.sqlCR);
-        patch.append("개발에 참고하겠습니다." + CommConstants.sqlCR);
-        patch.append("영어 공부에 많은 도움이 되었으면 합니다." + CommConstants.sqlCR);
-        patch.append("" + CommConstants.sqlCR);
-        patch.append("" + CommConstants.sqlCR);
-        patch.append("" + CommConstants.sqlCR);
-
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 단어상세에서 백버튼으로 돌아가도록 수정" + CommConstants.sqlCR);
+        patch.append("- 환경설정에서 단어상세 화면의 상단에 있는 콤보값을 설정하도록 수정(Naver, Daum, 예제)" + CommConstants.sqlCR);
+
         patch.append("- 영문 소설 기능 수정 : 페이지 단위로 보도록 수정, 무료 영문소설 사이트 추가" + CommConstants.sqlCR);
         patch.append("- 영문 소설 보는 기능 추가" + CommConstants.sqlCR);
         patch.append("- 사전에서 한글 검색시 단어체크 여부에 상관없이 한글 검색이 되도록 수정" + CommConstants.sqlCR);

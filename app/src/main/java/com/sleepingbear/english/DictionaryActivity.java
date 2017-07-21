@@ -388,6 +388,18 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
                         dSelect = arg1;
                     }
                 });
+                dlg.setNeutralButton("Web", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Cursor cur = adapter.getCursor();
+                        viewWebDictionary(cur.getString(cur.getColumnIndexOrThrow("WORD")));
+                    }
+                });
+                dlg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
                 dlg.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -403,6 +415,37 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             return true;
         }
     };
+
+    public void viewWebDictionary(String _word) {
+        final String word = _word;
+
+        final String[] kindCodes = new String[]{"Naver","Daum"};
+
+        final AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle("검색 사이트 선택");
+        dlg.setSingleChoiceItems(kindCodes, webDictionaryIdx, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                webDictionaryIdx = arg1;
+            }
+        });
+        dlg.setNegativeButton("취소", null);
+        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Bundle bundle = new Bundle();
+
+                bundle.putString("kind", (DicUtils.isHangule(et_search.getText().toString().trim()) ? CommConstants.dictionaryKind_h : CommConstants.dictionaryKind_f));
+                bundle.putString("site", kindCodes[webDictionaryIdx]);
+                bundle.putString("word", word);
+
+                Intent intent = new Intent(getApplication(), WebDictionaryActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        dlg.show();
+    }
 
     /**
      * 검색 단어가 변경되었으면 다시 검색을 한다.

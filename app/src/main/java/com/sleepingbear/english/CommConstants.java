@@ -45,6 +45,7 @@ public class CommConstants {
 
     public static String preferences_font = "key_fontSize";
     public static String preferences_webViewFont = "key_webViewFontSize";
+    public static String preferences_wordView = "key_wordView";
 
     public static String vocabularyCode = "MY_VOC";
     public static String defaultVocabularyCode = "VOC0001";
