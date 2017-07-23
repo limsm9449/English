@@ -324,13 +324,13 @@ public class ConversationNoteStudyActivity extends AppCompatActivity implements 
                 btn.setTextColor(Color.rgb(255, 255, 255));
                 btn.setText( DicUtils.getBtnString( foreignArr[i] ) );
                 btn.setAllCaps(false);
-                btn.setTextSize(12);
+                btn.setTextSize(18);
 
                 btn.setLayoutParams((new FlowLayout.LayoutParams(3, 3)));
 
                 btn.setId(i);
                 btn.setTag( DicUtils.getBtnString( foreignArr[i] ) );
-                btn.setGravity(Gravity.LEFT);
+                btn.setGravity(Gravity.TOP);
                 btn.setOnClickListener(this);
                 wordArea.addView(btn);
             }
