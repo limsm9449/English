@@ -2,7 +2,7 @@
     <string name="app_name">최고의 영어학습</string>
 
     <!-- Activity -->
-    <string name="title_activity_dictionary">사전</string>
+    <string name="title_activity_dictionary">영한사전</string>
     <string name="title_activity_dictionary_history">검색 History</string>
     <string name="title_activity_settings">환경 설정</string>
     <string name="title_activity_help">도움말</string>
