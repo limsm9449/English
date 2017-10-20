@@ -239,9 +239,7 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
 
         //registerForContextMenu(webView);
 
-        AdView av = (AdView)this.findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
 

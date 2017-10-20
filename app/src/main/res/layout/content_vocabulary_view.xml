@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sleepingbear.english.VocabularyNoteViewActivity"
-    tools:showIn="@layout/activity_vocabulary_note_view">
+    tools:context="com.sleepingbear.english.VocabularyViewActivity"
+    tools:showIn="@layout/activity_vocabulary_view">
 
     <LinearLayout
         android:orientation="vertical"
@@ -80,6 +80,16 @@
                     android:textColor="@color/my_white" />
             </RadioGroup>
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상세"
+                android:id="@+id/my_cb_detail"
+                android:checked="false"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/my_a_voc_rg_memory"
+                android:layout_marginLeft="10dp" />
+
             <Spinner
                 android:layout_width="100dp"
                 android:layout_height="30dp"
@@ -87,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="false"
-                android:layout_toRightOf="@+id/my_a_voc_rg_memory"
+                android:layout_toRightOf="@+id/my_cb_detail"
                 android:layout_marginLeft="5dp" />
         </RelativeLayout>
 

@@ -245,11 +245,15 @@ public class DicQuery {
         return sql.toString();
     }
 
-    public static String getPatternList() {
+    public static String getPatternList(String search) {
         StringBuffer sql = new StringBuffer();
 
         sql.append("SELECT SEQ _id, SEQ, PATTERN, DESC, SQL_WHERE" + CommConstants.sqlCR);
         sql.append("  FROM DIC_PATTERN" + CommConstants.sqlCR);
+        if ( !"".equals(search) ) {
+            sql.append(" WHERE ( PATTERN LIKE '%" + search + "%' OR DESC LIKE '%" + search + "%' )" + CommConstants.sqlCR);
+        }
+
         DicUtils.dicSqlLog(sql.toString());
 
         return sql.toString();
@@ -429,7 +433,15 @@ public class DicQuery {
         sql.append("SELECT 1 _id, CODE KIND, CODE_NAME KIND_NAME," + CommConstants.sqlCR);
         sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
         sql.append("                        FROM DIC_VOC" + CommConstants.sqlCR);
-        sql.append("                       WHERE KIND = A.CODE),0) CNT" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE),0) CNT," + CommConstants.sqlCR);
+        sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
+        sql.append("                        FROM DIC_VOC" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE" + CommConstants.sqlCR);
+        sql.append("                         AND MEMORIZATION = 'Y'),0) M_CNT," + CommConstants.sqlCR);
+        sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
+        sql.append("                        FROM DIC_VOC" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE" + CommConstants.sqlCR);
+        sql.append("                         AND MEMORIZATION = 'N'),0) UM_CNT" + CommConstants.sqlCR);
         sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
         sql.append(" WHERE CODE_GROUP = '" + CommConstants.vocabularyCode + "'" + CommConstants.sqlCR);
         sql.append(" ORDER BY 1,3" + CommConstants.sqlCR);
@@ -665,11 +677,14 @@ public class DicQuery {
         return insMyNoteCode;
     }
 
-    public static String getIdiomList() {
+    public static String getIdiomList(String search) {
         StringBuffer sql = new StringBuffer();
 
         sql.append("SELECT SEQ _id, SEQ, IDIOM, DESC, SQL_WHERE, SAME_IDIOM" + CommConstants.sqlCR);
         sql.append("  FROM DIC_IDIOM" + CommConstants.sqlCR);
+        if ( !"".equals(search) ) {
+            sql.append(" WHERE ( IDIOM LIKE '%" + search + "%' OR DESC LIKE '%" + search + "%' OR SAME_IDIOM LIKE '%" + search + "%' )" + CommConstants.sqlCR);
+        }
         DicUtils.dicSqlLog(sql.toString());
 
         return sql.toString();
@@ -714,6 +729,123 @@ public class DicQuery {
         StringBuffer sql = new StringBuffer();
 
         sql.append("SELECT -1 _id, -1 SEQ, '등록된 소설이 없습니다.' TITLE, '하단의 ''+''를 클릭해서 영문소설을 등록하세요.' PATH, '' INS_DATE" + CommConstants.sqlCR);
+
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getDaumCategoryVocabulary(String kind, String categoryId) {
+        StringBuffer sql = new StringBuffer();
+
+        if ( "R1,R2,R3".indexOf(kind) < 0 ) {
+            sql.append("SELECT SEQ _id, SEQ, WORD, SPELLING, MEAN, SAMPLES, MEMO" + CommConstants.sqlCR);
+            sql.append("  FROM DAUM_CATEGORY_VOC" + CommConstants.sqlCR);
+            sql.append(" WHERE CATEGORY_ID = '" + categoryId + "'" + CommConstants.sqlCR);
+            sql.append(" ORDER BY WORD" + CommConstants.sqlCR);
+        } else {
+            sql.append("SELECT SEQ _id, SEQ, WORD, SPELLING, MEAN, '' SAMPLES, '' MEMO" + CommConstants.sqlCR);
+            sql.append("  FROM DIC" + CommConstants.sqlCR);
+            sql.append(" WHERE ENTRY_ID IN (SELECT ENTRY_ID FROM DAUM_VOCABULARY WHERE CATEGORY_ID = '" + categoryId + "')" + CommConstants.sqlCR);
+        }
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getDaumSubCategoryCount(String kind, int mOrder, String search) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT CATEGORY_ID _id, KIND, CATEGORY_ID, CATEGORY_NAME, UPD_DATE, WORD_CNT, BOOKMARK_CNT" + CommConstants.sqlCR);
+        sql.append("  FROM DAUM_CATEGORY" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
+        if ( !"".equals(search) ) {
+            sql.append(" AND CATEGORY_NAME LIKE '%" + search + "%'" + CommConstants.sqlCR);
+        }
+        if ( mOrder == 0 ) {
+            sql.append(" ORDER BY BOOKMARK_CNT" + CommConstants.sqlCR);
+        } else if ( mOrder == 1 ) {
+            sql.append(" ORDER BY BOOKMARK_CNT DESC" + CommConstants.sqlCR);
+        } else if ( mOrder == 2 ) {
+            sql.append(" ORDER BY UPD_DATE" + CommConstants.sqlCR);
+        } else if ( mOrder == 3 ) {
+            sql.append(" ORDER BY UPD_DATE DESC" + CommConstants.sqlCR);
+        } else if ( mOrder == 4 ) {
+            sql.append(" ORDER BY CATEGORY_NAME" + CommConstants.sqlCR);
+        } else if ( mOrder == 5 ) {
+            sql.append(" ORDER BY CATEGORY_NAME DESC" + CommConstants.sqlCR);
+        }
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String updMyVocabularyRandom(String kind) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("UPDATE DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append("   SET RANDOM_SEQ = RANDOM()" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
+
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getMyVocabularyCategoryCount() {
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT 1 _id, CODE KIND, CODE_NAME KIND_NAME," + CommConstants.sqlCR);
+        sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
+        sql.append("                        FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE),0) CNT," + CommConstants.sqlCR);
+        sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
+        sql.append("                        FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE" + CommConstants.sqlCR);
+        sql.append("                         AND MEMORIZATION = 'Y'),0) M_CNT," + CommConstants.sqlCR);
+        sql.append("            COALESCE((SELECT COUNT(*)" + CommConstants.sqlCR);
+        sql.append("                        FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append("                       WHERE KIND = A.CODE" + CommConstants.sqlCR);
+        sql.append("                         AND MEMORIZATION = 'N'),0) UM_CNT" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
+        sql.append(" WHERE CODE_GROUP = '" + CommConstants.vocabularyCode + "'" + CommConstants.sqlCR);
+        sql.append(" ORDER BY 1,3" + CommConstants.sqlCR);
+
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getSaveMyVocabulary(String kind) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT WORD, SPELLING, MEAN, SAMPLES, MEMO" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
+        sql.append(" ORDER BY WORD" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getMyVocabularyCount(String kind) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT 1 _id, COUNT(*) CNT" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+
+        return sql.toString();
+    }
+
+    public static String getNewsList(String newsCode, String categoryCode) {
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("SELECT  SEQ _id, SEQ, NEWS, CATEGORY, TITLE, DESC, URL, INS_DATE" + CommConstants.sqlCR);
+        sql.append("FROM    DIC_NEWS" + CommConstants.sqlCR);
+        sql.append("WHERE   NEWS = '" + newsCode +"'" + CommConstants.sqlCR);
+        sql.append("AND     CATEGORY = '" + categoryCode +"'" + CommConstants.sqlCR);
+        sql.append("ORDER   BY INS_DATE DESC, SEQ" + CommConstants.sqlCR);
 
         DicUtils.dicSqlLog(sql.toString());
 

@@ -66,6 +66,7 @@ public class CommConstants {
     public static String infoFileName = "english.txt";
     public static String folderName = "/english";
     public static String novelFolderName = "/novel";
+    public static String systemBackupFile = "english.xls";
 
     //코드 등록
     public static String tag_code_ins = "C_CODE_INS" ;
@@ -84,4 +85,26 @@ public class CommConstants {
     public static String novel_classicreader = "www.classicreader.com" ;
     public static String novel_loyalbooks = "www.loyalbooks.com" ;
     public static String novel_local = "로컬 영문파일" ;
+
+    public static boolean isFreeApp = false;
+
+    public final static int a_dictionary = 2;
+    public final static int a_vocabulary = 3;
+    public final static int a_daum = 4;
+    public final static int a_vocabularyEdit = 5;
+
+    public final static String msgAdd = "ADD";
+    public final static String msgSave = "SAVE";
+
+    public static String news_KoreaJoongangDaily = "N01";
+    public static String news_TheChosunilbo = "N02";
+    public static String news_TheKoreaHerald = "N03";
+    public static String news_TheKoreaTimes = "N04";
+    public static String news_reuters = "N05";
+    public static String news_abcNews = "N06";
+    public static String news_bbcNews = "N07";
+    public static String news_cnn = "N08";
+    public static String news_losangeles = "N09";
+    public static String news_washingtonePost = "N10";
+    public static String news_newWorkTimes = "N11";
 }

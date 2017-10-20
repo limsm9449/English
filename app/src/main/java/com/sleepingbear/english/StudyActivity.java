@@ -1,16 +1,14 @@
 package com.sleepingbear.english;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -18,14 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -56,7 +48,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -109,9 +101,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
         Button b_start = (Button) findViewById(R.id.my_f_stu_b_start);
         b_start.setOnClickListener(this);
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
 
@@ -145,7 +135,7 @@ public class StudyActivity extends AppCompatActivity implements View.OnClickList
             bundle.putString("studyKindName", mStudyKindName);
             bundle.putString("memorization", mMemorization);
 
-            Cursor cursor = db.rawQuery(DicQuery.getVocabularyCount(mVocKind), null);
+            Cursor cursor = db.rawQuery(DicQuery.getMyVocabularyCount(mVocKind), null);
             if ( cursor.moveToNext() ) {
                 if ( cursor.getInt(cursor.getColumnIndexOrThrow("CNT")) == 0 ) {
                     new AlertDialog.Builder(this)

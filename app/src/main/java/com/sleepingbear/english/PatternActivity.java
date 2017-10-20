@@ -1,5 +1,6 @@
 package com.sleepingbear.english;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ public class PatternActivity extends AppCompatActivity {
     private PatternCursorAdapter adapter;
 
     private Cursor cursor;
+    private String search = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +55,13 @@ public class PatternActivity extends AppCompatActivity {
 
         changeListView();
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        av.loadAd(adRequest);
-
+        DicUtils.setAdView(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
 
         return true;
     }
@@ -71,6 +72,32 @@ public class PatternActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             finish();
+        } else if (id == R.id.action_search) {
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            final View dialog_layout = inflater.inflate(R.layout.dialog_search, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(PatternActivity.this);
+            builder.setView(dialog_layout);
+            final AlertDialog alertDialog = builder.create();
+
+            final EditText et_search = ((EditText) dialog_layout.findViewById(R.id.my_et_search));
+            et_search.setText(search);
+            ((Button) dialog_layout.findViewById(R.id.my_b_search)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    search = et_search.getText().toString();
+                    changeListView();
+                    alertDialog.dismiss();
+                }
+            });
+            ((Button) dialog_layout.findViewById(R.id.my_b_close)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                }
+            });
+
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
             bundle.putString("SCREEN", CommConstants.screen_pattern);
@@ -84,7 +111,7 @@ public class PatternActivity extends AppCompatActivity {
     }
 
     public void changeListView() {
-        cursor = db.rawQuery(DicQuery.getPatternList(), null);
+        cursor = db.rawQuery(DicQuery.getPatternList(search), null);
 
         if ( cursor.getCount() == 0 ) {
             Toast.makeText(this, "검색된 데이타가 없습니다.", Toast.LENGTH_SHORT).show();

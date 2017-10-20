@@ -1,7 +1,6 @@
 package com.sleepingbear.english;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -14,21 +13,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 public class Study3Activity extends AppCompatActivity implements View.OnClickListener {
     private String mVocKind;
     private String mMemorization;
+    private String mSort = "QUESTION ASC";
     private boolean mIsPlay = false;
 
     private String mWordMean = "WORD";
@@ -64,22 +59,24 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
         mMemorization = b.getString("memorization");
         mWordMean = "WORD";
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setTitle(b.getString("studyKindName"));
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
-        ((RadioButton) findViewById(R.id.my_a_study3_rb_all)).setOnClickListener(this);
-        ((RadioButton) findViewById(R.id.my_a_study3_rb_m)).setOnClickListener(this);
-        ((RadioButton) findViewById(R.id.my_a_study3_rb_m_not)).setOnClickListener(this);
-        ((RadioButton) findViewById(R.id.my_a_study3_rb_word)).setOnClickListener(this);
-        ((RadioButton) findViewById(R.id.my_a_study3_rb_mean)).setOnClickListener(this);
-        ((Button) findViewById(R.id.my_a_study3_b_random)).setOnClickListener(this);
-        ((ImageButton) findViewById(R.id.my_a_study3_ib_first)).setOnClickListener(this);
-        ((ImageButton) findViewById(R.id.my_a_study3_ib_prev)).setOnClickListener(this);
-        ((ImageButton) findViewById(R.id.my_a_study3_ib_play)).setOnClickListener(this);
-        ((ImageButton) findViewById(R.id.my_a_study3_ib_next)).setOnClickListener(this);
-        ((ImageButton) findViewById(R.id.my_a_study3_ib_last)).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_rb_all).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_rb_m).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_rb_m_not).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_rb_word).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_rb_mean).setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_asc).setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_desc).setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_random).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_ib_first).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_ib_prev).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_ib_play).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_ib_next).setOnClickListener(this);
+        findViewById(R.id.my_a_study3_ib_last).setOnClickListener(this);
 
         tv_question = (TextView) findViewById(R.id.my_a_study3_tv_question);
         tv_question.setText("");
@@ -140,9 +137,7 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
 
         getListView();
 
-        AdView av = (AdView)this.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     @Override
@@ -172,10 +167,21 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
 
             mWordMean = "MEAN";
             getListView();
-        } else if (v.getId() == R.id.my_a_study3_b_random) {
+        } else if (v.getId() == R.id.my_rb_sort_asc) {
             mThread.interrupt();
 
-            mDb.execSQL(DicQuery.updVocRandom());
+            mSort = "QUESTION ASC";
+            getListView();
+        } else if (v.getId() == R.id.my_rb_sort_desc) {
+            mThread.interrupt();
+
+            mSort = "QUESTION DESC";
+            getListView();
+        } else if (v.getId() == R.id.my_rb_sort_random) {
+            mThread.interrupt();
+
+            mSort = "RANDOM_SEQ";
+            mDb.execSQL(DicQuery.updMyVocabularyRandom(mVocKind));
             getListView();
         } else if (v.getId() == R.id.my_a_study3_ib_first) {
             if ( mCursor.getCount() == 0 ) {
@@ -231,13 +237,6 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
-
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -248,13 +247,6 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
                 mThread.interrupt();
             }
             finish();
-        } else if (id == R.id.action_help) {
-            Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_study3);
-
-            Intent intent = new Intent(getApplication(), HelpActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -272,25 +264,25 @@ public class Study3Activity extends AppCompatActivity implements View.OnClickLis
     public void getListView() {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("SELECT B.SEQ _id," + CommConstants.sqlCR);
-        sql.append("       B.SEQ," + CommConstants.sqlCR);
+        sql.append("SELECT SEQ _id," + CommConstants.sqlCR);
+        sql.append("       SEQ," + CommConstants.sqlCR);
         if ( "WORD".equals(mWordMean) ) {
-            sql.append("       B.WORD QUESTION," + CommConstants.sqlCR);
-            sql.append("       B.MEAN ANSWER," + CommConstants.sqlCR);
+            sql.append("       WORD QUESTION," + CommConstants.sqlCR);
+            sql.append("       MEAN ANSWER," + CommConstants.sqlCR);
         } else {
-            sql.append("       B.WORD ANSWER," + CommConstants.sqlCR);
-            sql.append("       B.MEAN QUESTION," + CommConstants.sqlCR);
+            sql.append("       WORD ANSWER," + CommConstants.sqlCR);
+            sql.append("       MEAN QUESTION," + CommConstants.sqlCR);
         }
-        sql.append("       B.ENTRY_ID," + CommConstants.sqlCR);
-        sql.append("       B.SPELLING," + CommConstants.sqlCR);
-        sql.append("       A.MEMORIZATION" + CommConstants.sqlCR);
-        sql.append("  FROM DIC_VOC A, DIC B" + CommConstants.sqlCR);
-        sql.append(" WHERE A.ENTRY_ID = B.ENTRY_ID" + CommConstants.sqlCR);
-        sql.append("   AND A.KIND = '" + mVocKind + "' " + CommConstants.sqlCR);
+        sql.append("       KIND," + CommConstants.sqlCR);
+        sql.append("       WORD," + CommConstants.sqlCR);
+        sql.append("       SPELLING," + CommConstants.sqlCR);
+        sql.append("       MEMORIZATION" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + mVocKind + "' " + CommConstants.sqlCR);
         if (mMemorization.length() == 1) {
-            sql.append("   AND A.MEMORIZATION = '" + mMemorization + "' " + CommConstants.sqlCR);
+            sql.append("   AND MEMORIZATION = '" + mMemorization + "' " + CommConstants.sqlCR);
         }
-        sql.append(" ORDER BY A.RANDOM_SEQ" + CommConstants.sqlCR);
+        sql.append(" ORDER BY " + mSort + CommConstants.sqlCR);
         mCursor = mDb.rawQuery(sql.toString(), null);
         if ( mCursor.moveToNext() ) {
             sb.setMax(mCursor.getCount() - 1);

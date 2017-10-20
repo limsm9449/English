@@ -21,6 +21,8 @@
 
     <color name="my_text_word">#367696</color>
     <color name="my_text_mean">#4f8ead</color>
+    <color name="my_text_sample">#a37fdf</color>
+    <color name="my_text_memo">#cf8a55</color>
     <color name="my_text_spelling">#424040</color>
     <color name="my_text_question">#e65a5a</color>
     <color name="my_text_answer">#4f8ead</color>

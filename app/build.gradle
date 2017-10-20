@@ -33,4 +33,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.google.android.gms:play-services-ads:8.3.0'
     testCompile 'junit:junit:4.12'
+    compile files('libs/poi-3.16.jar')
 }

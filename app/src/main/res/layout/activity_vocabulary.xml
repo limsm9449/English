@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.sleepingbear.english.VocabularyNoteActivity">
+    tools:context="com.sleepingbear.english.VocabularyActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_vocabulary_note" />
+    <include layout="@layout/content_vocabulary" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -32,6 +32,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add"
         app:backgroundTint="@color/colorPrimary"
-        android:tint="@android:color/white" />
+        android:tint="@android:color/white"/>
 
 </android.support.design.widget.CoordinatorLayout>

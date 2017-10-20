@@ -139,9 +139,7 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
         //리스트 내용 변경
         changeListView();
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     @Override
@@ -292,7 +290,7 @@ public class ConversationNoteActivity extends AppCompatActivity implements View.
                     Toast.makeText(getApplication(), "기본 회화노트는 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     alertDialog.dismiss();
                 } else {
-                    new android.app.AlertDialog.Builder(ConversationNoteActivity.this)
+                    new android.support.v7.app.AlertDialog.Builder(ConversationNoteActivity.this)
                             .setTitle("알림")
                             .setMessage("삭제된 데이타는 복구할 수 없습니다. 삭제하시겠습니까?")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {

@@ -63,6 +63,38 @@
                 android:layout_alignParentTop="true"
                 android:gravity="center_vertical|left" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/my_tv_samples"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="false"
+                android:textColor="@color/my_text_sample"
+                android:textSize="13dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/my_tv_memo"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="false"
+                android:textColor="@color/my_text_memo"
+                android:textSize="13dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_alignParentTop="true"
+                android:gravity="center_vertical|left"
+                android:layout_marginLeft="10dp" />
+
         </LinearLayout>
 
     </RelativeLayout>

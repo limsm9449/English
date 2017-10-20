@@ -40,6 +40,9 @@
     <string name="title_activity_novel">영어소설 검색</string>
     <string name="title_activity_novel_view">영어소설</string>
     <string name="title_activity_my_novel">영어소설</string>
+    <string name="title_activity_blank">Blank</string>
+    <string name="title_activity_vocabulary_edit">단어 편집</string>
+    <string name="title_activity_vocabulary">단어장</string>
 
 
     <!-- action -->
@@ -60,8 +63,12 @@
     <string name="action_share">어플 공유</string>
     <string name="action_patch">패치 내역</string>
     <string name="action_no_ad">광고 제거 어플(유료)</string>
+    <string name="action_blank">Blank</string>
+    <string name="action_download">다운로드</string>
+    <string name="action_web">웹페이지</string>
 
     <!-- My -->
     <string name="banner_ad_unit_id">ca-app-pub-3860766380986792/1206594265</string>
+    <string name="title_activity_news2">News2Activity</string>
 
 </resources>

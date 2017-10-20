@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.CursorAdapter;
@@ -17,19 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.Locale;
 
@@ -60,7 +52,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setTitle("문장 상세");
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -77,22 +69,10 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
 
         changeListView();
 
-        ImageButton mySample = (ImageButton) findViewById(R.id.my_ib_mysample);
-        mySample.setOnClickListener(this);
-        if ( DicDb.isExistMySample(db, sampleSeq) ) {
-            isMySample = true;
-            mySample.setImageResource(android.R.drawable.star_on);
-        } else {
-            isMySample = false;
-            mySample.setImageResource(android.R.drawable.star_off);
-        }
-
         ImageButton ib_tts = (ImageButton) findViewById(R.id.my_ib_tts);
         ib_tts.setOnClickListener(this);
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     public void changeListView() {
@@ -131,11 +111,11 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
 
         StringBuffer sql = new StringBuffer();
         if ( "".equals(word) ) {
-            sql.append("SELECT DISTINCT SEQ _id, 1 ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_VOC WHERE ENTRY_ID = A.ENTRY_ID) MY_VOC FROM DIC A WHERE ENTRY_ID = 'xxxxxxxx'" + CommConstants.sqlCR);
+            sql.append("SELECT DISTINCT SEQ _id, 1 ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_MY_VOC WHERE WORD = A.WORD) MY_VOC FROM DIC A WHERE ENTRY_ID = 'xxxxxxxx'" + CommConstants.sqlCR);
         } else {
-            sql.append("SELECT SEQ _id, ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_VOC WHERE ENTRY_ID = A.ENTRY_ID) MY_VOC FROM DIC A WHERE KIND = 'F' AND WORD IN ('" + word.substring(0, word.length() -1).toLowerCase().replaceAll(",","','") + "')" + CommConstants.sqlCR);
+            sql.append("SELECT SEQ _id, ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_MY_VOC WHERE WORD = A.WORD) MY_VOC FROM DIC A WHERE KIND = 'F' AND WORD IN ('" + word.substring(0, word.length() -1).toLowerCase().replaceAll(",","','") + "')" + CommConstants.sqlCR);
             sql.append("UNION" + CommConstants.sqlCR);
-            sql.append("SELECT SEQ _id, ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_VOC WHERE ENTRY_ID = A.ENTRY_ID) MY_VOC FROM DIC A WHERE KIND = 'F' AND WORD IN (SELECT DISTINCT WORD FROM DIC_TENSE WHERE WORD_TENSE IN ('" + oneWord.substring(0, oneWord.length() -1).toLowerCase().replaceAll(",","','") + "'))" + CommConstants.sqlCR);
+            sql.append("SELECT SEQ _id, ORD,  WORD, MEAN, ENTRY_ID, SPELLING, (SELECT COUNT(*) FROM DIC_MY_VOC WHERE WORD = A.WORD) MY_VOC FROM DIC A WHERE KIND = 'F' AND WORD IN (SELECT DISTINCT WORD FROM DIC_TENSE WHERE WORD_TENSE IN ('" + oneWord.substring(0, oneWord.length() -1).toLowerCase().replaceAll(",","','") + "'))" + CommConstants.sqlCR);
             sql.append(" ORDER BY ORD" + CommConstants.sqlCR);
         }
         DicUtils.dicSqlLog(sql.toString());
@@ -182,18 +162,16 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
                 dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DicDb.insDicVoc(db, entryId, kindCodes[mSelect]);
+                        DicDb.insMyVocabularyFromDic(db, entryId, kindCodes[mSelect]);
                         DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
 
                         adapter.dataChange();
-
-                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
                     }
                 });
                 dlg.show();
 
                 return true;
-            };
+            }
         });
     }
 
@@ -215,22 +193,6 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.my_ib_mysample:
-                ImageButton mySample = (ImageButton) findViewById(R.id.my_ib_mysample);
-                if ( isMySample ) {
-                    isMySample = false;
-                    mySample.setImageResource(android.R.drawable.star_off);
-
-                    DicDb.delConversationFromNote(db, "C010001", Integer.parseInt(sampleSeq));
-                } else {
-                    isMySample = true;
-                    mySample.setImageResource(android.R.drawable.star_on);
-
-                    DicDb.insConversationToNote(db, "C010001", sampleSeq);
-                }
-                DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
-
-                break;
             case R.id.my_ib_tts:
                 //myTTS.speak(((TextView)this.findViewById(R.id.my_c_wv_tv_spelling)).getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
                 myTTS.speak(((TextView)this.findViewById(R.id.my_tv_foreign)).getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
@@ -239,26 +201,11 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
             finish();
-        } else if (id == R.id.action_help) {
-            Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_sentenceView);
-
-            Intent intent = new Intent(getApplication(), HelpActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -290,8 +237,8 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
     private Cursor mCursor;
 
     static class ViewHolder {
-        protected String entryId;
         protected String word;
+        protected String entryId;
         protected ImageButton myvoc;
         protected boolean isMyVoc;
         protected int position;
@@ -324,10 +271,10 @@ class SentenceViewActivityCursorAdapter extends CursorAdapter {
                 ViewHolder viewHolder = (ViewHolder)v.getTag();
 
                 if ( viewHolder.isMyVoc ) {
-                    DicDb.delDicVocAll(mDb, viewHolder.entryId);
+                    DicDb.delMyVocabularyInAllCategory(mDb, viewHolder.word);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 } else {
-                    DicDb.insDicVoc(mDb, viewHolder.entryId, CommConstants.defaultVocabularyCode);
+                    DicDb.insMyVocabularyFromDic(mDb, viewHolder.entryId, CommConstants.defaultVocabularyCode);
                     DicUtils.setDbChange(context);  //DB 변경 체크
                 }
 

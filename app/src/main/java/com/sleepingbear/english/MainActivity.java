@@ -65,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_web_dic)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_news)).setOnClickListener(this);
-        findViewById(R.id.my_b_novel).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_news2)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_novel)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_news_word)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_conversation_study)).setOnClickListener(this);
@@ -81,9 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_voc)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc_study)).setOnClickListener(this);
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        //기존 VOC는 삭제한다.
+        DicDb.vocToMyVoc(db);
+
+        DicUtils.setAdView(this);
     }
 
     @Override
@@ -164,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(newsIntent);
 
                 break;
+            case R.id.my_b_news2:
+                Intent news2Intent = new Intent(getApplication(), News2Activity.class);
+                news2Intent.putExtras(bundle);
+                startActivity(news2Intent);
+
+                break;
             case R.id.my_b_novel:
                 Intent novelIntent = new Intent(getApplication(), MyNovelActivity.class);
                 novelIntent.putExtras(bundle);
@@ -202,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplication(), TodayActivity.class));
                 break;
             case R.id.my_b_voc:
-                startActivity(new Intent(getApplication(), VocabularyNoteActivity.class));
+                startActivity(new Intent(getApplication(), VocabularyActivity.class));
                 break;
             case R.id.my_b_voc_study:
                 startActivity(new Intent(getApplication(), StudyActivity.class));

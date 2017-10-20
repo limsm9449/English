@@ -75,9 +75,7 @@ public class NewsClickWordActivity extends AppCompatActivity implements View.OnC
         //리스트 내용 변경
         changeListView();
 
-        AdView av = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     @Override
@@ -178,7 +176,7 @@ public class NewsClickWordActivity extends AppCompatActivity implements View.OnC
                 if ( !adapter.isCheck() ) {
                     Toast.makeText(this, "선택된 데이타가 없습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    new android.app.AlertDialog.Builder(this)
+                    new android.support.v7.app.AlertDialog.Builder(this)
                             .setTitle("알림")
                             .setMessage("삭제하시겠습니까?")
                             .setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -412,7 +410,7 @@ class NewsClickwordCursorAdapter extends CursorAdapter {
     public void save(String kind) {
         for ( int i = 0; i < isCheck.length; i++ ) {
             if ( isCheck[i] ) {
-                DicDb.insDicVoc(mDb, entryId[i], kind);
+                DicDb.insMyVocabulary(mDb, kind, entryId[i]);
                 DicDb.delDicClickWord(mDb, seq[i]);
             }
         }

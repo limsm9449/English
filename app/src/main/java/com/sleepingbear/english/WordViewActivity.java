@@ -1,8 +1,6 @@
 package com.sleepingbear.english;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,19 +24,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import java.util.Locale;
 
 public class WordViewActivity extends AppCompatActivity implements View.OnClickListener {
     private DbHelper dbHelper;
@@ -62,7 +51,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -86,9 +75,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
 
         webDictionaryLoad();
 
-        AdView av =(AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new  AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     public void getWordInfo() {
@@ -97,7 +84,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
             word = wordCursor.getString(wordCursor.getColumnIndexOrThrow("WORD"));
             kind = wordCursor.getString(wordCursor.getColumnIndexOrThrow("KIND"));
 
-            ActionBar ab = (ActionBar) getSupportActionBar();
+            ActionBar ab = getSupportActionBar();
             ab.setTitle(word + " 검색");
         }
         wordCursor.close();
@@ -219,13 +206,6 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
 
         if (id == android.R.id.home) {
             finish();
-        } else if (id == R.id.action_help) {
-            Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_wordView);
-
-            Intent intent = new Intent(getApplication(), HelpActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -234,15 +214,17 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                    if ( webView.canGoBack() ) {
-                        webView.goBack();
-                    } else {
-                        //Toast.makeText(getApplicationContext(), "상단의 Back 버튼을 클릭해주세요.", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                    return true;
+            if ( !"Sample".equals(site) ) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_BACK:
+                        if (webView.canGoBack()) {
+                            webView.goBack();
+                        } else {
+                            //Toast.makeText(getApplicationContext(), "상단의 Back 버튼을 클릭해주세요.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        return true;
+                }
             }
         }
         return super.onKeyDown(keyCode, event);

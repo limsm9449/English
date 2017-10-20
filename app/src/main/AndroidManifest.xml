@@ -113,14 +113,6 @@
             android:label="@string/title_activity_pattern_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".VocabularyNoteActivity"
-            android:label="@string/title_activity_vocabulary_note"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".VocabularyNoteViewActivity"
-            android:label="@string/title_activity_vocabulary_note_view"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".NaverConversationActivity"
             android:label="@string/title_activity_naver_conversation"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -154,6 +146,11 @@
                 <action android:name="com.sleepingbear.english.MySpeechService" />
             </intent-filter>
         </service>
+        <service android:name=".NewsTtsService">
+            <intent-filter>
+                <action android:name="com.sleepingbear.ennew2.NewsTtsService" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".IdiomActivity"
@@ -162,7 +159,7 @@
         <activity
             android:name=".IdiomViewActivity"
             android:label="@string/title_activity_idiom_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TodayActivity"
             android:label="@string/title_activity_today"
@@ -178,6 +175,26 @@
         <activity
             android:name=".MyNovelActivity"
             android:label="@string/title_activity_my_novel"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VocabularyViewActivity"
+            android:label="@string/title_activity_blank"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VocabularyEditActivity"
+            android:label="@string/title_activity_vocabulary_edit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VocabularyActivity"
+            android:label="@string/title_activity_vocabulary"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".News2Activity"
+            android:label="@string/title_activity_news2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".News2ViewActivity"
+            android:label="@string/title_activity_blank"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -15,19 +15,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,6 +30,7 @@ import java.util.Random;
 public class Study2Activity extends AppCompatActivity implements View.OnClickListener {
     private String mVocKind;
     private String mMemorization;
+    private String mSort = "QUESTION ASC";
 
     private String mWordMean;
 
@@ -60,7 +56,7 @@ public class Study2Activity extends AppCompatActivity implements View.OnClickLis
         mMemorization = b.getString("memorization");
         mWordMean = "WORD";
 
-        ActionBar ab = (ActionBar) getSupportActionBar();
+        ActionBar ab = getSupportActionBar();
         ab.setTitle(b.getString("studyKindName"));
         ab.setHomeButtonEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
@@ -80,8 +76,9 @@ public class Study2Activity extends AppCompatActivity implements View.OnClickLis
         RadioButton rb_mean = (RadioButton) findViewById(R.id.my_a_study2_rb_mean);
         rb_mean.setOnClickListener(this);
 
-        Button b_random = (Button) findViewById(R.id.my_a_study2_b_random);
-        b_random.setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_asc).setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_desc).setOnClickListener(this);
+        findViewById(R.id.my_rb_sort_random).setOnClickListener(this);
 
         if ( "".equals(mMemorization) ) {
             ((RadioButton) findViewById(R.id.my_a_study2_rb_all)).setChecked(true);
@@ -93,32 +90,30 @@ public class Study2Activity extends AppCompatActivity implements View.OnClickLis
 
         getListView();
 
-        AdView av = (AdView)this.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        av.loadAd(adRequest);
+        DicUtils.setAdView(this);
     }
 
     public void getListView() {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("SELECT B.SEQ _id," + CommConstants.sqlCR);
-        sql.append("       B.SEQ," + CommConstants.sqlCR);
+        sql.append("SELECT SEQ _id," + CommConstants.sqlCR);
+        sql.append("       SEQ," + CommConstants.sqlCR);
         if ( "WORD".equals(mWordMean) ) {
-            sql.append("       B.WORD QUESTION," + CommConstants.sqlCR);
-            sql.append("       B.MEAN ANSWER," + CommConstants.sqlCR);
+            sql.append("       WORD QUESTION," + CommConstants.sqlCR);
+            sql.append("       MEAN ANSWER," + CommConstants.sqlCR);
         } else {
-            sql.append("       B.WORD ANSWER," + CommConstants.sqlCR);
-            sql.append("       B.MEAN QUESTION," + CommConstants.sqlCR);
+            sql.append("       WORD ANSWER," + CommConstants.sqlCR);
+            sql.append("       MEAN QUESTION," + CommConstants.sqlCR);
         }
-        sql.append("       B.ENTRY_ID," + CommConstants.sqlCR);
-        sql.append("       A.MEMORIZATION" + CommConstants.sqlCR);
-        sql.append("  FROM DIC_VOC A, DIC B" + CommConstants.sqlCR);
-        sql.append(" WHERE A.ENTRY_ID = B.ENTRY_ID" + CommConstants.sqlCR);
-        sql.append("   AND A.KIND = '" + mVocKind + "' " + CommConstants.sqlCR);
+        sql.append("       KIND," + CommConstants.sqlCR);
+        sql.append("       WORD," + CommConstants.sqlCR);
+        sql.append("       MEMORIZATION" + CommConstants.sqlCR);
+        sql.append("  FROM DIC_MY_VOC" + CommConstants.sqlCR);
+        sql.append(" WHERE KIND = '" + mVocKind + "' " + CommConstants.sqlCR);
         if (mMemorization.length() == 1) {
-            sql.append("   AND A.MEMORIZATION = '" + mMemorization + "' " + CommConstants.sqlCR);
+            sql.append("   AND MEMORIZATION = '" + mMemorization + "' " + CommConstants.sqlCR);
         }
-        sql.append(" ORDER BY A.RANDOM_SEQ" + CommConstants.sqlCR);
+        sql.append(" ORDER BY " + mSort + CommConstants.sqlCR);
         Cursor cursor = db.rawQuery(sql.toString(), null);
         if ( cursor.getCount() == 0 ) {
             new android.app.AlertDialog.Builder(this)
@@ -209,20 +204,19 @@ public class Study2Activity extends AppCompatActivity implements View.OnClickLis
         } else if (v.getId() == R.id.my_a_study2_rb_mean) {
             mWordMean = "MEAN";
             getListView();
-        } else if (v.getId() == R.id.my_a_study2_b_random) {
-            db.execSQL(DicQuery.updVocRandom());
-
+        } else if (v.getId() == R.id.my_rb_sort_asc) {
+            mSort = "QUESTION ASC";
+            getListView();
+        } else if (v.getId() == R.id.my_rb_sort_desc) {
+            mSort = "QUESTION DESC";
+            getListView();
+        } else if (v.getId() == R.id.my_rb_sort_random) {
+            mSort = "RANDOM_SEQ";
+            db.execSQL(DicQuery.updMyVocabularyRandom(mVocKind));
             getListView();
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
-
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -230,13 +224,6 @@ public class Study2Activity extends AppCompatActivity implements View.OnClickLis
 
         if (id == android.R.id.home) {
             finish();
-        } else if (id == R.id.action_help) {
-            Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_study2);
-
-            Intent intent = new Intent(getApplication(), HelpActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -266,7 +253,7 @@ class Study2CursorAdapter extends CursorAdapter {
     private ArrayList<Study2Item> mAnswerAl;
 
     static class ViewHolder {
-        protected String entryId;
+        protected String word;
         protected String seq;
         protected int position;
 
@@ -347,9 +334,9 @@ class Study2CursorAdapter extends CursorAdapter {
                 String[] params = ((String) v.getTag()).split(":");
 
                 StringBuffer sql = new StringBuffer();
-                sql.append("UPDATE DIC_VOC " + CommConstants.sqlCR);
+                sql.append("UPDATE DIC_MY_VOC " + CommConstants.sqlCR);
                 sql.append("   SET MEMORIZATION = '" + (((CheckBox) v.findViewById(R.id.my_c_s2i_cb_memorization)).isChecked() ? "Y" : "N") + "'" + CommConstants.sqlCR);
-                sql.append(" WHERE ENTRY_ID = '" + params[0] + "' " + CommConstants.sqlCR);
+                sql.append(" WHERE SEQ = '" + params[0] + "' " + CommConstants.sqlCR);
                 mDb.execSQL(sql.toString());
 
                 mCursor.requery();
@@ -383,8 +370,7 @@ class Study2CursorAdapter extends CursorAdapter {
                         } else if (mSelect == 1) {
                             Intent intent = new Intent(mActivity.getApplication(), WordViewActivity.class);
                             Bundle bundle = new Bundle();
-                            bundle.putString("entryId", viewHolder.entryId);
-                            bundle.putString("seq", viewHolder.seq);
+                            bundle.putString("entryId", DicDb.getEntryIdForWord(mDb, viewHolder.word));
                             intent.putExtras(bundle);
 
                             mActivity.startActivity(intent);
@@ -410,10 +396,10 @@ class Study2CursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        viewHolder.entryId = cursor.getString(cursor.getColumnIndexOrThrow("ENTRY_ID"));
+        viewHolder.word = cursor.getString(cursor.getColumnIndexOrThrow("WORD"));
         viewHolder.seq = cursor.getString(cursor.getColumnIndexOrThrow("SEQ"));
         viewHolder.position = cursor.getPosition();
-        viewHolder.cb_memorizationCheck.setTag(cursor.getString(cursor.getColumnIndexOrThrow("ENTRY_ID")) + ":" + cursor.getPosition());
+        viewHolder.cb_memorizationCheck.setTag(cursor.getString(cursor.getColumnIndexOrThrow("SEQ")) + ":" + cursor.getPosition());
         viewHolder.rg_answer.setTag(viewHolder);
 
         ((TextView)view.findViewById(R.id.my_c_s2i_tv_question)).setText(cursor.getString(cursor.getColumnIndexOrThrow("QUESTION")));
