@@ -63,6 +63,11 @@ public class IdiomViewActivity extends AppCompatActivity implements TextToSpeech
         Bundle b = this.getIntent().getExtras();
         sqlWhere = b.getString("SQL_WHERE");
 
+        if ( b.containsKey("isForeignView") ) {
+            isForeignView = b.getBoolean("isForeignView");
+            invalidateOptionsMenu();
+        }
+
         ((TextView)this.findViewById(R.id.my_tv_idiom_desc)).setText(b.getString("IDIOM") + " : " + b.getString("DESC"));
         ((TextView)this.findViewById(R.id.my_tv_idiom_desc)).setTextSize(fontSize);
 
@@ -79,6 +84,7 @@ public class IdiomViewActivity extends AppCompatActivity implements TextToSpeech
 
         ListView listView = (ListView) this.findViewById(R.id.my_lv);
         adapter = new IdiomViewCursorAdapter(getApplicationContext(), cursor, this);
+        adapter.setForeignView(isForeignView);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

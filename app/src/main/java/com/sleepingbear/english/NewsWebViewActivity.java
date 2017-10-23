@@ -177,11 +177,14 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
         if ( !"".equals(DicUtils.getString(param.getString("url"))) ) {
             DicUtils.dicLog("url param");
 
+            /*
             if ( currUrl.indexOf("https") > -1 ) {
                 currUrl = "https:\\" + param.getString("url");
             } else {
                 currUrl = "http:\\" + param.getString("url");
             }
+            */
+            currUrl = param.getString("url");
         }
 
         DicUtils.dicLog(currUrl);

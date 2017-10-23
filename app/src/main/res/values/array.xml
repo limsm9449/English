@@ -68,11 +68,15 @@
         <item>Naver</item>
         <item>Daum</item>
         <item>예제</item>
+        <item>패턴</item>
+        <item>숙어</item>
     </string-array>
     <string-array name="wordViewIdx">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 
     <string-array name="novel0">

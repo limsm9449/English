@@ -91,24 +91,33 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void showListView() {
-        if ( adapter == null ) {
-            StringBuffer sql = new StringBuffer();
-            sql.append("SELECT SEQ _id, SEQ, SENTENCE1, SENTENCE2" + CommConstants.sqlCR);
+        StringBuffer sql = new StringBuffer();
+        if ( site.equals("Sample") ) {
+            sql.append("SELECT SEQ _id, SEQ, SENTENCE1, SENTENCE2, '' SQL_WHERE" + CommConstants.sqlCR);
             sql.append("  FROM DIC_SAMPLE " + CommConstants.sqlCR);
             sql.append(" WHERE (SENTENCE1 LIKE (SELECT '%'||WORD||'%' FROM DIC WHERE ENTRY_ID = '" + entryId + "')  " + CommConstants.sqlCR);
             sql.append("             OR SENTENCE2 LIKE (SELECT '%'||WORD||'%' FROM DIC WHERE ENTRY_ID = '" + entryId + "'))  " + CommConstants.sqlCR);
             sql.append("ORDER BY 2  " + CommConstants.sqlCR);
             sql.append(" LIMIT 200  " + CommConstants.sqlCR);
-
-            DicUtils.dicLog(sql.toString());
-            Cursor dicViewCursor = db.rawQuery(sql.toString(), null);
-
-            ListView dicViewListView = (ListView) this.findViewById(R.id.my_lv);
-            adapter = new WordViewActivityCursorAdapter(this, dicViewCursor, 0);
-            dicViewListView.setAdapter(adapter);
-            dicViewListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            dicViewListView.setOnItemClickListener(itemClickListener);
+        } else if ( site.equals("Pattern") ) {
+            sql.append("SELECT SEQ _id, SEQ, PATTERN SENTENCE1, DESC SENTENCE2, SQL_WHERE" + CommConstants.sqlCR);
+            sql.append("  FROM DIC_PATTERN " + CommConstants.sqlCR);
+            sql.append(" WHERE PATTERN LIKE '%" + word + "%' " + CommConstants.sqlCR);
+            sql.append("ORDER BY PATTERN  " + CommConstants.sqlCR);
+        } else {
+            sql.append("SELECT SEQ _id, SEQ, IDIOM SENTENCE1, DESC SENTENCE2, SQL_WHERE" + CommConstants.sqlCR);
+            sql.append("  FROM DIC_IDIOM " + CommConstants.sqlCR);
+            sql.append(" WHERE IDIOM LIKE '%" + word + "%' " + CommConstants.sqlCR);
+            sql.append("ORDER BY IDIOM  " + CommConstants.sqlCR);
         }
+        DicUtils.dicLog(sql.toString());
+        Cursor dicViewCursor = db.rawQuery(sql.toString(), null);
+
+        ListView dicViewListView = (ListView) this.findViewById(R.id.my_lv);
+        adapter = new WordViewActivityCursorAdapter(this, dicViewCursor, 0);
+        dicViewListView.setAdapter(adapter);
+        dicViewListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        dicViewListView.setOnItemClickListener(itemClickListener);
     }
 
     /**
@@ -120,14 +129,38 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
             Cursor cur = (Cursor) adapter.getItem(position);
             cur.moveToPosition(position);
 
-            Bundle bundle = new Bundle();
-            bundle.putString("foreign", cur.getString(cur.getColumnIndexOrThrow("SENTENCE1")));
-            bundle.putString("han", cur.getString(cur.getColumnIndexOrThrow("SENTENCE2")));
-            bundle.putString("sampleSeq", cur.getString(cur.getColumnIndexOrThrow("SEQ")));
+            if ( site.equals("Sample") ) {
+                Bundle bundle = new Bundle();
+                bundle.putString("foreign", cur.getString(cur.getColumnIndexOrThrow("SENTENCE1")));
+                bundle.putString("han", cur.getString(cur.getColumnIndexOrThrow("SENTENCE2")));
+                bundle.putString("sampleSeq", cur.getString(cur.getColumnIndexOrThrow("SEQ")));
 
-            Intent intent = new Intent(getApplication(), SentenceViewActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
+                Intent intent = new Intent(getApplication(), SentenceViewActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else if ( site.equals("Pattern") ) {
+                Bundle bundle = new Bundle();
+                bundle.putString("PATTERN", cur.getString(cur.getColumnIndexOrThrow("SENTENCE1")));
+                bundle.putString("DESC", cur.getString(cur.getColumnIndexOrThrow("SENTENCE2")));
+                bundle.putString("SQL_WHERE", cur.getString(cur.getColumnIndexOrThrow("SQL_WHERE")));
+                bundle.putBoolean("isForeignView", true);
+
+                Intent intent = new Intent(getApplication(), PatternViewActivity.class);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            } else if ( site.equals("Idiom") ) {
+                Bundle bundle = new Bundle();
+                bundle.putString("IDIOM", cur.getString(cur.getColumnIndexOrThrow("SENTENCE1")));
+                bundle.putString("DESC", cur.getString(cur.getColumnIndexOrThrow("SENTENCE2")));
+                bundle.putString("SQL_WHERE", cur.getString(cur.getColumnIndexOrThrow("SQL_WHERE")));
+                bundle.putBoolean("isForeignView", true);
+
+                Intent intent = new Intent(getApplication(), IdiomViewActivity.class);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
         }
     };
 
@@ -163,6 +196,18 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
                     detailLl.setVisibility(View.GONE);
                 } else if ( parent.getSelectedItemPosition() == 2 ) {
                     site = "Sample";
+                    showListView();
+
+                    webView.setVisibility(View.GONE);
+                    detailLl.setVisibility(View.VISIBLE);
+                } else if ( parent.getSelectedItemPosition() == 3 ) {
+                    site = "Pattern";
+                    showListView();
+
+                    webView.setVisibility(View.GONE);
+                    detailLl.setVisibility(View.VISIBLE);
+                } else if ( parent.getSelectedItemPosition() == 4 ) {
+                    site = "Idiom";
                     showListView();
 
                     webView.setVisibility(View.GONE);

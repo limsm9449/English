@@ -63,6 +63,11 @@ public class PatternViewActivity extends AppCompatActivity implements TextToSpee
         Bundle b = this.getIntent().getExtras();
         sqlWhere = b.getString("SQL_WHERE");
 
+        if ( b.containsKey("isForeignView") ) {
+            isForeignView = b.getBoolean("isForeignView");
+            invalidateOptionsMenu();
+        }
+
         ((TextView)this.findViewById(R.id.my_tv_pattern_desc)).setText(b.getString("PATTERN") + " : " + b.getString("DESC"));
         ((TextView)this.findViewById(R.id.my_tv_pattern_desc)).setTextSize(fontSize);
 
@@ -79,6 +84,7 @@ public class PatternViewActivity extends AppCompatActivity implements TextToSpee
 
         ListView listView = (ListView) this.findViewById(R.id.my_c_pattern_lv);
         adapter = new PatternViewCursorAdapter(getApplicationContext(), cursor, this);
+        adapter.setForeignView(isForeignView);
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

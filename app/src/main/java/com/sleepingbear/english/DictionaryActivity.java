@@ -54,6 +54,9 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
     private int mSelect = 0;
     private int webDictionaryIdx = 0;
     private String mWsKind = "W";
+    private String mCategoryKind = "";
+
+    private boolean isAddVocabulary = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,8 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
+        mCategoryKind = DicUtils.getString(b.getString("CATEGORY_KIND"));
+
         if ( !"".equals(b.getString("word")) ) {
             et_search.setText(b.getString("word"));
             changeListView(true);
@@ -123,13 +128,6 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
         DicUtils.setAdView(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
-
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -140,14 +138,13 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(et_search.getWindowToken(), 0);
 
-            finish();
-        } else if (id == R.id.action_help) {
-            Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_dictionary);
+            if ( isAddVocabulary ) {
+                Intent intent = new Intent();
+                intent.putExtra("MSG", CommConstants.msgAdd);
+                setResult(RESULT_OK, intent);
+            }
 
-            Intent intent = new Intent(getApplication(), HelpActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -247,8 +244,6 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
             //결과가 나올때까지 기달리게 할려고 다음 로직을 추가한다. 안하면 progressbar가 사라짐.. cursor도  Thread 방식으로 돌아가나봄
             if ( cursor.getCount() != 0 ) {
-                DicDb.insSearchHistory(db, et_search.getText().toString().trim().toLowerCase());
-                DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
             }
         }
     }
@@ -322,48 +317,7 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
             Cursor cur = (Cursor) adapter.getItem(i);
 
-            if ( "SAMPLE".equals(cur.getString(cur.getColumnIndexOrThrow("KIND"))) ) {
-                final String sampleSeq = cur.getString(cur.getColumnIndexOrThrow("_id"));
-                final String foreign = cur.getString(cur.getColumnIndexOrThrow("SENTENCE1"));
-                final String han = cur.getString(cur.getColumnIndexOrThrow("SENTENCE2"));
-
-                //메뉴 선택 다이얼로그 생성
-                Cursor cursor = db.rawQuery(DicQuery.getNoteKindContextMenu(false), null);
-                final String[] kindCodes = new String[cursor.getCount()];
-                final String[] kindCodeNames = new String[cursor.getCount()];
-
-                int idx = 0;
-                while (cursor.moveToNext()) {
-                    kindCodes[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
-                    kindCodeNames[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME"));
-                    idx++;
-                }
-                cursor.close();
-
-                final android.support.v7.app.AlertDialog.Builder dlg = new android.support.v7.app.AlertDialog.Builder(DictionaryActivity.this);
-                dlg.setTitle("메뉴 선택");
-                dlg.setSingleChoiceItems(kindCodeNames, mSelect, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        mSelect = arg1;
-                    }
-                });
-                dlg.setNeutralButton("TTS", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        myTTS.speak(foreign, TextToSpeech.QUEUE_FLUSH, null);
-                    }
-                });
-                dlg.setNegativeButton("취소", null);
-                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DicDb.insConversationToNote(db, kindCodes[mSelect], sampleSeq);
-                        DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
-                    }
-                });
-                dlg.show();
-            } else {
+            if ( "F".equals(cur.getString(cur.getColumnIndexOrThrow("KIND"))) ) {
                 //단어장 다이얼로그 생성
                 Cursor cursor = db.rawQuery(DicQuery.getVocabularyCategory(), null);
 
@@ -372,6 +326,10 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
                 int idx = 0;
                 while (cursor.moveToNext()) {
+                    if ( cursor.getString(cursor.getColumnIndexOrThrow("KIND")).equals(mCategoryKind) ) {
+                        dSelect = idx;
+                    }
+
                     kindCodes[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND"));
                     kindCodeNames[idx] = cursor.getString(cursor.getColumnIndexOrThrow("KIND_NAME")) + " 에 단어 추가";
                     idx++;
@@ -402,8 +360,10 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Cursor cur = (Cursor) adapter.getCursor();
-                        DicDb.insDicVoc(db, cur.getString(cur.getColumnIndexOrThrow("ENTRY_ID")), kindCodes[dSelect]);
+                        DicDb.insMyVocabularyFromDic(db, cur.getString(cur.getColumnIndexOrThrow("ENTRY_ID")), kindCodes[dSelect]);
                         DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
+
+                        isAddVocabulary = true;
                     }
                 });
 

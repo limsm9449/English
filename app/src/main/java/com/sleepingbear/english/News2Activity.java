@@ -95,6 +95,9 @@ public class News2Activity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setTitle(newNames[sNews]);
 
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
+
         String[] newCodes = DicUtils.getNews("C");
         changeSpinner(newCodes[sNews], sCategory);
     }
@@ -190,7 +193,9 @@ public class News2Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_web) {
+        if (id == android.R.id.home) {
+            finish();
+        } else if (id == R.id.action_web) {
             String newCode = DicUtils.getNews("C")[sNews];
 
             Bundle bundle = new Bundle();
