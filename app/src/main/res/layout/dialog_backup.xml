@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="내보내기"
-            android:id="@+id/my_d_dm_b_save"
+            android:id="@+id/my_b_save"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:text="닫기"
-            android:id="@+id/my_d_dm_b_close"
+            android:id="@+id/my_b_close"
             android:layout_gravity="right"
             android:layout_alignParentRight="false"
             android:layout_centerInParent="false"
@@ -110,7 +110,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_toLeftOf="@+id/my_d_dm_b_save" />
+            android:layout_toLeftOf="@+id/my_b_save" />
     </RelativeLayout>
 
 </LinearLayout>

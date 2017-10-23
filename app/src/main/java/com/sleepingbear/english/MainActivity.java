@@ -24,6 +24,9 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private DbHelper dbHelper;
     private SQLiteDatabase db;
@@ -49,7 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if ( "Y".equals(prefs.getString("db_new", "N")) ) {
             DicUtils.dicLog("backup data import");
 
-            DicUtils.readInfoFromFile(this, db, "");
+            try {
+                File file = getBaseContext().getFileStreamPath(CommConstants.infoFileName);
+                if ( file.exists() ) {
+                    //이전걸로 import
+                    DicUtils.readInfoFromFile(this, db, "");
+
+                    //기존 VOC는 삭제한다.
+                    DicDb.vocToMyVoc(db);
+
+                    //파일 삭제
+                    file.delete();
+                } else {
+                    DicUtils.readExcelBackup(getApplicationContext(), db, null);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
 
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("db_new", "N");
@@ -81,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_today)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc_study)).setOnClickListener(this);
-
-        //기존 VOC는 삭제한다.
-        DicDb.vocToMyVoc(db);
 
         DicUtils.setAdView(this);
     }
