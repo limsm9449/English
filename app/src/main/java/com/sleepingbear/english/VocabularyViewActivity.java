@@ -605,6 +605,13 @@ public class VocabularyViewActivity extends AppCompatActivity implements View.On
         } else if (id == R.id.action_all_unmemory) {
             DicDb.updMyVocabularyAllUnmemory(db, kind);
             getListView();
+        } else if (id == R.id.action_help) {
+            Bundle bundle = new Bundle();
+            bundle.putString("SCREEN", CommConstants.screen_vocabularyNoteView);
+
+            Intent intent = new Intent(getApplication(), HelpActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

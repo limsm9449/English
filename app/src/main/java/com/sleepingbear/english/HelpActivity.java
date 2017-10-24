@@ -102,7 +102,7 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
-        tempSb.append("* 영한 뉴스" + CommConstants.sqlCR);
+        tempSb.append("* 영어신문 Ver.1" + CommConstants.sqlCR);
         tempSb.append("- 11개의 영문 뉴스가 있습니다. " + CommConstants.sqlCR);
         tempSb.append(" .국내 영어뉴스는 로딩이 빠르지만 외국 영어뉴스는 로딩이 많이 느립니다. 참고하세요." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
@@ -123,6 +123,36 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.append(" .뉴스를 보면서 클릭한 단어는 '뉴스 클릭 단어' 화면에서 확인하실 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);
         if ( screen.equals(CommConstants.screen_newsView) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 영어신문 Ver.2" + CommConstants.sqlCR);
+        tempSb.append(" .오른쪽 하단의 리스트 버튼을 클릭해서 뉴스를 선택하세요. " + CommConstants.sqlCR);
+        tempSb.append(" .뉴스를 선택하면 뉴스별 카테고리가 변경됩니다. " + CommConstants.sqlCR);
+        tempSb.append(" .카테고리를 선택하면 관련 뉴스를 조회합니다." + CommConstants.sqlCR);
+        tempSb.append(" .뉴스를 클릭하시면 뉴스 상세를 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .뉴스를 길게 클릭하시면 사이트 기사를 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_news2) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 뉴스 상세" + CommConstants.sqlCR);
+        tempSb.append("- 뉴스를 보면서 필요한 단어를 검색할 수 있는 기능이 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .뉴스를 보다가 모르는 단어를 클릭을 하면 하단에 클릭한 단어의 뜻이 보입니다. " + CommConstants.sqlCR);
+        tempSb.append(" .클릭단어의 뜻이 없을경우 하단 오른쪽의 검색 버튼을 클릭하면 Naver,Daum에서 단어 검색을 할 수 있습니다. " + CommConstants.sqlCR);
+        tempSb.append(" .하단 단어를 길게 클릭하시면 단어 상세를 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .하단 단어 옆의 (+)를 클릭하시면 바로 단어장에 등록을 하실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .뉴스의 단어를 길게 클릭하시면 단어보기, 단어검색(Naver,Daum), 번역, 문장보기, TTS, 전체TTS, 복사, 전체복사 기능을 사용하실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .뉴스를 보면서 클릭한 단어는 '뉴스 클릭 단어' 화면에서 확인하실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_news2View) ) {
             CurrentSb.append(tempSb.toString());
         } else {
             allSb.append(tempSb.toString());
@@ -359,6 +389,7 @@ public class HelpActivity extends AppCompatActivity {
         tempSb.delete(0, tempSb.length());
         tempSb.append("* 단어장 상세" + CommConstants.sqlCR);
         tempSb.append("- 단어 목록 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .하단의 + 버튼을 클릭해서 단어를 6가지 방법으로 추가할 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .상단 수정 버튼능 클릭하면 단어장을 편집(삭제,복사,이동) 할 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .상단 TTS 버튼을 클릭하면 단어,뜻을 들을 수 있습니다." + CommConstants.sqlCR);
         tempSb.append("" + CommConstants.sqlCR);

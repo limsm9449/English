@@ -209,6 +209,13 @@ public class News2Activity extends AppCompatActivity {
             taskKind = "NEWS_LIST";
             task = new News2Task();
             task.execute();
+        } else if (id == R.id.action_help) {
+            Bundle bundle = new Bundle();
+            bundle.putString("SCREEN", CommConstants.screen_news2);
+
+            Intent intent = new Intent(getApplication(), HelpActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

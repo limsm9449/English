@@ -167,7 +167,7 @@ public class News2ViewActivity extends AppCompatActivity implements View.OnClick
             startService(ttsIntent);
         } else if (id == R.id.action_help) {
             Bundle bundle = new Bundle();
-            bundle.putString("SCREEN", CommConstants.screen_novelView);
+            bundle.putString("SCREEN", CommConstants.screen_news2View);
 
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
