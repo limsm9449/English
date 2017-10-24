@@ -407,7 +407,7 @@ public class DicDb {
     }
 
     /**
-     * My 학습 초기화
+     * My 회화 초기화
      * @param db
      */
     public static void initMyConversationNote(SQLiteDatabase db) {
@@ -589,6 +589,14 @@ public class DicDb {
         StringBuffer sql = new StringBuffer();
         sql.append("INSERT INTO DIC_MY_NOVEL (TITLE, PATH, INS_DATE, FAVORITE_FLAG)" + CommConstants.sqlCR);
         sql.append("VALUES('" + title + "','" + path + "','" + insDate + "','" +  favoriteFlag + "')" + CommConstants.sqlCR);
+        DicUtils.dicSqlLog(sql.toString());
+        db.execSQL(sql.toString());
+    }
+
+    public static void insNote(SQLiteDatabase db, String code, String sampleSeq) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO DIC_NOTE (CODE, SAMPLE_SEQ)" + CommConstants.sqlCR);
+        sql.append("VALUES('" + code + "'," + sampleSeq + ")" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }

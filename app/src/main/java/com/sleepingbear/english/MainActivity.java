@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         //종료 시점에 변경 사항을 기록한다.
         if ( "Y".equals(DicUtils.getDbChange(getApplicationContext())) ) {
-            DicUtils.writeInfoToFile(this, db, "");
+            DicUtils.writeExcelBackup(this, db, "");
             DicUtils.clearDbChange(this);
         }
 

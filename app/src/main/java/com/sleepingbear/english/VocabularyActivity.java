@@ -93,6 +93,8 @@ public class VocabularyActivity extends AppCompatActivity {
         dbHelper = new DbHelper(this);
         db = dbHelper.getWritableDatabase();
 
+        DicUtils.setAdView(this);
+
         changeListView();
     }
 
@@ -243,7 +245,7 @@ public class VocabularyActivity extends AppCompatActivity {
             ((Button) dialog_layout.findViewById(R.id.my_b_upload)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FileChooser filechooser = new FileChooser(VocabularyActivity.this);
+                    FileChooser filechooser = new FileChooser(VocabularyActivity.this, "xls");
                     filechooser.setFileListener(new FileChooser.FileSelectedListener() {
                         @Override
                         public void fileSelected(final File file) {
@@ -255,7 +257,7 @@ public class VocabularyActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    filechooser.setExtension("xls");
+                    //filechooser.setExtension("xls");
                     filechooser.showDialog();
                 }
             });

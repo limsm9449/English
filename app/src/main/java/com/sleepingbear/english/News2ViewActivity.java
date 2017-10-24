@@ -137,7 +137,7 @@ public class News2ViewActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_news2, menu);
+        getMenuInflater().inflate(R.menu.menu_news2_view, menu);
 
         return true;
     }

@@ -86,7 +86,7 @@ public class CommConstants {
     public static String novel_loyalbooks = "www.loyalbooks.com" ;
     public static String novel_local = "로컬 영문파일" ;
 
-    public static boolean isFreeApp = false;
+    public static boolean isFreeApp = true;
 
     public final static int a_dictionary = 2;
     public final static int a_vocabulary = 3;

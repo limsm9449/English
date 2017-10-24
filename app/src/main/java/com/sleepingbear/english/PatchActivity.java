@@ -32,7 +32,8 @@ public class PatchActivity extends AppCompatActivity {
         patch.append("* 패치 내역" + CommConstants.sqlCR);
         patch.append("- 영어 신문 Ver.2 개발" + CommConstants.sqlCR);
         patch.append("- Daum 단어장 기능 개선" + CommConstants.sqlCR);
-        patch.append("- 단어장 기능 개선" + CommConstants.sqlCR);
+        patch.append("- 단어장 기능 개선 - db 변경으로 데이타가 삭제될 수 있습니다." + CommConstants.sqlCR);
+        patch.append("- 회화패턴, 숙어에 검색 기능 추가" + CommConstants.sqlCR);
         patch.append(CommConstants.sqlCR);
         patch.append(CommConstants.sqlCR);
         patch.append("- 단어상세에서 백버튼으로 돌아가도록 수정" + CommConstants.sqlCR);

@@ -86,7 +86,7 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if ( mSelect == 3 ) {
-                            FileChooser filechooser = new FileChooser(MyNovelActivity.this);
+                            FileChooser filechooser = new FileChooser(MyNovelActivity.this, "txt");
                             filechooser.setFileListener(new FileChooser.FileSelectedListener() {
                                 @Override
                                 public void fileSelected(final File file) {
@@ -96,7 +96,7 @@ public class MyNovelActivity extends AppCompatActivity implements View.OnClickLi
                                     Toast.makeText(getApplicationContext(), "소설을 추가했습니다.", Toast.LENGTH_LONG).show();
                                 }
                             });
-                            filechooser.setExtension("txt");
+                            //filechooser.setExtension("txt");
                             filechooser.showDialog();
                         } else {
                             Bundle bundle = new Bundle();

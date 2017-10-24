@@ -1166,7 +1166,7 @@ public class DicUtils {
             //단어 카테고리 저장
             sql.append("SELECT A.CODE_GROUP, A.CODE, A.CODE_NAME" + CommConstants.sqlCR);
             sql.append("  FROM DIC_CODE A" + CommConstants.sqlCR);
-            sql.append(" WHERE CODE_GROUP IN ('MY_VOC','C01')" + CommConstants.sqlCR);
+            sql.append(" WHERE CODE_GROUP IN ('MY_VOC','C01','C02')" + CommConstants.sqlCR);
             sql.append("   AND CODE NOT IN ('VOC0001','C010001')" + CommConstants.sqlCR);
             Cursor cursor = db.rawQuery(sql.toString(), null);
             while (cursor.moveToNext()) {
@@ -1203,17 +1203,33 @@ public class DicUtils {
 
             //영어소설 저장
             sql.setLength(0);
-            sql.append("SELECT KIND, TITLE, URL" + CommConstants.sqlCR);
-            sql.append("  FROM DIC_NOVEL" + CommConstants.sqlCR);
+            sql.append("SELECT TITLE, PATH, INS_DATE, FAVORITE_FLAG" + CommConstants.sqlCR);
+            sql.append("  FROM DIC_MY_NOVEL" + CommConstants.sqlCR);
             cursor = db.rawQuery(sql.toString(), null);
             while (cursor.moveToNext()) {
                 HSSFRow row = sheet.createRow(rowIdx++);
 
                 cellIdx = 0;
                 putCell(row, cellIdx++, CommConstants.tag_novel_ins);
-                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("KIND")));
                 putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("TITLE")));
-                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("URL")));
+                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("PATH")));
+                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("INS_DATE")));
+                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("FAVORITE_FLAG")));
+            }
+            cursor.close();
+
+            //학습회화 저장
+            sql.setLength(0);
+            sql.append("SELECT CODE, SAMPLE_SEQ" + CommConstants.sqlCR);
+            sql.append("  FROM DIC_NOTE" + CommConstants.sqlCR);
+            cursor = db.rawQuery(sql.toString(), null);
+            while (cursor.moveToNext()) {
+                HSSFRow row = sheet.createRow(rowIdx++);
+
+                cellIdx = 0;
+                putCell(row, cellIdx++, CommConstants.tag_note_ins);
+                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("CODE")));
+                putCell(row, cellIdx++, cursor.getString(cursor.getColumnIndexOrThrow("SAMPLE_SEQ")));
             }
             cursor.close();
 
@@ -1243,6 +1259,9 @@ public class DicUtils {
         try{
             //데이타 초기화
             DicDb.initMyVocabulary(db);
+            DicDb.initMyConversationNote(db);
+            DicDb.initConversationNote(db);
+            DicDb.initMyNovel(db);
 
             FileInputStream fis = null;
             if ( file == null ) {
@@ -1278,8 +1297,13 @@ public class DicUtils {
                             , getString(myRow.getCell(idx++).toString())
                             , getString(myRow.getCell(idx++).toString()));
                 } else if ( kind.equals(CommConstants.tag_novel_ins) ) {
-                    DicDb.insNovel(db
+                    DicDb.insMyNovel(db
                             , getString(myRow.getCell(idx++).toString())
+                            , getString(myRow.getCell(idx++).toString())
+                            , getString(myRow.getCell(idx++).toString())
+                            , getString(myRow.getCell(idx++).toString()));
+                } else if ( kind.equals(CommConstants.tag_note_ins) ) {
+                    DicDb.insNote(db
                             , getString(myRow.getCell(idx++).toString())
                             , getString(myRow.getCell(idx++).toString()));
                 }
