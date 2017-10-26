@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //DB가 새로 생성이 되었으면 이전 데이타를 DB에 넣고 Flag를 N 처리함
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if ( "Y".equals(prefs.getString("db_new", "N")) ) {
-            DicUtils.dicLog("backup data import");
+            Log.d(CommConstants.tag, "backup data import");
 
             try {
                 File file = getBaseContext().getFileStreamPath(CommConstants.infoFileName);
                 if ( file.exists() ) {
+                    Log.d(CommConstants.tag, "old data import");
                     //이전걸로 import
                     DicUtils.readInfoFromFile(this, db, "");
 
@@ -64,13 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //파일 삭제
                     file.delete();
                 } else {
+                    Log.d(CommConstants.tag, "new data import");
                     DicUtils.readExcelBackup(getApplicationContext(), db, null);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
 
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("db_new", "N");
