@@ -4,21 +4,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-class DbHelper extends SQLiteOpenHelper {
-    private static String DB_NAME ="ehdictandvoc.db";
+class CaptionDbHelper extends SQLiteOpenHelper {
+    private static String DB_NAME ="enCaption.db";
     private String DB_PATH = "";
-    private static final int DATABASE_VERSION = 41;
+    private static final int DATABASE_VERSION = 6;
     private final Context mContext;
 
-    public DbHelper(Context context) {
+    public CaptionDbHelper(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
 
         mContext = context;
@@ -31,7 +33,7 @@ class DbHelper extends SQLiteOpenHelper {
     private void initialize() {
         if (databaseExists()) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-            int dbVersion = prefs.getInt("db_ver", 1);
+            int dbVersion = prefs.getInt(DB_NAME, 1);
             //System.out.println("dbVersion : " + dbVersion);
 
             if (DATABASE_VERSION != dbVersion) {
@@ -67,7 +69,7 @@ class DbHelper extends SQLiteOpenHelper {
         InputStream is = null;
         OutputStream os = null;
         try {
-            is = mContext.getAssets().open(DB_NAME);
+            is = new FileInputStream(Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/" + DB_NAME);
             os = new FileOutputStream(path);
 
             byte[] buffer = new byte[1024];
@@ -79,8 +81,7 @@ class DbHelper extends SQLiteOpenHelper {
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("db_ver", DATABASE_VERSION);
-            editor.putString("db_new", "Y");
+            editor.putInt(DB_NAME, DATABASE_VERSION);
             editor.commit();
         } catch (IOException e) {
             e.printStackTrace();

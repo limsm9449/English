@@ -292,6 +292,31 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         tempSb.delete(0, tempSb.length());
+        tempSb.append("* 미드" + CommConstants.sqlCR);
+        tempSb.append("- 미드의 자막으로 학습을 해볼 수 있도록 만들었습니다." + CommConstants.sqlCR);
+        tempSb.append("주의사항) 1.다른 분들이 만들어준 자막이기 때문에 오역이 있을 수 있습니다.");
+        tempSb.append(" 2.한 문장이 길 경우 초단위로 볼 때 순번이 틀릴수도 있으니 참고하세요." + CommConstants.sqlCR);
+        tempSb.append(" .지금은 Friends, 24 미드의 자막만 등록을 했고 차차 다른 자막도 추가를 할 예정입니다." + CommConstants.sqlCR);
+        tempSb.append(" .시즌별 드라마를 클릭하시면 자막을 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_caption) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* 미드 자막" + CommConstants.sqlCR);
+        tempSb.append(" .상단 버튼을 클릭하면 All(한글,영어) / 한글 / 영어 을 보실 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .문장을 클릭하시면 문장상세에서 문장에 등록된 단어들을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_captionView) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
+        tempSb.delete(0, tempSb.length());
         tempSb.append("* 숙어" + CommConstants.sqlCR);
         tempSb.append("- 숙어별로 회화를 조회 및 회화 학습을 할 수 있습니다." + CommConstants.sqlCR);
         tempSb.append(" .숙어를 클릭하면 숙어가 들어간 회화를 조회 합니다. " + CommConstants.sqlCR);

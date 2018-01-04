@@ -30,12 +30,13 @@ public class PatchActivity extends AppCompatActivity {
         StringBuffer patch = new StringBuffer();
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 미드 자막 학습 기능 추가" + CommConstants.sqlCR);
+        patch.append(CommConstants.sqlCR);
+        patch.append(CommConstants.sqlCR);
         patch.append("- 영어 신문 Ver.2 개발" + CommConstants.sqlCR);
         patch.append("- Daum 단어장 기능 개선" + CommConstants.sqlCR);
         patch.append("- 단어장 기능 개선 - db 변경으로 데이타가 삭제될 수 있습니다." + CommConstants.sqlCR);
         patch.append("- 회화패턴, 숙어에 검색 기능 추가" + CommConstants.sqlCR);
-        patch.append(CommConstants.sqlCR);
-        patch.append(CommConstants.sqlCR);
         patch.append("- 단어상세에서 백버튼으로 돌아가도록 수정" + CommConstants.sqlCR);
         patch.append("- 환경설정에서 단어상세 화면의 상단에 있는 콤보값을 설정하도록 수정(Naver, Daum, 예제)" + CommConstants.sqlCR);
         patch.append("- 영문 소설 기능 수정 : 페이지 단위로 보도록 수정, 무료 영문소설 사이트 추가" + CommConstants.sqlCR);

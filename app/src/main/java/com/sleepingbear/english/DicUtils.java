@@ -1257,6 +1257,8 @@ public class DicUtils {
         boolean success = false;
 
         try{
+            db.beginTransaction();
+
             //데이타 초기화
             DicDb.initMyVocabulary(db);
             DicDb.initMyConversationNote(db);
@@ -1309,10 +1311,14 @@ public class DicUtils {
                 }
             }
 
+            db.setTransactionSuccessful();
+            db.endTransaction();
+
             success = true;
             fis.close();
         } catch (Exception e) {
             DicUtils.dicLog("readExcelBackup 에러=" + e.toString());
+            db.endTransaction();
         }
 
         System.out.println("readExcelBackup end");
@@ -2654,5 +2660,18 @@ public class DicUtils {
         return contents.replaceAll("&nbsp;","");
     }
 
+    public static String getUrlText(String url) {
+        StringBuffer sb = new StringBuffer();
+        try {
+            InputStream inputStream = new URL(url).openStream();
+            byte[] b = new byte[1024];
+            int c = 0;
+            while ((c = inputStream.read(b)) != -1) {
+                sb.append(new String(b, 0, c));
+            }
+        } catch ( Exception e ) {
+        }
+        return sb.toString();
+    }
 
 }

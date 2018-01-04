@@ -229,7 +229,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
         String url = "";
         if ( kind.equals(CommConstants.dictionaryKind_f) ) {
             if ("Naver".equals(site)) {
-                url = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=entry_idiom&query=" + word;
+                url = "http://endic.naver.com/search.nhn?sLn=en&searchOption=entry_idiom&query=" + word;
             } else if ("Daum".equals(site)) {
                 url = "http://alldic.daum.net/search.do?dic=eng&q=" + word;
             }
