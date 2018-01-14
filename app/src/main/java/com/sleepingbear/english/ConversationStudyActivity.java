@@ -101,7 +101,7 @@ public class ConversationStudyActivity extends AppCompatActivity implements View
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // 상단 메뉴 구성
-        getMenuInflater().inflate(R.menu.menu_help, menu);
+        getMenuInflater().inflate(R.menu.menu_conversation_study, menu);
 
         return true;
     }
@@ -119,9 +119,26 @@ public class ConversationStudyActivity extends AppCompatActivity implements View
             Intent intent = new Intent(getApplication(), HelpActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
+        } else if (id == R.id.action_setting) {
+            Bundle bundle = new Bundle();
+
+            Intent intent = new Intent(getApplication(), ConversationSettingActivity.class);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, CommConstants.a_conversationSetting);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        DicUtils.dicLog("onActivityResult : " + requestCode + " : " + resultCode);
+
+        switch ( requestCode ) {
+            case CommConstants.a_conversationSetting :
+                changeListView(true);
+
+                break;
+        }
     }
 
     public void changeListView(boolean isKeyin) {
@@ -338,6 +355,8 @@ public class ConversationStudyActivity extends AppCompatActivity implements View
 
             FlowLayout wordArea = (FlowLayout) findViewById(R.id.my_ll_conversation_word);
             wordArea.removeAllViews();
+            wordArea.customSetting(Integer.parseInt(DicUtils.getPreferencesValue(this, CommConstants.preferences_convLineHeight)),
+                    Integer.parseInt(DicUtils.getPreferencesValue(this, CommConstants.preferences_convFontWeight)));
 
             foreignArr = getRandForeign(foreign.split(" "));
             for ( int i = 0; i < foreignArr.length; i++ ) {

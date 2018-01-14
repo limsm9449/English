@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 
 public class FlowLayout extends ViewGroup {
 
+    private int custom_line_height = 120;
+    private int custom_font_weight = 36;
+
     private int line_height;
 
     public static class LayoutParams extends ViewGroup.LayoutParams {
@@ -27,6 +30,11 @@ public class FlowLayout extends ViewGroup {
 
     public FlowLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void customSetting(int _custom_line_height, int _custom_font_weight) {
+        custom_line_height = _custom_line_height;
+        custom_font_weight = _custom_font_weight;
     }
 
     @Override
@@ -57,7 +65,7 @@ public class FlowLayout extends ViewGroup {
                 //final int childw = (((String)child.getTag()).length() <= 3 ? 100 : ((String)child.getTag()).length() * 35);
                 final int childw = getWordWidth((String)child.getTag());
                 //line_height = Math.max(line_height, child.getMeasuredHeight() + lp.vertical_spacing);
-                line_height = Math.max(line_height, 120 + lp.vertical_spacing);
+                line_height = Math.max(line_height, custom_line_height + lp.vertical_spacing);
                 //System.out.println(child.getMeasuredHeight());
                 if (xpos + childw > width) {
                     xpos = getPaddingLeft();
@@ -107,13 +115,13 @@ public class FlowLayout extends ViewGroup {
                 //final int childw = (((String)child.getTag()).length() <= 3 ? 100 : ((String)child.getTag()).length() * 35);
                 final int childw = getWordWidth((String)child.getTag());
                 //final int childh = child.getMeasuredHeight();
-                final int childh = 120;
+                final int childh = custom_line_height;
                 //System.out.println(childh);
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 if (xpos + childw > width) {
                     xpos = getPaddingLeft();
                     //ypos += line_height;
-                    ypos += 120 + lp.vertical_spacing;
+                    ypos += custom_line_height + lp.vertical_spacing;
                 }
                 child.layout(xpos, ypos, xpos + childw, ypos + childh);
                 xpos += childw + lp.horizontal_spacing;
@@ -131,15 +139,15 @@ public class FlowLayout extends ViewGroup {
 
         for ( int i = 0; i < word.length() ; i++ ) {
             if ( compWord1.indexOf(word.substring(i, i +1)) > -1 ) {
-                width += 36;
+                width += custom_font_weight;
             } else if ( compWord2.indexOf(word.substring(i, i +1)) > -1 ) {
-                width += 25;
+                width += custom_font_weight - 11;
             } else if ( compWord3.indexOf(word.substring(i, i +1)) > -1 ) {
-                width += 32;
+                width += custom_font_weight - 4;
             } else if ( compWord4.indexOf(word.substring(i, i +1)) > -1 ) {
-                width += 23;
+                width += custom_font_weight - 13;
             } else {
-                width += 30;
+                width += custom_font_weight - 6;
             }
         }
         //DicUtils.dicLog(word + " : " + word.length() + " : " + width);

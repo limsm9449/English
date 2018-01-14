@@ -486,6 +486,10 @@ public class DicUtils {
                 rtn = "0";
             } else if ( preference.equals(CommConstants.preferences_webViewFont) ) {
                 rtn = "3";
+            } else if ( preference.equals(CommConstants.preferences_convLineHeight) ) {
+                rtn = getPreferences(context, CommConstants.preferences_convLineHeight, "120");
+            } else if ( preference.equals(CommConstants.preferences_convFontWeight) ) {
+                rtn = getPreferences(context, CommConstants.preferences_convFontWeight, "36");
             } else {
                 rtn = "";
             }

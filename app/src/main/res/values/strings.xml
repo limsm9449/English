@@ -45,6 +45,9 @@
     <string name="title_activity_vocabulary">단어장</string>
     <string name="title_activity_caption">미드 자막</string>
     <string name="title_activity_caption_view">CaptionViewActivity</string>
+    <string name="title_activity_news2">News2Activity</string>
+    <string name="title_activity_conversation_setting">회화 학습 설정</string>
+
 
 
     <!-- action -->
@@ -71,6 +74,4 @@
 
     <!-- My -->
     <string name="banner_ad_unit_id">ca-app-pub-3860766380986792/1206594265</string>
-    <string name="title_activity_news2">News2Activity</string>
-
 </resources>

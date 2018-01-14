@@ -50,6 +50,8 @@ public class CommConstants {
     public static String preferences_font = "key_fontSize";
     public static String preferences_webViewFont = "key_webViewFontSize";
     public static String preferences_wordView = "key_wordView";
+    public static String preferences_convLineHeight = "key_conversationLineHeight";
+    public static String preferences_convFontWeight = "key_conversationFontWeight";
 
     public static String vocabularyCode = "MY_VOC";
     public static String defaultVocabularyCode = "VOC0001";
@@ -96,6 +98,7 @@ public class CommConstants {
     public final static int a_vocabulary = 3;
     public final static int a_daum = 4;
     public final static int a_vocabularyEdit = 5;
+    public final static int a_conversationSetting = 6;
 
     public final static String msgAdd = "ADD";
     public final static String msgSave = "SAVE";
