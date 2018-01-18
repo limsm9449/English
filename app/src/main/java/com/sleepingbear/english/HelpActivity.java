@@ -511,6 +511,20 @@ public class HelpActivity extends AppCompatActivity {
             allSb.append(tempSb.toString());
         }
 
+        tempSb.delete(0, tempSb.length());
+        tempSb.append("* Card 학습" + CommConstants.sqlCR);
+        tempSb.append("- 회화패턴, 숙어, 네이버 회화, 단어장, Daum 단어장을 Card 형식으로 학습할 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .영어/한국어 Radio 버튼 : 영어 기준으로 학습을 할려면 영어를, 한국어 기준으로 학습을 할려면 한국어를 클릭하세요." + CommConstants.sqlCR);
+        tempSb.append(" .영어를 클릭하시면 하단에 뜻이 보입니다." + CommConstants.sqlCR);
+        tempSb.append(" .영어를 길게 클릭하시면 상세내용을 볼 수 있습니다." + CommConstants.sqlCR);
+        tempSb.append(" .오른쪽에서 왼쪽으로 스크롤시 다음 문제가 보입니다. 왼쪽에서 오른쪽으로 스크롤시 이전 문제가 보입니다." + CommConstants.sqlCR);
+        tempSb.append("" + CommConstants.sqlCR);
+        if ( screen.equals(CommConstants.screen_cardStudy) ) {
+            CurrentSb.append(tempSb.toString());
+        } else {
+            allSb.append(tempSb.toString());
+        }
+
         if ( "ALL".equals(b.getString("SCREEN")) ) {
             ((TextView) this.findViewById(R.id.my_c_help_tv1)).setText(allSb.toString());
         } else {

@@ -283,7 +283,7 @@ public class WordViewActivity extends AppCompatActivity implements View.OnClickL
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
+            view.loadUrl(url.replaceAll("%2520","%20"));
             return true;
         }
 

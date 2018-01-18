@@ -47,7 +47,7 @@
     <string name="title_activity_caption_view">CaptionViewActivity</string>
     <string name="title_activity_news2">News2Activity</string>
     <string name="title_activity_conversation_setting">회화 학습 설정</string>
-
+    <string name="title_activity_card_study">Card 학습</string>
 
 
     <!-- action -->

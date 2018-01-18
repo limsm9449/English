@@ -30,9 +30,10 @@ public class PatchActivity extends AppCompatActivity {
         StringBuffer patch = new StringBuffer();
 
         patch.append("* 패치 내역" + CommConstants.sqlCR);
+        patch.append("- 회화패턴, 숙어, 네이버 회화, 단어장, Daum 단어장 학습을 위한 Card 학습 기능 추가" + CommConstants.sqlCR);
+        patch.append(CommConstants.sqlCR);
+        patch.append(CommConstants.sqlCR);
         patch.append("- 몇몇 핸드폰에서 회화학습의 클릭 버튼의 사이즈가 잘 안나오는 문제가 있어서 설정화면을 추가" + CommConstants.sqlCR);
-        patch.append(CommConstants.sqlCR);
-        patch.append(CommConstants.sqlCR);
         patch.append("- 미드 자막 학습 기능 추가" + CommConstants.sqlCR);
         patch.append("- 영어 신문 Ver.2 개발" + CommConstants.sqlCR);
         patch.append("- Daum 단어장 기능 개선" + CommConstants.sqlCR);

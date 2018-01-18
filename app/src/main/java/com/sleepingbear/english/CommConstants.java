@@ -46,6 +46,7 @@ public class CommConstants {
     public static String screen_news2View= "SCREEN_NEWS2_VIEW";
     public static String screen_caption = "SCREEN_CAPTION";
     public static String screen_captionView = "SCREEN_CAPTION_VIEW";
+    public static String screen_cardStudy = "SCREEN_CARD_STUDY";
 
     public static String preferences_font = "key_fontSize";
     public static String preferences_webViewFont = "key_webViewFontSize";

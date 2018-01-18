@@ -2678,4 +2678,18 @@ public class DicUtils {
         return sb.toString();
     }
 
+    public static String replaceUrlSpace(String s) {
+        String[] stringArray = s.split(" ");
+        StringBuffer sb = new StringBuffer();
+        for(String s3 : stringArray) {
+            sb.append(s3);
+            sb.append("%20");
+        }
+        // if the last character is not space then, don't append %20.
+        if(s.charAt(s.length()-1) != ' ') {
+            return sb.substring(0, sb.length()-3).toString();
+        }
+
+        return sb.toString();
+    }
 }

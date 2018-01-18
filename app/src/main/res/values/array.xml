@@ -200,5 +200,15 @@
         <item>7</item>
     </string-array>
 
+    <string-array name="randomKind">
+        <item>회화패턴</item>
+        <item>숙어</item>
+        <item>네이버 회화</item>
+        <item>단어장</item>
+        <item>초중고 단어</item>
+        <item>수능 단어</item>
+        <item>Toeic 단어</item>
+        <item>Daum 단어장</item>
+    </string-array>
 
 </resources>

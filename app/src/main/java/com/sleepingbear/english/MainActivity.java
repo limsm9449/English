@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_today)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_voc_study)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_card_study)).setOnClickListener(this);
 
         DicUtils.setAdView(this);
     }
@@ -236,7 +237,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.my_b_voc_study:
                 startActivity(new Intent(getApplication(), StudyActivity.class));
-
+                break;
+            case R.id.my_b_card_study:
+                startActivity(new Intent(getApplication(), CardStudyActivity.class));
                 break;
         }
     }

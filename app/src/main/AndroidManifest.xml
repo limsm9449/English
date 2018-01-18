@@ -208,6 +208,10 @@
         <activity
             android:name=".ConversationSettingActivity"
             android:label="@string/title_activity_conversation_setting"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CardStudyActivity"
+            android:label="@string/title_activity_card_study"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
