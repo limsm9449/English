@@ -290,10 +290,10 @@ class GrammarQuestionQuery {
         sql.append("SELECT  SEQ _id, CODE, TITLE1, TITLE2, TITLE3, EXPLAIN, SAMPLE1, SAMPLE2, ANSWER" + CommConstants.sqlCR);
         sql.append("FROM    " + tableName + CommConstants.sqlCR);
         if ( "".equals(code) ) {
-            sql.append("WHERE   TITLE1 = 'P'" + CommConstants.sqlCR);
+            sql.append("WHERE   ANSWER != ''" + CommConstants.sqlCR);
         } else {
             sql.append("WHERE   CODE LIKE '" + code + "%'" + CommConstants.sqlCR);
-            sql.append("AND     TITLE1 = 'P'" + CommConstants.sqlCR);
+            sql.append("AND     ANSWER != ''" + CommConstants.sqlCR);
         }
         sql.append("ORDER   BY RANDOM()    " + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
