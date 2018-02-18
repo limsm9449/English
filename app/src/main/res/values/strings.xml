@@ -48,6 +48,7 @@
     <string name="title_activity_news2">News2Activity</string>
     <string name="title_activity_conversation_setting">회화 학습 설정</string>
     <string name="title_activity_card_study">Card 학습</string>
+    <string name="title_activity_grammar">문법</string>
 
 
     <!-- action -->
@@ -74,4 +75,6 @@
 
     <!-- My -->
     <string name="banner_ad_unit_id">ca-app-pub-3860766380986792/1206594265</string>
+    <string name="title_activity_grammar_view">GrammarViewActivity</string>
+    <string name="title_activity_grammar_question">GrammarQuestionActivity</string>
 </resources>

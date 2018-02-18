@@ -212,6 +212,26 @@
         <activity
             android:name=".CardStudyActivity"
             android:label="@string/title_activity_card_study"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GrammarActivity"
+            android:label="@string/title_activity_grammar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".GrammarViewActivity"
+            android:label="@string/title_activity_grammar_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GrammarQuestionActivity"
+            android:label="@string/title_activity_grammar_question"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

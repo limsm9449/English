@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((Button) findViewById(R.id.my_b_conv_note)).setOnClickListener(this);
 
         ((Button) findViewById(R.id.my_b_caption)).setOnClickListener(this);
+        ((Button) findViewById(R.id.my_b_grammar)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_idiom)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_naver_conv)).setOnClickListener(this);
         ((Button) findViewById(R.id.my_b_daum)).setOnClickListener(this);
@@ -219,6 +220,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.my_b_caption:
                 startActivity(new Intent(getApplication(), CaptionActivity.class));
+                break;
+            case R.id.my_b_grammar:
+                startActivity(new Intent(getApplication(), GrammarActivity.class));
                 break;
             case R.id.my_b_idiom:
                 startActivity(new Intent(getApplication(), IdiomActivity.class));

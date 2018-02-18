@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -2692,4 +2693,60 @@ public class DicUtils {
 
         return sb.toString();
     }
+
+    public static String getExcelString(HSSFCell cell) {
+        if (cell == null)
+            return "";
+        else
+            return cell.toString();
+    }
+
+    public static String getMakeRandomAnswer(String question, String answer) {
+        if ( "".equals(answer) ) {
+            return question;
+        } else {
+            String[] temp = answer.split("\\^");
+            if (temp.length == 1) {
+                return question;
+            } else {
+                String[] temp2 = temp[1].split(";");
+
+                String[] all = new String[1 + temp2.length];
+                all[0] = temp[0];
+                for ( int i = 0; i < temp2.length; i++ ) {
+                    all[i + 1] = temp2[i];
+                }
+
+                String[] randomAnswer = new String[all.length];
+                for ( int i = 0; i < randomAnswer.length; i++ ) {
+                    randomAnswer[i] = "";
+                }
+                HashMap hm = new HashMap();
+                Random rand = new Random();
+                int idx = 0;
+                while ( true ) {
+                    int r = rand.nextInt(all.length);
+                    if ( !hm.containsKey(r) ) {
+                        hm.put(r,r);
+                        randomAnswer[idx++] = all[r];
+                    }
+                    if ( idx == all.length ) {
+                        break;
+                    }
+                }
+
+                String questionAnswer = "";
+                for ( int i = 0; i < randomAnswer.length; i++ ) {
+                    if ( i > 0 ) {
+                        questionAnswer += "   ";
+                    }
+                    questionAnswer += ( i + 1 ) + " ) " + randomAnswer[i];
+                }
+
+                return question + "\n" + questionAnswer;
+            }
+        }
+    }
+
+
 }
