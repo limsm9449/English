@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -35,6 +36,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
     public String han;
     public String notHan;
     public String sampleSeq;
+    public String onlyWordList;
     public boolean isMySample = false;
 
     private int fontSize = 0;
@@ -64,6 +66,11 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
         notHan = b.getString("foreign").replaceAll("'"," ");
         han = b.getString("han").replaceAll("'"," ");
         sampleSeq = b.getString("sampleSeq");
+        onlyWordList = b.getString("onlyWordList");
+        if ( "Y".equals(onlyWordList) ) {
+            ((RelativeLayout) this.findViewById(R.id.my_rl_1)).setVisibility(View.GONE);
+            ab.setTitle("단어");
+        }
 
         fontSize = Integer.parseInt( DicUtils.getPreferencesValue( this, CommConstants.preferences_font ) );
 
@@ -78,7 +85,7 @@ public class SentenceViewActivity extends AppCompatActivity implements View.OnCl
     public void changeListView() {
         //문장의 단어를 구한다.
         //String[] splitStr = b.getString("viet").split(CommConstants.splitStr);
-        notHan = notHan.replaceAll("'", "");
+        notHan = notHan.replaceAll("", "");
         String[] splitStr = DicUtils.sentenceSplit(notHan);
 
         Cursor wordCursor = null;

@@ -62,7 +62,7 @@ public class CommConstants {
 
     public static String appName = "english";
     public static String sqlCR = "\n";
-    public static String sentenceSplitStr = "()[]<>\"',.?/= ";
+    public static String sentenceSplitStr = "()[]<>\"',.?/= “”";
 
     public static int studyKind1 = 0;
     public static int studyKind2 = 1;

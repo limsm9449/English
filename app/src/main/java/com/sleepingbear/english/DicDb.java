@@ -672,7 +672,7 @@ public class DicDb {
         sql.append("  FROM DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
         sql.append("   AND SAMPLES = ''" + CommConstants.sqlCR);
-        //DicUtils.dicSqlLog(sql.toString());
+        DicUtils.dicSqlLog(sql.toString());
 
         Cursor cursor = db.rawQuery(sql.toString(), null);
         while ( cursor.moveToNext() ) {

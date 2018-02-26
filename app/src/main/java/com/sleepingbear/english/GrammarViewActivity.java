@@ -303,7 +303,7 @@ class GrammarViewQuery {
         sql.append("SELECT  SEQ _id, CODE, TITLE1, TITLE2, TITLE3, EXPLAIN, SAMPLE1, SAMPLE2, ANSWER" + CommConstants.sqlCR);
         sql.append("FROM    " + tableName + CommConstants.sqlCR);
         sql.append("WHERE   CODE LIKE '" + code + "%'" + CommConstants.sqlCR);
-        sql.append("AND     TITLE1 = ''" + CommConstants.sqlCR);
+        sql.append("AND     KIND != 'P'" + CommConstants.sqlCR);
         sql.append("ORDER   BY SEQ    " + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
 

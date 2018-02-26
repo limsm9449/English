@@ -258,9 +258,6 @@ public class GrammarActivity extends AppCompatActivity implements View.OnClickLi
                     version = DicUtils.getUrlText("http://limsm9449data.cafe24.com/english/enGrammar.txt");
 
                     if (!DicUtils.getPreferences(GrammarActivity.this, "GRAMMAR_VERSION", "-").equals(version)) {
-                        // 문법 테이블 초기화
-                        GrammarQuery.tableCreate(db);
-
                         // 저장할 파일 생성
                         File appDir = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName);
                         if (!appDir.exists()) {
@@ -286,6 +283,9 @@ public class GrammarActivity extends AppCompatActivity implements View.OnClickLi
                         try {
                             db.beginTransaction();
 
+                            // 문법 테이블 초기화
+                            GrammarQuery.tableCreate(db);
+
                             File excelFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + CommConstants.folderName + "/enGrammar.xls");
                             FileInputStream myInput = new FileInputStream(excelFile);
 
@@ -307,9 +307,11 @@ public class GrammarActivity extends AppCompatActivity implements View.OnClickLi
                                 String sample1 = DicUtils.getExcelString(myRow.getCell(idx++));
                                 String sample2 = DicUtils.getExcelString(myRow.getCell(idx++));
                                 String answer = DicUtils.getExcelString(myRow.getCell(idx++));
+                                String kind = DicUtils.getExcelString(myRow.getCell(idx++));
+                                String other1 = DicUtils.getExcelString(myRow.getCell(idx++));
 
                                 if (!"".equals(code)) {
-                                    GrammarQuery.insGrammar(db, seq, code, title1, title2, title3, explain, sample1, sample2, answer);
+                                    GrammarQuery.insGrammar(db, seq, code, title1, title2, title3, explain, sample1, sample2, answer, kind, other1);
                                     seq++;
                                 }
                             }
@@ -391,16 +393,18 @@ class GrammarQuery {
         createSql.append("EXPLAIN TEXT,");
         createSql.append("SAMPLE1 TEXT,");
         createSql.append("SAMPLE2 TEXT,");
-        createSql.append("ANSWER TEXT");
+        createSql.append("ANSWER TEXT,");
+        createSql.append("KIND TEXT,");
+        createSql.append("OTHER1 TEXT");
         createSql.append(")");
 
         db.execSQL(createSql.toString());
     }
 
-    public static void insGrammar(SQLiteDatabase db, int seq, String code, String title1, String  title2, String title3, String explain, String sample1, String sample2, String answer) {
+    public static void insGrammar(SQLiteDatabase db, int seq, String code, String title1, String  title2, String title3, String explain, String sample1, String sample2, String answer, String kind, String other1) {
         StringBuffer sql = new StringBuffer();
 
-        sql.append("INSERT INTO " + tableName + "( SEQ, CODE, TITLE1, TITLE2, TITLE3, EXPLAIN, SAMPLE1, SAMPLE2, ANSWER )" + CommConstants.sqlCR);
+        sql.append("INSERT INTO " + tableName + "( SEQ, CODE, TITLE1, TITLE2, TITLE3, EXPLAIN, SAMPLE1, SAMPLE2, ANSWER, KIND, OTHER1 )" + CommConstants.sqlCR);
         sql.append("VALUES ('" + seq + "','" + DicUtils.getQueryParam(code) + "','" +
                 DicUtils.getQueryParam(title1) + "','" +
                 DicUtils.getQueryParam(title2) + "','" +
@@ -408,8 +412,10 @@ class GrammarQuery {
                 DicUtils.getQueryParam(explain) + "','" +
                 DicUtils.getQueryParam(sample1) + "','" +
                 DicUtils.getQueryParam(sample2) + "','" +
-                DicUtils.getQueryParam(answer) + "')" + CommConstants.sqlCR);
-        DicUtils.dicSqlLog(sql.toString());
+                DicUtils.getQueryParam(answer) + "','" +
+                DicUtils.getQueryParam(kind) + "','" +
+                DicUtils.getQueryParam(other1) + "')" + CommConstants.sqlCR);
+        //DicUtils.dicSqlLog(sql.toString());
 
         db.execSQL(sql.toString());
     }
@@ -420,7 +426,7 @@ class GrammarQuery {
         sql.append("SELECT  SEQ _id, CODE, TITLE1" + CommConstants.sqlCR);
         sql.append("FROM    " + tableName + CommConstants.sqlCR);
         sql.append("WHERE   CODE LIKE '0000%'" + CommConstants.sqlCR);
-        DicUtils.dicSqlLog(sql.toString());
+        //DicUtils.dicSqlLog(sql.toString());
 
         return sql.toString();
     }
@@ -433,7 +439,7 @@ class GrammarQuery {
         sql.append("SELECT  SEQ _id, CODE, TITLE1 || ' 문제 풀기' TITLE1" + CommConstants.sqlCR);
         sql.append("FROM    " + tableName + CommConstants.sqlCR);
         sql.append("WHERE   CODE LIKE '0000%'" + CommConstants.sqlCR);
-        DicUtils.dicSqlLog(sql.toString());
+        //DicUtils.dicSqlLog(sql.toString());
 
         return sql.toString();
     }

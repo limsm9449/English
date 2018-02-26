@@ -34,44 +34,89 @@
         android:layout_above="@+id/adView"
         android:background="@color/colorPrimary"
         android:clickable="false"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:text="TextView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="false"
             android:layout_marginLeft="5dp"
             android:id="@+id/my_c_webview_mean"
             android:textColor="@color/textColorPrimary"
-            android:layout_toLeftOf="@+id/my_c_webview_ib_search"
+            android:layout_toLeftOf="@+id/my_ll_btn"
             android:clickable="false"
             android:textAlignment="gravity"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
-        <ImageButton
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_search_white_24dp"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:layout_centerVertical="false"
-            android:layout_centerInParent="false"
-            android:id="@+id/my_c_webview_ib_search"
-            android:layout_toLeftOf="@+id/my_c_webview_ib_add"
-            android:layout_width="50dp"
-            android:layout_alignParentRight="true" />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_add_circle_outline_white_24dp"
-            android:layout_alignParentTop="true"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:id="@+id/my_ll_btn"
             android:layout_alignParentRight="true"
-            android:id="@+id/my_c_webview_ib_add"
-            android:background="@android:color/transparent"
-            android:layout_centerVertical="false"
-            android:layout_centerInParent="false"
-            android:layout_centerHorizontal="false" />
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerInParent="true">
+
+            <ImageButton
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_search_white_24dp"
+                android:layout_alignParentTop="false"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="false"
+                android:layout_centerInParent="false"
+                android:id="@+id/my_c_webview_ib_search"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="false"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_add_circle_outline_white_24dp"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentRight="false"
+                android:id="@+id/my_c_webview_ib_add"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="false"
+                android:layout_centerInParent="false"
+                android:layout_centerHorizontal="false"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_record_voice_over_white_24dp"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentRight="false"
+                android:id="@+id/my_c_webview_ib_tts"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="false"
+                android:layout_centerInParent="false"
+                android:layout_centerHorizontal="false"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_list_white_24dp"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentRight="false"
+                android:id="@+id/my_c_webview_ib_list"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="false"
+                android:layout_centerInParent="false"
+                android:layout_centerHorizontal="false"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     </RelativeLayout>
 

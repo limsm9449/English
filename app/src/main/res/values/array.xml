@@ -211,4 +211,9 @@
         <item>Daum 단어장</item>
     </string-array>
 
+    <string-array name="clickType">
+        <item>단어 선택</item>
+        <item>문장 선택</item>
+    </string-array>
+
 </resources>
