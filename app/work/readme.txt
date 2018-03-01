@@ -22,20 +22,25 @@ if (selection.focusNode) {
     var s = 0;
     var e = 0;
     for ( var i = selection.focusOffset - 1; i >= 0; i-- ) {
-	if ( fullStr.substring(i, i+1) == " " ) {
-		s = i;
-		break;
-	}
+        if ( fullStr.substring(i, i+1) == " " ) {
+            s = i;
+            break;
+        }
     }
     for ( var i = selection.focusOffset; i < fullStr.length; i++ ) {
-	if ( fullStr.substring(i, i+1) == " " ) {
-		e = i;
-		break;
-	}
+        if ( fullStr.substring(i, i+1) == " " ) {
+            e = i;
+            break;
+        }
     }
-
+    if ( s == 0 && e == 0 ) {
+        e = selection.focusNode.length;
+    }
+console.log(s);
+console.log(e);
+console.log(fullStr.substring(s+1,e));
     var rangeToSelect = document.createRange();
-    rangeToSelect.setStart(selection.focusNode, s+1);
+    rangeToSelect.setStart(selection.focusNode, s);
     rangeToSelect.setEnd(selection.focusNode, e);
     selection.removeAllRanges ();
     selection.addRange (rangeToSelect);
