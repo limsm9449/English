@@ -103,6 +103,7 @@ public class CommConstants {
     public final static int a_daum = 4;
     public final static int a_vocabularyEdit = 5;
     public final static int a_conversationSetting = 6;
+    public final static int a_setting = 7;
 
     public final static String msgAdd = "ADD";
     public final static String msgSave = "SAVE";

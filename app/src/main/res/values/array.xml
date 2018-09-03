@@ -214,6 +214,7 @@
     <string-array name="clickType">
         <item>단어 선택</item>
         <item>문장 선택</item>
+        <item>직접 선택</item>
     </string-array>
 
 </resources>

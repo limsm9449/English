@@ -28,242 +28,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="20dp">
 
             <Button
-                android:text="영한 사전"
+                android:text="메뉴 선택"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/my_b_foreign_dic"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="검색\nHistory"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_dic_history"
-                android:background="@drawable/my_button"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:text="Web 사전"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_web_dic"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="Web 번역"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_web_translate"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp">
-
-            <Button
-                android:text="영어 신문\nVer.1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_news"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="영어 신문\nVer.2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_news2"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="영어 소설"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_novel"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="뉴스/소설\n클릭 단어"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_news_word"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp">
-
-            <Button
-                android:text="회화\n학습"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_conversation_study"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="회화\n검색"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_conv_search"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="회화\n패턴"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_pattern"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="회화\n노트"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_conv_note"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp">
-
-            <Button
-                android:text="미드\n자막"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_caption"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="문법"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_grammar"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="숙어"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_idiom"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="네이버\n회화"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_naver_conv"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="3dp" />
-
-            <Button
-                android:text="Daum 단어장"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_daum"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginBottom="5dp">
-
-            <Button
-                android:text="오늘의\n단어"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_today"
-                android:background="@drawable/my_button"
-                android:layout_weight="1"
-                android:layout_marginRight="3dp"/>
-
-            <Button
-                android:text="단어장"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/my_b_voc"
+                android:id="@+id/my_b_1"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
                 android:layout_marginRight="3dp"
-                android:layout_marginLeft="2dp" />
+                android:textSize="24sp" />
 
             <Button
-                android:text="단어 학습"
+                android:text="메뉴 선택"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/my_b_voc_study"
+                android:id="@+id/my_b_2"
+                android:background="@drawable/my_button"
+                android:layout_weight="1"
+                android:layout_marginLeft="2dp"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="2dp">
+
+            <Button
+                android:text="메뉴 선택"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/my_b_3"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
                 android:layout_marginRight="3dp"
-                android:layout_marginLeft="2dp" />
+                android:textSize="24sp" />
 
             <Button
-                android:text="Card\n학습"
+                android:text="메뉴 선택"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/my_b_card_study"
+                android:id="@+id/my_b_4"
                 android:background="@drawable/my_button"
                 android:layout_weight="1"
-                android:layout_marginLeft="2dp" />
+                android:layout_marginLeft="2dp"
+                android:textSize="24sp" />
+
         </LinearLayout>
 
     </LinearLayout>

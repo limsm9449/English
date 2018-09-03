@@ -862,7 +862,7 @@ public class DicDb {
         sql.append("UPDATE DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append("   SET MEMORIZATION = '" + memoryYn + "'" + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }
@@ -871,7 +871,7 @@ public class DicDb {
         StringBuffer sql = new StringBuffer();
         sql.append("DELETE FROM DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + kind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }
@@ -880,7 +880,7 @@ public class DicDb {
         StringBuffer sql = new StringBuffer();
         sql.append("DELETE FROM DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + copyKind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
 
@@ -889,7 +889,7 @@ public class DicDb {
         sql.append("SELECT '" + copyKind + "', WORD, MEAN, SPELLING, 'N', '" + DicUtils.getDelimiterDate(DicUtils.getCurrentDate(), ".")  + "' " + CommConstants.sqlCR);
         sql.append("  FROM DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + currKind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }
@@ -898,7 +898,7 @@ public class DicDb {
         StringBuffer sql = new StringBuffer();
         sql.append("DELETE FROM DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + copyKind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
 
@@ -906,7 +906,7 @@ public class DicDb {
         sql.append("UPDATE DIC_MY_VOC " + CommConstants.sqlCR);
         sql.append("   SET KIND = '" + copyKind + "'" + CommConstants.sqlCR);
         sql.append(" WHERE KIND = '" + currKind + "'" + CommConstants.sqlCR);
-        sql.append("   AND WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append("   AND WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicSqlLog(sql.toString());
         db.execSQL(sql.toString());
     }
@@ -971,7 +971,7 @@ public class DicDb {
     public static void delMyVocabularyInAllCategory(SQLiteDatabase db, String word) {
         StringBuffer sql = new StringBuffer();
         sql.append("DELETE FROM DIC_MY_VOC " + CommConstants.sqlCR);
-        sql.append(" WHERE WORD = '" + word + "'" + CommConstants.sqlCR);
+        sql.append(" WHERE WORD = '" + word.replaceAll("'","''") + "'" + CommConstants.sqlCR);
         DicUtils.dicLog(sql.toString());
         db.execSQL(sql.toString());
     }

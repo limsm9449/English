@@ -339,35 +339,54 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
             // Remove the default menu items (select all, copy, paste, search)
             menu.clear();
 
-            /*
-            // Inflate your own menu items
-            mode.getMenuInflater().inflate(R.menu.menu_webview_cm, menu);
+            if ( clickType == 2 ) {
+                // Inflate your own menu items
+                mode.getMenuInflater().inflate(R.menu.menu_webview_cm, menu);
 
-            //클릭시 onContextItemSelected를 호출해주도록 이벤트를 걸어준다.
-            MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    onContextualMenuItemClicked(item);
-                    return true;
+                //클릭시 onContextItemSelected를 호출해주도록 이벤트를 걸어준다.
+                MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        onContextualMenuItemClicked(item);
+                        return true;
+                    }
+                };
+                for (int i = 0, n = menu.size(); i < n; i++) {
+                    menu.getItem(i).setOnMenuItemClickListener(listener);
                 }
-            };
-            for (int i = 0, n = menu.size(); i < n; i++) {
-                menu.getItem(i).setOnMenuItemClickListener(listener);
+            } else {
+                mActionMode.finish();
             }
-            */
-
-            mActionMode.finish();
         }
 
         super.onActionModeStarted(mode);
     }
 
-    /*
     public void onContextualMenuItemClicked(MenuItem item) {
         DicUtils.dicLog("onContextualMenuItemClicked");
         switch (item.getItemId()) {
             case R.id.action_copy:
-                //webView.loadUrl("javascript:window.android.action('COPY', window.getSelection().toString())");
+                webView.loadUrl("javascript:window.android.action('COPY', window.getSelection().toString())");
+
+                break;
+            case R.id.action_word_view:
+                webView.loadUrl("javascript:window.android.action('WORD', window.getSelection().toString())");
+
+                break;
+            case R.id.action_translate:
+                webView.loadUrl("javascript:window.android.action('TRANSLATE', window.getSelection().toString())");
+
+                break;
+            case R.id.action_word_search:
+                webView.loadUrl("javascript:window.android.action('WORD_SEARCH', window.getSelection().toString())");
+
+                break;
+            case R.id.action_sentence_view:
+                webView.loadUrl("javascript:window.android.action('SENTENCE', window.getSelection().toString())");
+
+                break;
+            case R.id.action_tts:
+                webView.loadUrl("javascript:window.android.action('TTS', window.getSelection().toString())");
 
                 break;
             default:
@@ -380,7 +399,6 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
             mActionMode.finish();
         }
     }
-    */
 
     public void onInit(int status) {
         Locale loc = new Locale("en");
@@ -453,7 +471,9 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
 
             script.append("    window.android.action('SEL', returnStr);");
             script.append("}");
-        } else {
+
+            webView.loadUrl("javascript:" + script.toString());
+        } else if ( clickType == 1 ) {
             script.append("var selection = window.getSelection();");
             script.append("if (selection.focusNode) {");
             script.append("    var returnStr = selection.focusNode.nodeValue;");
@@ -474,9 +494,9 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
 
             script.append("    window.android.action('SEL', returnStr);");
             script.append("}");
-        }
 
-        webView.loadUrl("javascript:" + script.toString());
+            webView.loadUrl("javascript:" + script.toString());
+        }
 
         super.onActionModeFinished(mode);
     }
@@ -547,10 +567,10 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //클립보드에 복사
-                    /*
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("simple text", clickWord);
-                    clipboard.setPrimaryClip(clip);
+                /*
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("simple text", clickWord);
+                clipboard.setPrimaryClip(clip);
 */
                     Bundle bundle = new Bundle();
                     bundle.putString("site", kindCodes[m2Select]);
@@ -669,6 +689,33 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
 
     private class AndroidBridge {
         @JavascriptInterface
+        public void setWord(final String arg) { // must be final
+            handler.post(new Runnable() {
+                public void run() {
+                    meanRl.setVisibility(View.VISIBLE);
+
+                    clickWord = arg;
+
+                    HashMap info = DicDb.getMean(mDb, arg);
+                    mean.setText(arg + " " + DicUtils.getString((String)info.get("SPELLING")) + " : " + DicUtils.getString((String)info.get("MEAN")));
+
+                    entryId = DicUtils.getString((String)info.get("ENTRY_ID"));
+                    if ( !"".equals(entryId) ) {
+                        DicDb.insDicClickWord(mDb, entryId, "");
+
+                        DicUtils.setDbChange(getApplicationContext());  //DB 변경 체크
+
+                        addBtn.setVisibility(View.VISIBLE);
+                        searchBtn.setVisibility(View.GONE);
+                    } else {
+                        addBtn.setVisibility(View.GONE);
+                        searchBtn.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+
+        @JavascriptInterface
         public void action(final String kind, final String arg) { // must be final
             handler.post(new Runnable() {
                 public void run() {
@@ -702,6 +749,71 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
                             addBtn.setVisibility(View.GONE);
                             searchBtn.setVisibility(View.GONE);
                         }
+                    } else if ( "COPY".equals(kind) ) {
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("simple text", arg);
+                        clipboard.setPrimaryClip(clip);
+                    } else if ( "WORD".equals(kind) ) {
+                        HashMap info = DicDb.getMean(mDb, arg);
+
+                        if ( info.containsKey("ENTRY_ID") ) {
+                            Intent intent = new Intent(getApplication(), WordViewActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("entryId", (String) info.get("ENTRY_ID"));
+                            intent.putExtras(bundle);
+
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "등록된 단어가 아닙니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if ( "WORD_SEARCH".equals(kind) ) {
+                        clickWord = arg;
+                        wordSearch();
+                    } else if ( "SENTENCE".equals(kind) ) {
+                        Intent intent = new Intent(getApplication(), SentenceViewActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("foreign", arg);
+                        bundle.putString("han", "");
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+                    } else if ( "TTS".equals(kind) ) {
+                        if ( arg.length() > 4000 ) {
+                            Toast.makeText(getApplicationContext(), "TTS는 4,000자 까지만 가능합니다.", Toast.LENGTH_SHORT).show();
+                            myTTS.speak(arg.substring(0, 3900), TextToSpeech.QUEUE_FLUSH, null);
+                        } else {
+                            myTTS.speak(arg, TextToSpeech.QUEUE_FLUSH, null);
+                        }
+                    } else if ( "TRANSLATE".equals(kind) ) {
+                        final String[] kindCodes = new String[]{"Naver","Google"};
+
+                        final AlertDialog.Builder dlg = new AlertDialog.Builder(NewsWebViewActivity.this);
+                        dlg.setTitle("번역 사이트 선택");
+                        dlg.setSingleChoiceItems(kindCodes, m2Select, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                m2Select = arg1;
+                            }
+                        });
+                        dlg.setNegativeButton("취소", null);
+                        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //클립보드에 복사
+                                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("simple text", arg);
+                                clipboard.setPrimaryClip(clip);
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("site", kindCodes[m2Select]);
+                                bundle.putString("sentence", arg);
+
+                                Intent intent = new Intent(getApplication(), WebTranslateActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        });
+                        dlg.show();
                     }
                 }
             });

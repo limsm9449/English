@@ -68,7 +68,7 @@ public class WebTranslateActivity extends AppCompatActivity {
     public void webTranslateLoad() {
         String url = "";
         if ( "Naver".equals(site) ) {
-            url = "http://translate.naver.com/#/en/ko/" + sentence;
+            url = "https://papago.naver.com/?sk=auto&tk=ko&st=" + sentence;
         } else if ( "Google".equals(site) ) {
             url = "https://translate.google.co.kr/#en/ko/" + sentence;
         }

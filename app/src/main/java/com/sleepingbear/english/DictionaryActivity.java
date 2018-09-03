@@ -244,6 +244,8 @@ public class DictionaryActivity extends AppCompatActivity implements View.OnClic
 
             //결과가 나올때까지 기달리게 할려고 다음 로직을 추가한다. 안하면 progressbar가 사라짐.. cursor도  Thread 방식으로 돌아가나봄
             if ( cursor.getCount() != 0 ) {
+                DicDb.insSearchHistory(db, et_search.getText().toString().trim().toLowerCase());
+                DicUtils.setDbChange(getApplicationContext()); //변경여부 체크
             }
         }
     }

@@ -12,7 +12,7 @@
     <ListPreference
         android:defaultValue="3"
         android:key="key_webViewFontSize"
-        android:title="영어소설 폰트 사이즈"
+        android:title="영어신문/영어소설 폰트 사이즈"
         android:entries="@array/webViewFontSize"
         android:entryValues="@array/webViewFontSize"
         android:negativeButtonText="@null"
@@ -66,9 +66,5 @@
             android:key="key_review"
             android:title="어플 리뷰"
             android:summary="어플 관련 리뷰를 달아주세요."/>
-        <Preference
-            android:key="key_apps"
-            android:title="기타 어플.."
-            android:summary="다른 학습 어플을 확인해 보세요."/>
     </PreferenceCategory>
 </PreferenceScreen>
