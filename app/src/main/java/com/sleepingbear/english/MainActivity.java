@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             favoritBtn3.setTag(-1);
         }
         if ( CommConstants.isFreeApp ) {
-            favoritBtn4.setText("어플 공유");
+            favoritBtn4.setText("최고의 영어학습\n유료 설치");
         } else {
             if (prefs.getInt("favorites4", -1) != -1) {
                 favoritBtn4.setTag(prefs.getInt("favorites4", -1));
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.my_b_4:
                 if ( CommConstants.isFreeApp ) {
-                    btnSelect(R.id.nav_share);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.sleepingbear.english")));
                 } else {
                     if ((int) favoritBtn4.getTag() == -1) {
                         selectFavoriteBtn(favoritBtn4, "favorites4");
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent msg = new Intent(Intent.ACTION_SEND);
             msg.addCategory(Intent.CATEGORY_DEFAULT);
             msg.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-            msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.english ");
+            msg.putExtra(Intent.EXTRA_TEXT, "영어.. 참 어렵죠? '최고의 영어학습' 어플을 사용해 보세요. https://play.google.com/store/apps/details?id=com.sleepingbear.english");
             msg.setType("text/plain");
             startActivity(Intent.createChooser(msg, "어플 공유"));
         } else if (id == R.id.nav_review) {
