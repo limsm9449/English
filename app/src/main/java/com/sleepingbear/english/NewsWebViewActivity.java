@@ -653,37 +653,29 @@ public class NewsWebViewActivity extends AppCompatActivity implements View.OnCli
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             //return super.shouldOverrideUrlLoading(view, url);
-
-            //The New Work Times 에서 다음 url을 호출할때 화면이 안나오는 문제가 있음
-            if ( "data:text/html,".equals(url) ) {
-                return false;
+            if ( url.indexOf("youtube") > -1 ) {
+                return true;
             } else {
-                DicUtils.dicLog("url = " + url);
-                view.loadUrl(url);
+                return false;
             }
-
-            return true;
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-
-            DicUtils.dicLog("onPageStarted : " + url);
+            //DicUtils.dicLog("onPageStarted : " + url);
         }
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
-
-
-            DicUtils.dicLog("onReceivedError : " + error.toString());
+            //DicUtils.dicLog("onReceivedError : " + error.toString());
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            DicUtils.dicLog("onPageFinished : " + url);
+            //DicUtils.dicLog("onPageFinished : " + url);
         }
     }
 

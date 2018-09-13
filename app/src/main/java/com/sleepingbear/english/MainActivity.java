@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             favoritBtn3.setTag(-1);
         }
         if ( CommConstants.isFreeApp ) {
-            favoritBtn4.setText("최고의 영어학습\n유료 설치");
+            favoritBtn4.setText("최고의\n영어학습\n유료 설치");
         } else {
             if (prefs.getInt("favorites4", -1) != -1) {
                 favoritBtn4.setTag(prefs.getInt("favorites4", -1));
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.my_b_4:
                 if ( CommConstants.isFreeApp ) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.sleepingbear.english")));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.sleepingbear.penglish")));
                 } else {
                     if ((int) favoritBtn4.getTag() == -1) {
                         selectFavoriteBtn(favoritBtn4, "favorites4");
