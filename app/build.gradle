@@ -7,8 +7,8 @@ android {
         applicationId "com.sleepingbear.english"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 18
-        versionName "18.0"
+        versionCode 19
+        versionName "19.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
